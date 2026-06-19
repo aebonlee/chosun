@@ -22,11 +22,15 @@ const NAVY = '#1E3A5F'
 const TERRA = '#C2603D'
 const BORDER = '#E2D9C9'
 const container = { maxWidth: 1180, margin: '0 auto', padding: '0 40px' }
+const labH = { fontSize: 12.5, fontWeight: 700, letterSpacing: '0.04em', color: NAVY, marginBottom: 9 }
+const labUl = { listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 7 }
+const labLi = { display: 'flex', alignItems: 'flex-start', fontSize: 14, color: '#3D372E', lineHeight: 1.55 }
 
 export default function App() {
   const [showLogin, setShowLogin] = useState(false)
   const [hash, setHash] = useState(window.location.hash)
   const [openMenu, setOpenMenu] = useState(null) // 'prompt' | 'day1' | 'day2' | null
+  const [expandedLab, setExpandedLab] = useState(null)
   const { user, signOut } = useAuth()
   const open = () => setShowLogin(true)
 
@@ -210,23 +214,64 @@ export default function App() {
             <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, color: TERRA, marginBottom: 14 }}>Hands-on Labs</div>
             <h2 className="section-h2" style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 42, letterSpacing: '-0.025em' }}>8개 실습 모듈</h2>
           </div>
-          <p style={{ fontSize: 15, color: '#6F665A', maxWidth: 380, lineHeight: 1.6 }}>각 모듈은 완성된 산출물을 직접 만들어 보는 것으로 마무리됩니다. 강의 후 그대로 본인 업무에 재사용하세요.</p>
+          <p style={{ fontSize: 15, color: '#6F665A', maxWidth: 380, lineHeight: 1.6 }}>각 모듈은 완성된 산출물을 직접 만들어 보는 것으로 마무리됩니다. 카드를 클릭하면 진행 절차·예시 프롬프트가 펼쳐집니다.</p>
         </div>
 
-        <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20 }}>
-          {labs.map((l, i) => (
-            <div key={i} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 18, padding: 30, display: 'flex', gap: 22, alignItems: 'flex-start' }}>
+        <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20, alignItems: 'start' }}>
+          {labs.map((l, i) => {
+            const openLab = expandedLab === i
+            return (
+            <div key={i} onClick={() => setExpandedLab(openLab ? null : i)} style={{ background: '#fff', border: `1px solid ${openLab ? l.ink : BORDER}`, borderRadius: 18, padding: 30, display: 'flex', gap: 22, alignItems: 'flex-start', cursor: 'pointer', transition: 'border-color .15s' }}>
               <div style={{ minWidth: 54, height: 54, borderRadius: 13, background: l.tint, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: NEWS, fontSize: 21, color: l.ink, fontWeight: 500 }}>{l.no}</div>
-              <div>
-                <div style={{ display: 'inline-block', fontSize: 11.5, fontWeight: 700, letterSpacing: '0.06em', color: l.ink, background: l.tint, padding: '4px 10px', borderRadius: 6, marginBottom: 12 }}>{l.tag}</div>
-                <h3 style={{ fontSize: 17.5, fontWeight: 600, color: '#1B1916', lineHeight: 1.4, letterSpacing: '-0.01em' }}>{l.title}</h3>
-                <p style={{ fontSize: 14.5, color: '#7A7163', marginTop: 9, lineHeight: 1.6 }}>{l.desc}</p>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                  <span style={{ display: 'inline-block', fontSize: 11.5, fontWeight: 700, letterSpacing: '0.06em', color: l.ink, background: l.tint, padding: '4px 10px', borderRadius: 6 }}>{l.tag}</span>
+                  <span style={{ fontSize: 12, color: '#9A8F7D', fontWeight: 600 }}>{openLab ? '접기 ▴' : '자세히 ▾'}</span>
+                </div>
+                <h3 style={{ fontSize: 17.5, fontWeight: 600, color: '#1B1916', lineHeight: 1.4, letterSpacing: '-0.01em', marginTop: 12 }}>{l.title}</h3>
+                <p style={{ fontSize: 14.5, color: '#7A7163', marginTop: 9, lineHeight: 1.6 }}>{openLab ? l.summary : l.desc}</p>
                 <div style={{ fontSize: 13, color: '#9A8F7D', marginTop: 14, display: 'flex', alignItems: 'center', gap: 7 }}>
                   <span style={{ fontFamily: NEWS, color: TERRA }}>◆</span> 산출물 · {l.output}
                 </div>
+
+                {openLab && (
+                  <div onClick={(e) => e.stopPropagation()} style={{ marginTop: 22, cursor: 'auto', borderTop: '1px solid #EDE5D7', paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    {l.objectives && (
+                      <div>
+                        <div style={labH}>학습 목표</div>
+                        <ul style={labUl}>{l.objectives.map((o, j) => <li key={j} style={labLi}><span style={{ color: l.ink, marginRight: 8 }}>◆</span>{o}</li>)}</ul>
+                      </div>
+                    )}
+                    {l.steps && (
+                      <div>
+                        <div style={labH}>진행 절차</div>
+                        <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                          {l.steps.map((s, j) => (
+                            <li key={j} style={{ display: 'flex', gap: 11, alignItems: 'flex-start', fontSize: 14, color: '#3D372E', lineHeight: 1.55 }}>
+                              <span style={{ minWidth: 22, height: 22, borderRadius: '50%', background: l.ink, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontFamily: NEWS, flexShrink: 0 }}>{j + 1}</span>{s}
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    )}
+                    {l.promptExample && (
+                      <div>
+                        <div style={labH}>예시 프롬프트</div>
+                        <pre style={{ margin: 0, background: '#1B1916', color: '#EAE4D8', borderRadius: 11, padding: '14px 16px', fontSize: 13, lineHeight: 1.65, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: "'IBM Plex Sans KR', ui-monospace, monospace" }}>{l.promptExample}</pre>
+                      </div>
+                    )}
+                    {l.tips && (
+                      <div style={{ background: '#FBF3EC', border: '1px solid #F0DDCB', borderRadius: 11, padding: '14px 16px' }}>
+                        <div style={{ ...labH, color: TERRA }}>TIP</div>
+                        <ul style={labUl}>{l.tips.map((t, j) => <li key={j} style={{ ...labLi, color: '#5A4636' }}><span style={{ color: TERRA, marginRight: 8 }}>◆</span>{t}</li>)}</ul>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
       </section>
 
