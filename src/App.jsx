@@ -128,7 +128,22 @@ export default function App() {
           <span style={{ width: 7, height: 7, borderRadius: '50%', background: TERRA, display: 'inline-block' }}></span>
           <span style={{ fontSize: 13, fontWeight: 600, color: '#7A4A33', letterSpacing: '0.01em' }}>전임 교원 대상 · 오프라인 실습 과정</span>
         </div>
-        <h1 className="hero-h1" style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 62, lineHeight: 1.14, letterSpacing: '-0.025em', maxWidth: 880, marginBottom: 26 }}>
+        <div className="hero-logo" aria-hidden="true" style={{ position: 'absolute', top: 72, right: 16, width: 180, height: 180, zIndex: 0, pointerEvents: 'none' }}>
+          <div style={{ position: 'absolute', inset: '-10%', background: 'radial-gradient(circle, rgba(217,119,87,0.18), transparent 66%)' }} />
+          <svg viewBox="0 0 120 120" width="180" height="180" style={{ position: 'relative', animation: 'floatBob 6s ease-in-out infinite', filter: 'drop-shadow(0 16px 28px rgba(194,96,61,0.28))' }}>
+            {Array.from({ length: 12 }).map((_, i) => {
+              const a = (i * 30) * Math.PI / 180
+              const r0 = 13, r1 = i % 2 === 0 ? 47 : 33
+              return (
+                <line key={i}
+                  x1={(60 + Math.cos(a) * r0).toFixed(1)} y1={(60 + Math.sin(a) * r0).toFixed(1)}
+                  x2={(60 + Math.cos(a) * r1).toFixed(1)} y2={(60 + Math.sin(a) * r1).toFixed(1)}
+                  stroke="#D9774F" strokeWidth="7" strokeLinecap="round" />
+              )
+            })}
+          </svg>
+        </div>
+        <h1 className="hero-h1" style={{ position: 'relative', zIndex: 1, fontFamily: SERIF, fontWeight: 700, fontSize: 62, lineHeight: 1.14, letterSpacing: '-0.025em', maxWidth: 880, marginBottom: 26 }}>
           Claude 기반 <span style={{ color: TERRA }}>연구 업무 활용</span> &amp;<br />AX 브릿지 교과목 설계
         </h1>
         <p style={{ fontSize: 19, lineHeight: 1.6, color: '#5A5246', maxWidth: 620, marginBottom: 42 }}>
@@ -141,7 +156,7 @@ export default function App() {
 
         <div className="stats-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0, marginTop: 64, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
           {heroStats.map((s, i) => (
-            <div key={i} style={{ padding: '26px 28px 26px 0', borderRight: `1px solid ${BORDER}` }}>
+            <div key={i} style={{ padding: '28px 16px', textAlign: 'center', borderRight: i < heroStats.length - 1 ? `1px solid ${BORDER}` : 'none' }}>
               <div style={{ fontFamily: NEWS, fontSize: 38, fontWeight: 500, color: NAVY, lineHeight: 1, letterSpacing: '-0.01em' }}>{s.value}</div>
               <div style={{ fontSize: 13.5, color: '#7A7163', marginTop: 9, fontWeight: 500 }}>{s.label}</div>
             </div>

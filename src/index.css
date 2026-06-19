@@ -21,12 +21,18 @@ button { font-family: inherit; }
   to { opacity: 1; transform: none; }
 }
 
+@keyframes floatBob {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-14px) rotate(4deg); }
+}
+
 /* 반응형: 좁은 화면에서 2/3/4단 그리드를 1단으로 */
 @media (max-width: 900px) {
   .grid-2, .grid-3, .grid-4, .grid-overview, .grid-prep, .grid-curriculum {
     grid-template-columns: 1fr !important;
   }
   .nav-links { display: none !important; }
+  .hero-logo { display: none !important; }
   .hero-h1 { font-size: 40px !important; }
   .section-h2 { font-size: 30px !important; }
   .prep-wrap, .overview-wrap { gap: 32px !important; }
