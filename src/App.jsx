@@ -42,7 +42,6 @@ export default function App() {
   const view = route === 'lecture' ? 'lecture' : PromptView ? 'prompt' : 'home'
   const goRoute = (r) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#' + r; window.scrollTo({ top: 0 }) }
   const goLectureItem = (id) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#lecture/' + id; window.scrollTo({ top: 0 }) }
-  const goLecture = goLectureItem('intro')
 
   const day1Ids = new Set(['intro', ...lectureDays[0].sessions.map((s) => s.id)])
   const promptItems = [
@@ -50,11 +49,6 @@ export default function App() {
     { key: 'prompt-practice', title: '프롬프트 연습장', active: route === 'prompt-practice', onClick: goRoute('prompt-practice') },
     { key: 'prompt-gallery', title: '프롬프트 갤러리', active: route === 'prompt-gallery', onClick: goRoute('prompt-gallery') },
   ]
-  const dayItems = (dayIdx) => {
-    const sessions = lectureDays[dayIdx].sessions.map((s) => ({ key: s.id, meta: s.time, title: s.title, active: lectureSub === s.id, onClick: goLectureItem(s.id) }))
-    if (dayIdx === 0) sessions.unshift({ key: 'intro', title: '과정 개요 및 안내', active: lectureSub === 'intro', onClick: goLectureItem('intro') })
-    return sessions
-  }
   const goHome = (e) => { e.preventDefault(); window.location.hash = ''; window.scrollTo({ top: 0, behavior: 'smooth' }) }
   const goSection = (id) => (e) => {
     e.preventDefault()
@@ -80,8 +74,8 @@ export default function App() {
             <a href="#prompt-eval" onClick={goRoute('prompt-eval')} style={{ color: route === 'prompt-eval' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'prompt-eval' ? 700 : 500 }}>프롬프트 평가</a>
 
             <a href="#prep" onClick={goSection('prep')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>준비사항</a>
-            <NavMenu id="day1" label="Day 1 강의안" active={view === 'lecture' && day1Ids.has(lectureSub)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={dayItems(0)} />
-            <NavMenu id="day2" label="Day 2 강의안" active={view === 'lecture' && !day1Ids.has(lectureSub)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={dayItems(1)} />
+            <a href="#lecture/d1-s1" onClick={goLectureItem('d1-s1')} style={{ color: view === 'lecture' && day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 1 강의안</a>
+            <a href="#lecture/d2-s1" onClick={goLectureItem('d2-s1')} style={{ color: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 2 강의안</a>
             {user ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <span style={{ fontSize: 13.5, fontWeight: 600, color: NAVY }}>{displayName(user)}님</span>
