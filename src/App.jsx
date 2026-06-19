@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { heroStats, overviewItems, days, labs, prep, infoCards } from './data'
 import LoginModal from './components/LoginModal'
 import LectureNotes from './components/LectureNotes'
+import { lectureDays } from './lectureNotes'
 import PromptGuide from './components/PromptGuide'
 import PromptPractice from './components/PromptPractice'
 import PromptGallery from './components/PromptGallery'
@@ -25,32 +26,35 @@ const container = { maxWidth: 1180, margin: '0 auto', padding: '0 40px' }
 export default function App() {
   const [showLogin, setShowLogin] = useState(false)
   const [hash, setHash] = useState(window.location.hash)
-  const [promptOpen, setPromptOpen] = useState(false)
-  const promptRef = useRef(null)
+  const [openMenu, setOpenMenu] = useState(null) // 'prompt' | 'day1' | 'day2' | null
   const { user, signOut } = useAuth()
   const open = () => setShowLogin(true)
 
   useEffect(() => {
-    const onHash = () => { setHash(window.location.hash); setPromptOpen(false) }
+    const onHash = () => { setHash(window.location.hash); setOpenMenu(null) }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
-  // 드롭다운 바깥 클릭 / ESC 로 닫기
-  useEffect(() => {
-    if (!promptOpen) return
-    const onDown = (e) => { if (promptRef.current && !promptRef.current.contains(e.target)) setPromptOpen(false) }
-    const onKey = (e) => { if (e.key === 'Escape') setPromptOpen(false) }
-    document.addEventListener('mousedown', onDown)
-    document.addEventListener('keydown', onKey)
-    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey) }
-  }, [promptOpen])
-
   const route = hash.replace(/^#/, '').split('/')[0]
+  const lectureSub = route === 'lecture' ? (hash.split('/')[1] || 'intro') : null
   const PromptView = PROMPT_VIEWS[route]
   const view = route === 'lecture' ? 'lecture' : PromptView ? 'prompt' : 'home'
-  const goLecture = (e) => { e.preventDefault(); window.location.hash = '#lecture/intro'; window.scrollTo({ top: 0 }) }
-  const goRoute = (r) => (e) => { e.preventDefault(); setPromptOpen(false); window.location.hash = '#' + r; window.scrollTo({ top: 0 }) }
+  const goRoute = (r) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#' + r; window.scrollTo({ top: 0 }) }
+  const goLectureItem = (id) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#lecture/' + id; window.scrollTo({ top: 0 }) }
+  const goLecture = goLectureItem('intro')
+
+  const day1Ids = new Set(['intro', ...lectureDays[0].sessions.map((s) => s.id)])
+  const promptItems = [
+    { key: 'prompt-guide', title: '프롬프트 가이드', active: route === 'prompt-guide', onClick: goRoute('prompt-guide') },
+    { key: 'prompt-practice', title: '프롬프트 연습장', active: route === 'prompt-practice', onClick: goRoute('prompt-practice') },
+    { key: 'prompt-gallery', title: '프롬프트 갤러리', active: route === 'prompt-gallery', onClick: goRoute('prompt-gallery') },
+  ]
+  const dayItems = (dayIdx) => {
+    const sessions = lectureDays[dayIdx].sessions.map((s) => ({ key: s.id, meta: s.time, title: s.title, active: lectureSub === s.id, onClick: goLectureItem(s.id) }))
+    if (dayIdx === 0) sessions.unshift({ key: 'intro', title: '과정 개요 및 안내', active: lectureSub === 'intro', onClick: goLectureItem('intro') })
+    return sessions
+  }
   const goHome = (e) => { e.preventDefault(); window.location.hash = ''; window.scrollTo({ top: 0, behavior: 'smooth' }) }
   const goSection = (id) => (e) => {
     e.preventDefault()
@@ -72,38 +76,12 @@ export default function App() {
             <a href="#curriculum" onClick={goSection('curriculum')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
             <a href="#labs" onClick={goSection('labs')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>실습 모듈</a>
 
-            <div ref={promptRef} style={{ position: 'relative' }} onMouseEnter={() => setPromptOpen(true)}>
-              <button
-                type="button"
-                aria-haspopup="menu"
-                aria-expanded={promptOpen}
-                onClick={() => setPromptOpen((v) => !v)}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '6px 0', color: ['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route) ? NAVY : '#5A5246', fontSize: 14, fontWeight: ['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route) ? 700 : 500 }}
-              >
-                프롬프트 <span style={{ fontSize: 10, transform: promptOpen ? 'rotate(180deg)' : 'none', transition: 'transform .15s' }}>▾</span>
-              </button>
-              {promptOpen && (
-                <div role="menu" style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', paddingTop: 10, zIndex: 60 }}>
-                  <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, boxShadow: '0 16px 40px rgba(27,25,22,0.16)', padding: 6, minWidth: 184 }}>
-                    {[['prompt-guide', '프롬프트 가이드'], ['prompt-practice', '프롬프트 연습장'], ['prompt-gallery', '프롬프트 갤러리']].map(([r, label]) => (
-                      <a
-                        key={r}
-                        href={'#' + r}
-                        role="menuitem"
-                        onClick={goRoute(r)}
-                        style={{ display: 'block', padding: '11px 14px', borderRadius: 9, textDecoration: 'none', fontSize: 14.5, whiteSpace: 'nowrap', fontWeight: route === r ? 700 : 500, color: route === r ? NAVY : '#3C3730', background: route === r ? '#F1ECE1' : 'transparent' }}
-                        onMouseEnter={(e) => { if (route !== r) e.currentTarget.style.background = '#F6F2EA' }}
-                        onMouseLeave={(e) => { if (route !== r) e.currentTarget.style.background = 'transparent' }}
-                      >{label}</a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+            <NavMenu id="prompt" label="프롬프트" active={['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={promptItems} />
             <a href="#prompt-eval" onClick={goRoute('prompt-eval')} style={{ color: route === 'prompt-eval' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'prompt-eval' ? 700 : 500 }}>프롬프트 평가</a>
 
             <a href="#prep" onClick={goSection('prep')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>준비사항</a>
-            <a href="#lecture/intro" onClick={goLecture} style={{ color: view === 'lecture' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' ? 700 : 600 }}>학습강의안</a>
+            <NavMenu id="day1" label="Day 1 강의안" active={view === 'lecture' && day1Ids.has(lectureSub)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={dayItems(0)} />
+            <NavMenu id="day2" label="Day 2 강의안" active={view === 'lecture' && !day1Ids.has(lectureSub)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={dayItems(1)} />
             {user ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <span style={{ fontSize: 13.5, fontWeight: 600, color: NAVY }}>{displayName(user)}님</span>
@@ -323,6 +301,54 @@ export default function App() {
       </footer>
 
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+    </div>
+  )
+}
+
+// 상단 nav 드롭다운 (프롬프트 / Day1 / Day2 공용)
+function NavMenu({ id, label, active, openMenu, setOpenMenu, items }) {
+  const ref = useRef(null)
+  const isOpen = openMenu === id
+  useEffect(() => {
+    if (!isOpen) return
+    const onDown = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpenMenu(null) }
+    const onKey = (e) => { if (e.key === 'Escape') setOpenMenu(null) }
+    document.addEventListener('mousedown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey) }
+  }, [isOpen, setOpenMenu])
+
+  return (
+    <div ref={ref} style={{ position: 'relative' }} onMouseEnter={() => setOpenMenu(id)}>
+      <button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        onClick={() => setOpenMenu(isOpen ? null : id)}
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '6px 0', whiteSpace: 'nowrap', color: active ? NAVY : '#5A5246', fontSize: 14, fontWeight: active ? 700 : 500 }}
+      >
+        {label} <span style={{ fontSize: 10, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform .15s' }}>▾</span>
+      </button>
+      {isOpen && (
+        <div role="menu" style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', paddingTop: 10, zIndex: 60 }}>
+          <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, boxShadow: '0 16px 40px rgba(27,25,22,0.16)', padding: 6, minWidth: 220, maxWidth: 320 }}>
+            {items.map((it) => (
+              <a
+                key={it.key}
+                href="#"
+                role="menuitem"
+                onClick={it.onClick}
+                style={{ display: 'flex', gap: 10, alignItems: 'baseline', padding: '10px 14px', borderRadius: 9, textDecoration: 'none', fontSize: 14, fontWeight: it.active ? 700 : 500, color: it.active ? NAVY : '#3C3730', background: it.active ? '#F1ECE1' : 'transparent' }}
+                onMouseEnter={(e) => { if (!it.active) e.currentTarget.style.background = '#F6F2EA' }}
+                onMouseLeave={(e) => { if (!it.active) e.currentTarget.style.background = 'transparent' }}
+              >
+                {it.meta && <span style={{ fontFamily: NEWS, fontSize: 12.5, color: '#9A8F7D', flexShrink: 0, minWidth: 78 }}>{it.meta}</span>}
+                <span style={{ lineHeight: 1.4 }}>{it.title}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

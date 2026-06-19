@@ -12,7 +12,7 @@ const ALL_ITEMS = [intro, ...lectureDays.flatMap((d) => d.sessions)]
 
 export default function LectureNotes({ user, onRequestLogin }) {
   const [activeId, setActiveId] = useState(() => {
-    const sub = window.location.hash.split('/')[1]
+    const sub = typeof window !== 'undefined' ? window.location.hash.split('/')[1] : ''
     return ALL_ITEMS.some((i) => i.id === sub) ? sub : 'intro'
   })
 
@@ -153,6 +153,41 @@ function Content({ item }) {
         </div>
       ))}
 
+      {item.example && (
+        <Block title="사례 · 예시">
+          {item.example.scenario && (
+            <p style={{ fontSize: 15.5, color: '#3D372E', lineHeight: 1.75, marginBottom: 16 }}><Lines text={item.example.scenario} /></p>
+          )}
+          <div style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: '0.04em', color: NAVY, marginBottom: 8 }}>입력 (프롬프트)</div>
+          <pre style={preDark}>{item.example.input}</pre>
+          <div style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: '0.04em', color: TERRA, margin: '18px 0 8px' }}>예상 출력</div>
+          <div style={{ background: '#F4F6F9', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '16px 18px', fontSize: 14.5, color: '#3D372E', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{item.example.output}</div>
+        </Block>
+      )}
+
+      {item.slides && (
+        <Block title="슬라이드 구성 제안">
+          <p style={{ fontSize: 14, color: '#7A7163', marginTop: -4, marginBottom: 16 }}>아래 장표 흐름을 그대로 PPT 골격으로 사용할 수 있습니다.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {item.slides.map((sl, i) => (
+              <div key={i} style={{ display: 'flex', gap: 16, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '16px 18px' }}>
+                <div style={{ flexShrink: 0, fontFamily: NEWS, fontSize: 14, color: '#fff', background: NAVY, width: 30, height: 30, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</div>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 15.5, fontWeight: 600, color: '#1B1916', lineHeight: 1.4 }}>{sl.title}</div>
+                  {sl.points && (
+                    <ul style={{ ...ulS, marginTop: 9, gap: 6 }}>
+                      {sl.points.map((p, j) => (
+                        <li key={j} style={{ ...liS, fontSize: 14, color: '#5A5246', lineHeight: 1.55 }}><Bullet color={TERRA} />{p}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Block>
+      )}
+
       {item.practice && (
         <Block title={item.practice.title} accent>
           <ol style={{ listStyle: 'none', counterReset: 'step', padding: 0, margin: 0 }}>
@@ -171,6 +206,20 @@ function Content({ item }) {
           <h3 style={h3S}>예시 프롬프트</h3>
           <pre style={{ marginTop: 14, background: '#1B1916', color: '#EAE4D8', borderRadius: 14, padding: '22px 24px', fontSize: 14, lineHeight: 1.7, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: "'IBM Plex Sans KR', ui-monospace, monospace" }}>{item.promptExample}</pre>
         </div>
+      )}
+
+      {item.teachingNotes && (
+        <Block title="강의 진행 노트">
+          <div style={{ background: '#FBF8F1', border: `1px solid ${BORDER}`, borderLeft: `3px solid ${NAVY}`, borderRadius: '0 12px 12px 0', padding: '18px 22px' }}>
+            <ul style={{ ...ulS, margin: 0, gap: 12 }}>
+              {item.teachingNotes.map((n, i) => (
+                <li key={i} style={{ ...liS, color: '#3D372E', lineHeight: 1.7 }}>
+                  <span style={{ color: NAVY, marginRight: 10, flexShrink: 0, fontWeight: 700 }}>›</span><Lines text={n} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Block>
       )}
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 18, marginTop: 34 }}>
@@ -219,3 +268,4 @@ function Bullet({ color = NAVY }) {
 const h3S = { fontFamily: SERIF, fontWeight: 600, fontSize: 21, letterSpacing: '-0.015em', color: '#1B1916' }
 const ulS = { listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }
 const liS = { display: 'flex', alignItems: 'flex-start', fontSize: 15.5, color: '#3D372E', lineHeight: 1.65 }
+const preDark = { margin: 0, background: '#1B1916', color: '#EAE4D8', borderRadius: 12, padding: '18px 20px', fontSize: 13.5, lineHeight: 1.7, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: "'IBM Plex Sans KR', ui-monospace, monospace" }
