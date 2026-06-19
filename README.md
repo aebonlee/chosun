@@ -7,7 +7,7 @@
 ## 스택
 
 - React 18 + Vite 5
-- Supabase (`chosun_applications` — 교육 신청 접수)
+- Supabase Auth (구글 · 카카오 OAuth 로그인)
 - 폰트: Noto Serif KR · IBM Plex Sans KR · Newsreader
 - 디자인 출처: `조선대 교원 교육.dc.html` (Claude Design 핸드오프) 픽셀-퍼펙트 포팅
 - 배포: GitHub Actions → GitHub Pages (커스텀 도메인)
@@ -31,11 +31,12 @@ npm run og
 npm uninstall sharp
 ```
 
-## Supabase
+## Supabase Auth
 
-- 공유 프로젝트(`hcmgdztsgjvzcyxyayaj`) 내 `chosun_` 접두사 테이블 사용
-- 스키마: [`supabase/schema.sql`](supabase/schema.sql)
-- RLS: 익명(anon) `INSERT`만 허용(신청 제출), 조회는 운영자만(SQL/대시보드)
+- 공유 프로젝트(`hcmgdztsgjvzcyxyayaj`)의 구글·카카오 OAuth 사용
+- `supabase.auth.signInWithOAuth({ provider, options: { redirectTo: origin } })`
+- 리다이렉트 허용: 공유 프로젝트 allow-list의 `https://*.dreamitbiz.com/**` 와일드카드로 커버됨
+- 세션 추적: `src/lib/useAuth.js` (`getSession` + `onAuthStateChange`)
 - 클라이언트 키는 `src/lib/supabase.js`에 fallback 하드코딩(anon 공개 키)
 
 ## 구조
@@ -44,7 +45,8 @@ npm uninstall sharp
 src/
   App.jsx                   # 전체 랜딩 (NAV·HERO·OVERVIEW·CURRICULUM·LABS·PREP·INFO·FOOTER)
   data.js                   # 커리큘럼/실습/안내 콘텐츠 데이터
-  components/ApplyModal.jsx # 교육 신청 모달 (Supabase insert)
+  components/LoginModal.jsx # 구글·카카오 로그인 모달
+  lib/useAuth.js            # Supabase 세션 추적 훅
   lib/supabase.js           # Supabase 클라이언트
 scripts/generate-og.mjs     # OG 이미지 생성
 ```

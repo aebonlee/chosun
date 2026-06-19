@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { heroStats, overviewItems, days, labs, prep, infoCards } from './data'
-import ApplyModal from './components/ApplyModal'
+import LoginModal from './components/LoginModal'
+import { useAuth, displayName } from './lib/useAuth'
 
 const SERIF = "'Noto Serif KR', serif"
 const NEWS = "'Newsreader', serif"
@@ -10,8 +11,9 @@ const BORDER = '#E2D9C9'
 const container = { maxWidth: 1180, margin: '0 auto', padding: '0 40px' }
 
 export default function App() {
-  const [showApply, setShowApply] = useState(false)
-  const open = () => setShowApply(true)
+  const [showLogin, setShowLogin] = useState(false)
+  const { user, signOut } = useAuth()
+  const open = () => setShowLogin(true)
 
   return (
     <div style={{ background: '#F6F2EA', color: '#1B1916', minHeight: '100vh' }}>
@@ -29,7 +31,14 @@ export default function App() {
             <a href="#labs" style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>실습 모듈</a>
             <a href="#prep" style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>준비사항</a>
             <a href="#info" style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>운영 정보</a>
-            <button onClick={open} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: NAVY, color: '#fff', border: 'none', cursor: 'pointer', fontSize: 13.5, fontWeight: 600, padding: '9px 18px', borderRadius: 999 }}>교육 신청</button>
+            {user ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontSize: 13.5, fontWeight: 600, color: NAVY }}>{displayName(user)}님</span>
+                <button onClick={signOut} style={{ background: '#fff', color: '#5A5246', border: `1px solid ${BORDER}`, cursor: 'pointer', fontSize: 13.5, fontWeight: 600, padding: '8px 16px', borderRadius: 999 }}>로그아웃</button>
+              </div>
+            ) : (
+              <button onClick={open} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: NAVY, color: '#fff', border: 'none', cursor: 'pointer', fontSize: 13.5, fontWeight: 600, padding: '9px 18px', borderRadius: 999 }}>로그인</button>
+            )}
           </div>
         </div>
       </nav>
@@ -48,7 +57,7 @@ export default function App() {
         </p>
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
           <a href="#curriculum" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: NAVY, color: '#fff', textDecoration: 'none', fontSize: 15, fontWeight: 600, padding: '14px 26px', borderRadius: 11 }}>커리큘럼 살펴보기 <span style={{ fontFamily: NEWS }}>→</span></a>
-          <button onClick={open} style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: '#fff', border: `1px solid ${BORDER}`, color: '#1B1916', cursor: 'pointer', fontSize: 15, fontWeight: 600, padding: '14px 26px', borderRadius: 11 }}>교육 신청하기</button>
+          <a href="#prep" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: '#fff', border: `1px solid ${BORDER}`, color: '#1B1916', textDecoration: 'none', fontSize: 15, fontWeight: 600, padding: '14px 26px', borderRadius: 11 }}>준비물 확인</a>
         </div>
 
         <div className="stats-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0, marginTop: 64, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
@@ -184,9 +193,15 @@ export default function App() {
         </div>
 
         <div style={{ textAlign: 'center', marginTop: 56 }}>
-          <button onClick={open} style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: TERRA, color: '#fff', border: 'none', cursor: 'pointer', fontSize: 16, fontWeight: 600, padding: '16px 36px', borderRadius: 12 }}>
-            교육 신청하기 <span style={{ fontFamily: NEWS }}>→</span>
-          </button>
+          {user ? (
+            <div style={{ fontSize: 16, color: '#5A5246' }}>
+              <span style={{ fontFamily: SERIF, fontWeight: 600, color: NAVY }}>{displayName(user)}</span>님, 환영합니다. 교육 안내를 확인해 주세요.
+            </div>
+          ) : (
+            <button onClick={open} style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: TERRA, color: '#fff', border: 'none', cursor: 'pointer', fontSize: 16, fontWeight: 600, padding: '16px 36px', borderRadius: 12 }}>
+              구글·카카오로 로그인 <span style={{ fontFamily: NEWS }}>→</span>
+            </button>
+          )}
         </div>
       </section>
 
@@ -201,7 +216,7 @@ export default function App() {
         </div>
       </footer>
 
-      {showApply && <ApplyModal onClose={() => setShowApply(false)} />}
+      {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </div>
   )
 }
