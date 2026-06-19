@@ -125,7 +125,7 @@ function Content({ item }) {
         <div style={{ fontFamily: NEWS, fontSize: 15, color: TERRA, marginBottom: 10, letterSpacing: '0.01em' }}>{item.time}</div>
       )}
       <h1 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 38, lineHeight: 1.2, letterSpacing: '-0.025em' }}>{item.title}</h1>
-      <p style={{ fontSize: 17, color: '#5A5246', marginTop: 18, lineHeight: 1.7, maxWidth: 720 }}>{item.summary}</p>
+      <p style={{ fontSize: 17, color: '#5A5246', marginTop: 18, lineHeight: 1.7, maxWidth: 720 }}><Lines text={item.summary} /></p>
 
       {item.objectives && (
         <Block title="학습 목표">
@@ -141,7 +141,7 @@ function Content({ item }) {
         <div key={i} style={{ marginTop: 38 }}>
           <h3 style={h3S}>{sec.heading}</h3>
           {sec.paragraphs?.map((p, j) => (
-            <p key={j} style={{ fontSize: 15.5, color: '#3D372E', lineHeight: 1.8, marginTop: 12 }}>{p}</p>
+            <p key={j} style={{ fontSize: 15.5, color: '#3D372E', lineHeight: 1.8, marginTop: 12 }}><Lines text={p} /></p>
           ))}
           {sec.bullets && (
             <ul style={{ ...ulS, marginTop: 14 }}>
@@ -202,6 +202,14 @@ function Block({ title, accent, children }) {
       <div style={{ marginTop: 14 }}>{children}</div>
     </div>
   )
+}
+
+// 마침표(.) 기준 문장별 줄바꿈. 숫자 뒤 마침표(예: "2026. 6. 24")는 보호.
+function Lines({ text }) {
+  const parts = String(text).split(/(?<=[^\d]\.)\s+/).filter(Boolean)
+  return parts.map((s, i) => (
+    <span key={i} style={{ display: 'block' }}>{s}</span>
+  ))
 }
 
 function Bullet({ color = NAVY }) {
