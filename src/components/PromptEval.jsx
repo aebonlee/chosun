@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { PromptPage } from './PromptPractice'
 
 const SERIF = "'Noto Serif KR', serif"
+const NEWS = "'Newsreader', serif"
 const NAVY = '#1E3A5F'
 const TERRA = '#C2603D'
 const BORDER = '#E2D9C9'
