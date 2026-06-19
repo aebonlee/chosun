@@ -213,13 +213,13 @@ function Content({ item }) {
         </div>
       )}
 
-      {item.teachingNotes && (
-        <Block title="강의 진행 노트">
-          <div style={{ background: '#FBF8F1', border: `1px solid ${BORDER}`, borderLeft: `3px solid ${NAVY}`, borderRadius: '0 12px 12px 0', padding: '18px 22px' }}>
+      {item.recap && (
+        <Block title="이 교시 요약">
+          <div style={{ background: '#FBF8F1', border: `1px solid ${BORDER}`, borderLeft: `3px solid ${TERRA}`, borderRadius: '0 12px 12px 0', padding: '18px 22px' }}>
             <ul style={{ ...ulS, margin: 0, gap: 12 }}>
-              {item.teachingNotes.map((n, i) => (
+              {item.recap.map((n, i) => (
                 <li key={i} style={{ ...liS, color: '#3D372E', lineHeight: 1.7 }}>
-                  <span style={{ color: NAVY, marginRight: 10, flexShrink: 0, fontWeight: 700 }}>›</span><Lines text={n} />
+                  <Bullet color={TERRA} /><Lines text={n} />
                 </li>
               ))}
             </ul>
