@@ -31,4 +31,8 @@ button { font-family: inherit; }
   .section-h2 { font-size: 30px !important; }
   .prep-wrap, .overview-wrap { gap: 32px !important; }
   .stats-4 { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* 학습강의안: 사이드바를 본문 위로 쌓기 */
+  .lecture-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
+  .lecture-aside { position: static !important; }
 }

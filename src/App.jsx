@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { heroStats, overviewItems, days, labs, prep, infoCards } from './data'
 import LoginModal from './components/LoginModal'
+import LectureNotes from './components/LectureNotes'
 import { useAuth, displayName } from './lib/useAuth'
 
 const SERIF = "'Noto Serif KR', serif"
@@ -12,8 +13,24 @@ const container = { maxWidth: 1180, margin: '0 auto', padding: '0 40px' }
 
 export default function App() {
   const [showLogin, setShowLogin] = useState(false)
+  const [hash, setHash] = useState(window.location.hash)
   const { user, signOut } = useAuth()
   const open = () => setShowLogin(true)
+
+  useEffect(() => {
+    const onHash = () => setHash(window.location.hash)
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
+  const view = hash.startsWith('#lecture') ? 'lecture' : 'home'
+  const goLecture = (e) => { e.preventDefault(); window.location.hash = '#lecture/intro'; window.scrollTo({ top: 0 }) }
+  const goHome = (e) => { e.preventDefault(); window.location.hash = ''; window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  const goSection = (id) => (e) => {
+    e.preventDefault()
+    window.location.hash = ''
+    setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 60)
+  }
 
   return (
     <div style={{ background: '#F6F2EA', color: '#1B1916', minHeight: '100vh' }}>
@@ -21,16 +38,15 @@ export default function App() {
       {/* NAV */}
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(246,242,234,0.86)', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${BORDER}` }}>
         <div style={{ ...container, height: 66, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <a href="#" onClick={goHome} style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none', color: 'inherit' }}>
             <div style={{ width: 30, height: 30, borderRadius: 7, background: NAVY, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: NEWS, fontSize: 17, fontStyle: 'italic' }}>C</div>
             <span style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 16, letterSpacing: '-0.01em' }}>조선대학교 교원 교육</span>
-          </div>
-          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-            <a href="#overview" style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>개요</a>
-            <a href="#curriculum" style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
-            <a href="#labs" style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>실습 모듈</a>
-            <a href="#prep" style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>준비사항</a>
-            <a href="#info" style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>운영 정보</a>
+          </a>
+          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+            <a href="#curriculum" onClick={goSection('curriculum')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
+            <a href="#labs" onClick={goSection('labs')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>실습 모듈</a>
+            <a href="#prep" onClick={goSection('prep')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>준비사항</a>
+            <a href="#lecture/intro" onClick={goLecture} style={{ color: view === 'lecture' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' ? 700 : 600 }}>학습강의안</a>
             {user ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <span style={{ fontSize: 13.5, fontWeight: 600, color: NAVY }}>{displayName(user)}님</span>
@@ -43,6 +59,10 @@ export default function App() {
         </div>
       </nav>
 
+      {view === 'lecture' ? (
+        <LectureNotes user={user} onRequestLogin={open} />
+      ) : (
+      <>
       {/* HERO */}
       <header style={{ ...container, padding: '84px 40px 72px', position: 'relative' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 999, padding: '7px 16px', marginBottom: 30 }}>
@@ -204,6 +224,8 @@ export default function App() {
           )}
         </div>
       </section>
+      </>
+      )}
 
       {/* FOOTER */}
       <footer style={{ background: '#1B1916', color: '#A39C90', padding: '48px 0' }}>
