@@ -67,13 +67,18 @@ export default function LectureNotes({ user, onRequestLogin }) {
             onClick={() => select(intro.id)}
           />
 
-          {lectureDays.map((d) => (
+          {lectureDays.map((d, di) => (
             <div key={d.id} style={{ marginTop: 24 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
                 <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: d.accent }}>{d.day}</span>
                 <span style={{ fontSize: 11.5, fontWeight: 600, color: d.accent, background: d.chipBg, padding: '3px 9px', borderRadius: 999 }}>{d.date}</span>
               </div>
               <div style={{ fontSize: 13, color: '#8A8170', marginBottom: 10, paddingLeft: 2 }}>{d.title}</div>
+              <a
+                href={`${import.meta.env.BASE_URL}ppt/chosun-ai-day${di + 1}.pptx`}
+                download={`조선대AI특강_Day${di + 1}.pptx`}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: d.accent, textDecoration: 'none', background: d.chipBg, border: `1px solid ${d.accent}22`, borderRadius: 8, padding: '7px 11px', marginBottom: 10 }}
+              >↓ Day {di + 1} 강의안 PPT 다운로드</a>
               {d.sessions.map((s, i) => (
                 <SideLink
                   key={s.id}

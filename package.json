@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "og": "node scripts/generate-og.mjs"
+    "og": "node scripts/generate-og.mjs",
+    "ppt": "node scripts/generate-ppt.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
