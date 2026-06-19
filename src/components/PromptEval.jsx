@@ -254,7 +254,7 @@ export default function PromptEval() {
           </div>
         ))}
       </div>
-      <p style={{ fontSize: 14, color: '#6F665A', marginTop: 20, lineHeight: 1.6 }}>→ 위 과제를 개선한 뒤, 상단 입력창에 붙여넣고 "채점해보기"로 점수를 확인하세요. 67점 이상을 목표로!</p>
+      <p style={{ fontSize: 14, color: '#6F665A', marginTop: 20, lineHeight: 1.6 }}>→ 위 과제를 개선한 뒤, 상단 입력창에 붙여넣고 "채점해보기"로 점수를 확인하세요. 80점 이상을 목표로!</p>
     </PromptPage>
   )
 }
