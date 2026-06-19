@@ -286,10 +286,20 @@ export default function App() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {prep.map((p, i) => (
               <div key={i} style={{ background: '#fff', borderRadius: 13, padding: '20px 22px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                <div style={{ minWidth: 26, height: 26, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontFamily: NEWS }}>{p.no}</div>
-                <div>
+                <div style={{ minWidth: 26, height: 26, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontFamily: NEWS, flexShrink: 0 }}>{p.no}</div>
+                <div style={{ minWidth: 0 }}>
                   <div style={{ fontSize: 15, fontWeight: 600, color: '#1B1916' }}>{p.title}</div>
                   <div style={{ fontSize: 14, color: '#7A7163', marginTop: 4, lineHeight: 1.55 }}>{p.desc}</div>
+                  {p.detail && <div style={{ fontSize: 13.5, color: '#6B5B3C', marginTop: 10, lineHeight: 1.65 }}>{p.detail}</div>}
+                  {p.checklist && (
+                    <ul style={{ listStyle: 'none', padding: 0, margin: '12px 0 0', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {p.checklist.map((c, j) => (
+                        <li key={j} style={{ display: 'flex', gap: 9, alignItems: 'flex-start', fontSize: 13.5, color: '#5A5246', lineHeight: 1.5 }}>
+                          <span style={{ color: '#A8732E', flexShrink: 0, fontWeight: 700 }}>✓</span>{c}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             ))}
