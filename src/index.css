@@ -35,4 +35,52 @@ button { font-family: inherit; }
   /* 학습강의안: 사이드바를 본문 위로 쌓기 */
   .lecture-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
   .lecture-aside { position: static !important; }
+
+  /* 프롬프트 페이지 그리드 */
+  .prompt-2col, .prompt-grid2, .prompt-grid3 { grid-template-columns: 1fr !important; }
 }
+
+/* ── 마크다운 본문 (프롬프트 가이드) ── */
+.markdown-body { font-size: 15.5px; line-height: 1.8; color: #3D372E; }
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+  font-family: 'Noto Serif KR', serif; letter-spacing: -0.015em; color: #1B1916; line-height: 1.35;
+}
+.markdown-body h3 { font-size: 19px; font-weight: 600; margin: 26px 0 10px; }
+.markdown-body h4 { font-size: 16px; font-weight: 600; margin: 20px 0 8px; }
+.markdown-body p { margin: 12px 0; }
+.markdown-body ul, .markdown-body ol { margin: 12px 0; padding-left: 22px; }
+.markdown-body li { margin: 6px 0; }
+.markdown-body strong { color: #1B1916; font-weight: 700; }
+.markdown-body a { color: #C2603D; text-decoration: underline; }
+.markdown-body hr { border: none; border-top: 1px solid #E2D9C9; margin: 28px 0; }
+.markdown-body .inline-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.88em;
+  background: #EEE7DA; color: #9A4A2C; padding: 2px 6px; border-radius: 5px;
+}
+.markdown-body .table-responsive { overflow-x: auto; margin: 16px 0; }
+.markdown-body table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.markdown-body th, .markdown-body td { border: 1px solid #E2D9C9; padding: 9px 13px; text-align: left; }
+.markdown-body th { background: #F1ECE1; font-weight: 700; color: #1B1916; }
+.markdown-body .md-tip {
+  background: #FBF3EC; border-left: 3px solid #C2603D; border-radius: 0 10px 10px 0;
+  padding: 14px 18px; margin: 16px 0; color: #5A4636; font-size: 14.5px;
+}
+.markdown-body .md-tip p { margin: 4px 0; }
+
+/* ── 코드 블록 (CodeBlock) ── */
+.code-block { background: #1B1916; border-radius: 12px; overflow: hidden; margin: 16px 0; }
+.code-block-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.code-block-lang { font-size: 12px; color: #9A8F7D; letter-spacing: 0.04em; text-transform: uppercase; }
+.code-copy { background: rgba(255,255,255,0.1); color: #EAE4D8; border: none; border-radius: 6px; padding: 4px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.code-copy:hover { background: rgba(255,255,255,0.18); }
+.code-block pre { margin: 0; padding: 18px 20px; overflow-x: auto; }
+.code-block code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; line-height: 1.7; color: #EAE4D8; white-space: pre; }
+.code-line-highlight { display: inline-block; width: 100%; background: rgba(232,98,61,0.16); }
+.token.comment { color: #8A8170; font-style: italic; }
+.token.string { color: #E0A777; }
+.token.keyword { color: #E8896B; font-weight: 600; }
+.token.builtin { color: #7FB0D6; }
+.token.function { color: #C9B26B; }
+.token.number { color: #C99A7E; }
+.token.operator { color: #B6BECB; }
+.token.decorator { color: #C9B26B; }

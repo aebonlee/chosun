@@ -2,7 +2,18 @@ import { useState, useEffect } from 'react'
 import { heroStats, overviewItems, days, labs, prep, infoCards } from './data'
 import LoginModal from './components/LoginModal'
 import LectureNotes from './components/LectureNotes'
+import PromptGuide from './components/PromptGuide'
+import PromptPractice from './components/PromptPractice'
+import PromptGallery from './components/PromptGallery'
+import PromptEval from './components/PromptEval'
 import { useAuth, displayName } from './lib/useAuth'
+
+const PROMPT_VIEWS = {
+  'prompt-guide': PromptGuide,
+  'prompt-practice': PromptPractice,
+  'prompt-gallery': PromptGallery,
+  'prompt-eval': PromptEval,
+}
 
 const SERIF = "'Noto Serif KR', serif"
 const NEWS = "'Newsreader', serif"
@@ -14,17 +25,21 @@ const container = { maxWidth: 1180, margin: '0 auto', padding: '0 40px' }
 export default function App() {
   const [showLogin, setShowLogin] = useState(false)
   const [hash, setHash] = useState(window.location.hash)
+  const [promptOpen, setPromptOpen] = useState(false)
   const { user, signOut } = useAuth()
   const open = () => setShowLogin(true)
 
   useEffect(() => {
-    const onHash = () => setHash(window.location.hash)
+    const onHash = () => { setHash(window.location.hash); setPromptOpen(false) }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
-  const view = hash.startsWith('#lecture') ? 'lecture' : 'home'
+  const route = hash.replace(/^#/, '').split('/')[0]
+  const PromptView = PROMPT_VIEWS[route]
+  const view = route === 'lecture' ? 'lecture' : PromptView ? 'prompt' : 'home'
   const goLecture = (e) => { e.preventDefault(); window.location.hash = '#lecture/intro'; window.scrollTo({ top: 0 }) }
+  const goRoute = (r) => (e) => { e.preventDefault(); setPromptOpen(false); window.location.hash = '#' + r; window.scrollTo({ top: 0 }) }
   const goHome = (e) => { e.preventDefault(); window.location.hash = ''; window.scrollTo({ top: 0, behavior: 'smooth' }) }
   const goSection = (id) => (e) => {
     e.preventDefault()
@@ -45,6 +60,21 @@ export default function App() {
           <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
             <a href="#curriculum" onClick={goSection('curriculum')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
             <a href="#labs" onClick={goSection('labs')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>실습 모듈</a>
+
+            <div style={{ position: 'relative' }} onMouseEnter={() => setPromptOpen(true)} onMouseLeave={() => setPromptOpen(false)}>
+              <button onClick={() => setPromptOpen((v) => !v)} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', color: ['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route) ? NAVY : '#5A5246', fontSize: 14, fontWeight: ['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route) ? 700 : 500 }}>
+                프롬프트 <span style={{ fontSize: 10 }}>▾</span>
+              </button>
+              {promptOpen && (
+                <div style={{ position: 'absolute', top: '100%', left: 0, marginTop: 6, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, boxShadow: '0 14px 36px rgba(27,25,22,0.14)', padding: 8, minWidth: 168, zIndex: 60 }}>
+                  {[['prompt-guide', '프롬프트 가이드'], ['prompt-practice', '프롬프트 연습장'], ['prompt-gallery', '프롬프트 갤러리']].map(([r, label]) => (
+                    <a key={r} href={'#' + r} onClick={goRoute(r)} style={{ display: 'block', padding: '9px 12px', borderRadius: 8, textDecoration: 'none', fontSize: 14, fontWeight: route === r ? 700 : 500, color: route === r ? NAVY : '#5A5246', background: route === r ? '#F4F6F9' : 'transparent' }}>{label}</a>
+                  ))}
+                </div>
+              )}
+            </div>
+            <a href="#prompt-eval" onClick={goRoute('prompt-eval')} style={{ color: route === 'prompt-eval' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'prompt-eval' ? 700 : 500 }}>프롬프트 평가</a>
+
             <a href="#prep" onClick={goSection('prep')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>준비사항</a>
             <a href="#lecture/intro" onClick={goLecture} style={{ color: view === 'lecture' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' ? 700 : 600 }}>학습강의안</a>
             {user ? (
@@ -61,6 +91,8 @@ export default function App() {
 
       {view === 'lecture' ? (
         <LectureNotes user={user} onRequestLogin={open} />
+      ) : view === 'prompt' ? (
+        <PromptView />
       ) : (
       <>
       {/* HERO */}
