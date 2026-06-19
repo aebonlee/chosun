@@ -26,6 +26,9 @@ const mdComponents = {
     if (!inline && !match && text.includes('\n')) return <CodeBlock code={text} language="" />
     return <code className="inline-code" {...props}>{children}</code>
   },
+  pre({ children }) {
+    return <>{children}</>
+  },
   table({ children }) {
     return <div className="table-responsive"><table>{children}</table></div>
   },
