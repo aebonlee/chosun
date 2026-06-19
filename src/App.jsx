@@ -132,7 +132,7 @@ export default function App() {
           Claude 기반 <span style={{ color: TERRA }}>연구 업무 활용</span> &amp;<br />AX 브릿지 교과목 설계
         </h1>
         <p style={{ fontSize: 19, lineHeight: 1.6, color: '#5A5246', maxWidth: 620, marginBottom: 42 }}>
-          논문 리뷰부터 제안서 작성, 교과목 AI 접목과 과목 에이전트 구축까지 — 학과를 막론하고 따라 할 수 있는 실습 중심 2일 과정입니다.
+          논문 리뷰부터 제안서 작성, 교과목 AI 접목과 과목 에이전트 구축까지<br />— 학과를 막론하고 따라 할 수 있는 실습 중심 2일 과정입니다.
         </p>
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
           <a href="#curriculum" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: NAVY, color: '#fff', textDecoration: 'none', fontSize: 15, fontWeight: 600, padding: '14px 26px', borderRadius: 11 }}>커리큘럼 살펴보기 <span style={{ fontFamily: NEWS }}>→</span></a>
