@@ -39,7 +39,7 @@ export default function LectureNotes({ user, onRequestLogin }) {
     return (
       <div style={{ maxWidth: 560, margin: '0 auto', padding: '120px 40px 160px', textAlign: 'center' }}>
         <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, color: TERRA, marginBottom: 14 }}>Members Only</div>
-        <h2 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 34, letterSpacing: '-0.02em' }}>학습강의안은 로그인 후 이용할 수 있습니다</h2>
+        <h2 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 34, letterSpacing: '-0.02em' }}>학습강의안은 로그인 후<br />이용할 수 있습니다</h2>
         <p style={{ fontSize: 16, color: '#6F665A', marginTop: 16, lineHeight: 1.7 }}>
           조선대학교 교원 교육 참여자 확인을 위해<br />구글 또는 카카오 계정으로 로그인해 주세요.
         </p>
