@@ -166,8 +166,8 @@ function Content({ item }) {
       )}
 
       {item.slides && (
-        <Block title="슬라이드 구성 제안">
-          <p style={{ fontSize: 14, color: '#7A7163', marginTop: -4, marginBottom: 16 }}>아래 장표 흐름을 그대로 PPT 골격으로 사용할 수 있습니다.</p>
+        <Block title="강의안 · 핵심정리">
+          <p style={{ fontSize: 14, color: '#7A7163', marginTop: -4, marginBottom: 16 }}>이 교시에서 다루는 핵심 내용을 항목별로 정리했습니다.</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {item.slides.map((sl, i) => (
               <div key={i} style={{ display: 'flex', gap: 16, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '16px 18px' }}>
