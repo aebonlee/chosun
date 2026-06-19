@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { heroStats, overviewItems, days, labs, prep, infoCards } from './data'
 import LoginModal from './components/LoginModal'
 import LectureNotes from './components/LectureNotes'
@@ -26,6 +26,7 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false)
   const [hash, setHash] = useState(window.location.hash)
   const [promptOpen, setPromptOpen] = useState(false)
+  const promptRef = useRef(null)
   const { user, signOut } = useAuth()
   const open = () => setShowLogin(true)
 
@@ -34,6 +35,16 @@ export default function App() {
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
+
+  // 드롭다운 바깥 클릭 / ESC 로 닫기
+  useEffect(() => {
+    if (!promptOpen) return
+    const onDown = (e) => { if (promptRef.current && !promptRef.current.contains(e.target)) setPromptOpen(false) }
+    const onKey = (e) => { if (e.key === 'Escape') setPromptOpen(false) }
+    document.addEventListener('mousedown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey) }
+  }, [promptOpen])
 
   const route = hash.replace(/^#/, '').split('/')[0]
   const PromptView = PROMPT_VIEWS[route]
@@ -61,15 +72,31 @@ export default function App() {
             <a href="#curriculum" onClick={goSection('curriculum')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
             <a href="#labs" onClick={goSection('labs')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>실습 모듈</a>
 
-            <div style={{ position: 'relative' }} onMouseEnter={() => setPromptOpen(true)} onMouseLeave={() => setPromptOpen(false)}>
-              <button onClick={() => setPromptOpen((v) => !v)} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', color: ['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route) ? NAVY : '#5A5246', fontSize: 14, fontWeight: ['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route) ? 700 : 500 }}>
-                프롬프트 <span style={{ fontSize: 10 }}>▾</span>
+            <div ref={promptRef} style={{ position: 'relative' }} onMouseEnter={() => setPromptOpen(true)}>
+              <button
+                type="button"
+                aria-haspopup="menu"
+                aria-expanded={promptOpen}
+                onClick={() => setPromptOpen((v) => !v)}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '6px 0', color: ['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route) ? NAVY : '#5A5246', fontSize: 14, fontWeight: ['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route) ? 700 : 500 }}
+              >
+                프롬프트 <span style={{ fontSize: 10, transform: promptOpen ? 'rotate(180deg)' : 'none', transition: 'transform .15s' }}>▾</span>
               </button>
               {promptOpen && (
-                <div style={{ position: 'absolute', top: '100%', left: 0, marginTop: 6, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, boxShadow: '0 14px 36px rgba(27,25,22,0.14)', padding: 8, minWidth: 168, zIndex: 60 }}>
-                  {[['prompt-guide', '프롬프트 가이드'], ['prompt-practice', '프롬프트 연습장'], ['prompt-gallery', '프롬프트 갤러리']].map(([r, label]) => (
-                    <a key={r} href={'#' + r} onClick={goRoute(r)} style={{ display: 'block', padding: '9px 12px', borderRadius: 8, textDecoration: 'none', fontSize: 14, fontWeight: route === r ? 700 : 500, color: route === r ? NAVY : '#5A5246', background: route === r ? '#F4F6F9' : 'transparent' }}>{label}</a>
-                  ))}
+                <div role="menu" style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', paddingTop: 10, zIndex: 60 }}>
+                  <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, boxShadow: '0 16px 40px rgba(27,25,22,0.16)', padding: 6, minWidth: 184 }}>
+                    {[['prompt-guide', '프롬프트 가이드'], ['prompt-practice', '프롬프트 연습장'], ['prompt-gallery', '프롬프트 갤러리']].map(([r, label]) => (
+                      <a
+                        key={r}
+                        href={'#' + r}
+                        role="menuitem"
+                        onClick={goRoute(r)}
+                        style={{ display: 'block', padding: '11px 14px', borderRadius: 9, textDecoration: 'none', fontSize: 14.5, whiteSpace: 'nowrap', fontWeight: route === r ? 700 : 500, color: route === r ? NAVY : '#3C3730', background: route === r ? '#F1ECE1' : 'transparent' }}
+                        onMouseEnter={(e) => { if (route !== r) e.currentTarget.style.background = '#F6F2EA' }}
+                        onMouseLeave={(e) => { if (route !== r) e.currentTarget.style.background = 'transparent' }}
+                      >{label}</a>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
