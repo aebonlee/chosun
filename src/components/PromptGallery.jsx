@@ -44,7 +44,7 @@ export default function PromptGallery() {
   }
 
   return (
-    <PromptPage kicker="Prompt Gallery" title="프롬프트 갤러리" desc="바로 사용할 수 있는 프롬프트 템플릿 예제입니다. 클릭해서 확인하고 [대괄호] 부분을 수정해서 사용하세요.">
+    <PromptPage kicker="Prompt Gallery" title="프롬프트 갤러리" desc="바로 사용할 수 있는 프롬프트 템플릿 예제입니다. 클릭해서 확인하고 [대괄호] 부분을 수정해서 사용하세요." diagram={{ type: 'flow', steps: ['카테고리 선택', '템플릿 확인', '[대괄호] 수정', '복사 · 사용'] }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 28 }}>
         {categories.map((c) => (
           <button key={c.key} onClick={() => { setCat(c.key); setExpanded(null) }} style={{

@@ -3,6 +3,7 @@ import { heroStats, overviewItems, days, labs, prep, infoCards } from './data'
 import LoginModal from './components/LoginModal'
 import LectureNotes from './components/LectureNotes'
 import { lectureDays } from './lectureNotes'
+import Diagram from './components/Diagram'
 import PromptGuide from './components/PromptGuide'
 import PromptPractice from './components/PromptPractice'
 import PromptGallery from './components/PromptGallery'
@@ -236,6 +237,12 @@ export default function App() {
 
                 {openLab && (
                   <div onClick={(e) => e.stopPropagation()} style={{ marginTop: 22, cursor: 'auto', borderTop: '1px solid #EDE5D7', paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    {l.diagram && (
+                      <div>
+                        <div style={labH}>한눈에 보기</div>
+                        <div style={{ background: '#FBFAF7', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '16px 18px' }}><Diagram spec={l.diagram} /></div>
+                      </div>
+                    )}
                     {l.objectives && (
                       <div>
                         <div style={labH}>학습 목표</div>

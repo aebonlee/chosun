@@ -141,7 +141,7 @@ export default function PromptEval() {
   const weakPoints = criteria.map((c, i) => ({ c, s: scores[i] })).filter((x) => x.s !== null && x.s <= 1)
 
   return (
-    <PromptPage kicker="Prompt Evaluation" title="프롬프트 평가 실습" desc='평가할 프롬프트를 입력하고 "채점해보기"를 누르면 6대 기준으로 자동 채점합니다. 항목별 근거와 개선점을 확인하고, 점수를 직접 보정할 수도 있습니다.'>
+    <PromptPage kicker="Prompt Evaluation" title="프롬프트 평가 실습" desc='평가할 프롬프트를 입력하고 "채점해보기"를 누르면 6대 기준으로 자동 채점합니다. 항목별 근거와 개선점을 확인하고, 점수를 직접 보정할 수도 있습니다.' diagram={{ type: 'converge', inputs: ['역할', '맥락', '구체적 지시', '출력 형식', '제약', '예시'], result: '0~100점 · A~D 등급' }}>
       {/* 입력 + 결과 */}
       <div className="prompt-2col" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 20 }}>
         <div style={panel}>

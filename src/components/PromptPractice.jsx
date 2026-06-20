@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Diagram from './Diagram'
 
 const SERIF = "'Noto Serif KR', serif"
 const NEWS = "'Newsreader', serif"
@@ -44,7 +45,7 @@ export default function PromptPractice() {
   const clear = () => { setPromptText(''); setOutput('') }
 
   return (
-    <PromptPage kicker="Prompt Playground" title="프롬프트 연습장" desc="다양한 템플릿을 불러와 프롬프트 작성을 연습해 보세요. 작성한 프롬프트는 복사해 Claude에 붙여넣어 결과를 확인할 수 있습니다.">
+    <PromptPage kicker="Prompt Playground" title="프롬프트 연습장" desc="다양한 템플릿을 불러와 프롬프트 작성을 연습해 보세요. 작성한 프롬프트는 복사해 Claude에 붙여넣어 결과를 확인할 수 있습니다." diagram={{ type: 'flow', steps: ['템플릿 선택', '프롬프트 작성', '복사', 'claude.ai에서 실행'] }}>
       <div className="prompt-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <div style={panel}>
           <h3 style={panelH}>프롬프트 입력</h3>
@@ -81,12 +82,18 @@ export default function PromptPractice() {
 }
 
 // --- shared bits ---
-export function PromptPage({ kicker, title, desc, children }) {
+export function PromptPage({ kicker, title, desc, diagram, children }) {
   return (
     <div style={{ maxWidth: 1180, margin: '0 auto', padding: '56px 40px 100px', animation: 'floatIn .35s ease both' }}>
       <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, color: TERRA, marginBottom: 12 }}>{kicker}</div>
       <h1 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 40, letterSpacing: '-0.025em' }}>{title}</h1>
       {desc && <p style={{ fontSize: 16.5, color: '#5A5246', marginTop: 16, lineHeight: 1.7, maxWidth: 760 }}>{desc}</p>}
+      {diagram && (
+        <div style={{ marginTop: 24, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: '22px 24px', maxWidth: 860 }}>
+          <div style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: '0.04em', color: NAVY, marginBottom: 12 }}>한눈에 보기</div>
+          <Diagram spec={diagram} />
+        </div>
+      )}
       <div style={{ marginTop: 40 }}>{children}</div>
     </div>
   )

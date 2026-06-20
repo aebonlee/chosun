@@ -2,6 +2,7 @@ import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import CodeBlock from './CodeBlock'
+import Diagram from './Diagram'
 import basics from '../prompt/data/basics'
 import systemPrompts from '../prompt/data/system-prompts'
 import xmlTags from '../prompt/data/xml-tags'
@@ -66,6 +67,12 @@ export default function PromptGuide() {
         <article style={{ minWidth: 0, animation: 'floatIn .35s ease both' }}>
           <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, color: TERRA, marginBottom: 10 }}>Prompt Engineering</div>
           <h1 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 38, lineHeight: 1.2, letterSpacing: '-0.025em' }}>{sec.title}</h1>
+          {active === 0 && (
+            <div style={{ marginTop: 24, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: '22px 24px' }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: '0.04em', color: NAVY, marginBottom: 12 }}>한눈에 보기</div>
+              <Diagram spec={{ type: 'converge', inputs: ['역할', '맥락', '과업', '형식', '제약'], result: '신뢰할 수 있는 응답' }} />
+            </div>
+          )}
           {sec.sections.map((s, i) => (
             <section key={i} style={{ marginTop: 38 }}>
               <h2 style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 24, letterSpacing: '-0.02em', marginBottom: 14, paddingBottom: 10, borderBottom: `1px solid ${BORDER}` }}>{s.title}</h2>
