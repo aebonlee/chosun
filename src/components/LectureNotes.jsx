@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { intro, lectureDays } from '../lectureNotes'
+import Diagram from './Diagram'
 
 const SERIF = "'Noto Serif KR', serif"
 const NEWS = "'Newsreader', serif"
@@ -139,6 +140,14 @@ function Content({ item }) {
               <li key={i} style={liS}><Bullet />{o}</li>
             ))}
           </ul>
+        </Block>
+      )}
+
+      {item.diagram && (
+        <Block title="한눈에 보기">
+          <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: '22px 24px' }}>
+            <Diagram spec={item.diagram} />
+          </div>
         </Block>
       )}
 
