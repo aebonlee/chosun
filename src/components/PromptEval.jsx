@@ -141,7 +141,24 @@ export default function PromptEval() {
   const weakPoints = criteria.map((c, i) => ({ c, s: scores[i] })).filter((x) => x.s !== null && x.s <= 1)
 
   return (
-    <PromptPage kicker="Prompt Evaluation" title="프롬프트 평가 실습" desc='평가할 프롬프트를 입력하고 "채점해보기"를 누르면 6대 기준으로 자동 채점합니다. 항목별 근거와 개선점을 확인하고, 점수를 직접 보정할 수도 있습니다.' diagram={{ type: 'converge', inputs: ['역할', '맥락', '구체적 지시', '출력 형식', '제약', '예시'], result: '0~100점 · A~D 등급' }}>
+    <PromptPage kicker="Prompt Evaluation" title="프롬프트 평가 실습" desc='평가할 프롬프트를 입력하고 "채점해보기"를 누르면 6대 기준으로 자동 채점합니다. 항목별 근거와 개선점을 확인하고, 점수를 직접 보정할 수도 있습니다.'>
+      {/* 실습 방법 */}
+      <div style={{ background: '#FBF8F1', border: `1px solid ${BORDER}`, borderLeft: `3px solid ${TERRA}`, borderRadius: '0 14px 14px 0', padding: '20px 24px', marginBottom: 28 }}>
+        <div style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: '0.04em', color: TERRA, marginBottom: 14 }}>실습 방법</div>
+        <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {[
+            '평가할 프롬프트를 입력창에 붙여넣고 "채점해보기"를 누릅니다.',
+            '6대 기준 점수와 항목별 "개선 제안"을 확인합니다. 자동 점수는 직접 보정할 수 있습니다.',
+            '개선 제안을 반영해 프롬프트를 고친 뒤 다시 채점합니다 — 80점 이상을 목표로 반복하세요.',
+          ].map((t, i) => (
+            <li key={i} style={{ display: 'flex', gap: 13, alignItems: 'flex-start', fontSize: 15, color: '#3D372E', lineHeight: 1.6 }}>
+              <span style={{ minWidth: 24, height: 24, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12.5, fontFamily: NEWS, flexShrink: 0 }}>{i + 1}</span>
+              <span>{t}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
       {/* 입력 + 결과 */}
       <div className="prompt-2col" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 20 }}>
         <div style={panel}>
