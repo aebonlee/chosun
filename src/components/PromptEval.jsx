@@ -195,7 +195,7 @@ export default function PromptEval() {
       {/* 루브릭 */}
       <h2 style={sectionTitle}>6대 평가 기준</h2>
       <p style={{ fontSize: 15, color: '#6F665A', marginBottom: 20 }}>각 기준은 0~3점입니다. 채점 후 항목마다 "왜 중요한지"와 자동 분석 근거가 표시됩니다.</p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div className="prompt-grid2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, alignItems: 'start' }}>
         {criteria.map((c, i) => (
           <div key={c.key} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: 22 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
