@@ -35,43 +35,82 @@ const templates = [
   },
 ]
 
+// 정확한 실습을 위한 자가 점검 항목 — 입력 텍스트에서 5요소(+예시) 포함 여부를 휴리스틱으로 감지
+const checks = [
+  { key: 'role', label: '역할', test: (t) => /당신은|너는|역할|as an?\s|you are|act as|전문가|시니어|senior|경력|개발자|디자이너|마케터|컨설턴트|분석가|연구자|교수|expert/i.test(t), tip: '"당신은 OO 분야 전문가입니다"처럼 역할·전문성을 지정합니다.' },
+  { key: 'context', label: '맥락·배경', test: (t) => /<context>|배경|맥락|목적|대상|독자|타겟|상황|because|since|audience|goal/i.test(t) || t.length > 140, tip: '대상 독자·목적·배경 등 "왜" 필요한지를 함께 적습니다.' },
+  { key: 'task', label: '구체적 지시', test: (t) => /작성|만들|생성|분석|요약|설명|리뷰|평가|번역|수정|정리|추천|작성해|write|create|generate|analyz|summar|explain|review/i.test(t), tip: '무엇을 해야 하는지 동작을 분명한 동사로 지시합니다.' },
+  { key: 'format', label: '출력 형식', test: (t) => /형식|포맷|표(로|\s|$)|테이블|json|마크다운|불릿|리스트|목록|번호|단계|항목|\d+\s*(개|가지|문장|줄|단어|자)/i.test(t), tip: '표·목록·항목 수·글자 수 등 원하는 출력 형식을 지정합니다.' },
+  { key: 'constraints', label: '제약·규칙', test: (t) => /이내|이하|이상|글자|금지|하지\s?마|말\s?것|제외|톤|말투|어조|정중|격식|반드시|필수|없이|간결|한국어로|영어로/i.test(t), tip: '길이·어조·금지사항 등 출력의 경계를 정합니다.' },
+  { key: 'examples', label: '예시(선택)', test: (t) => /예시|예:|예\)|보기|example|e\.?g\.|<example>|샘플|sample|입력.*출력/i.test(t), tip: '원하는 결과의 예시를 1개 이상 주면 품질이 크게 오릅니다(선택).' },
+]
+
 export default function PromptPractice() {
   const [promptText, setPromptText] = useState('')
-  const [output, setOutput] = useState('')
+  const [copied, setCopied] = useState(false)
 
-  const run = () => {
-    setOutput('[ 미리보기 모드 ] 이 연습장은 프롬프트를 직접 작성·구조화해 보는 공간입니다.\n실제 응답은 Claude(claude.ai)에 붙여넣어 확인하세요.\n\n---\n입력한 프롬프트:\n\n' + promptText)
+  const results = checks.map((c) => ({ ...c, ok: !!promptText.trim() && c.test(promptText) }))
+  const core = results.slice(0, 5)
+  const coreOk = core.filter((r) => r.ok).length
+  const ready = coreOk >= 4
+
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(promptText) } catch { /* noop */ }
+    setCopied(true); setTimeout(() => setCopied(false), 2000)
   }
-  const clear = () => { setPromptText(''); setOutput('') }
+  const clear = () => setPromptText('')
 
   return (
-    <PromptPage kicker="Prompt Playground" title="프롬프트 연습장" desc="다양한 템플릿을 불러와 프롬프트 작성을 연습해 보세요. 작성한 프롬프트는 복사해 Claude에 붙여넣어 결과를 확인할 수 있습니다." diagram={{ type: 'flow', steps: ['템플릿 선택', '프롬프트 작성', '복사', 'claude.ai에서 실행'] }}>
-      <div className="prompt-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+    <PromptPage
+      kicker="Prompt Playground"
+      title="프롬프트 연습장"
+      desc="이 연습장은 좋은 프롬프트를 직접 작성·점검해 보는 공간입니다. 프롬프트를 쓰면 오른쪽에서 5대 구성요소가 갖춰졌는지 실시간으로 점검해 줍니다. 점검을 통과하면 복사해 claude.ai에 붙여넣어 실제 응답을 확인하세요."
+      diagram={{ type: 'flow', steps: ['작성 / 템플릿', '5요소 자가 점검', '복사', 'claude.ai에서 실행'] }}
+    >
+      <div className="prompt-2col" style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: 20 }}>
         <div style={panel}>
-          <h3 style={panelH}>프롬프트 입력</h3>
+          <h3 style={panelH}>프롬프트 작성</h3>
           <textarea
             value={promptText}
             onChange={(e) => setPromptText(e.target.value)}
-            placeholder="프롬프트를 입력하거나 아래 템플릿을 선택하세요…"
+            placeholder="프롬프트를 직접 작성하거나 아래 템플릿을 불러와 수정해 보세요…"
             style={textarea}
           />
-          <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-            <button onClick={run} disabled={!promptText.trim()} style={btn(NAVY, !promptText.trim())}>미리보기</button>
-            <button onClick={clear} style={btnOutline}>초기화</button>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 14, flexWrap: 'wrap', gap: 10 }}>
+            <span style={{ fontSize: 13, color: '#9A8F7D' }}>글자 수 {promptText.length}</span>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button onClick={copy} disabled={!promptText.trim()} style={btn(NAVY, !promptText.trim())}>{copied ? '복사됨 ✓' : '프롬프트 복사'}</button>
+              <button onClick={clear} style={btnOutline}>초기화</button>
+            </div>
           </div>
+          <p style={{ fontSize: 13, color: '#7A7163', marginTop: 14, lineHeight: 1.6 }}>※ 복사한 프롬프트를 <strong style={{ color: NAVY }}>claude.ai</strong>에 붙여넣어 실제 응답을 확인하고, 결과를 보며 프롬프트를 다듬어 보세요.</p>
         </div>
+
         <div style={panel}>
-          <h3 style={panelH}>결과</h3>
-          <div style={{ ...output ? {} : { color: '#9A8F7D' }, whiteSpace: 'pre-wrap', fontSize: 14, lineHeight: 1.7, color: output ? '#3D372E' : '#9A8F7D', minHeight: 220 }}>
-            {output || '프롬프트를 입력하고 미리보기를 눌러보세요.\n\n작성한 프롬프트를 복사해 claude.ai에 붙여넣으면 실제 응답을 확인할 수 있습니다.'}
+          <h3 style={panelH}>프롬프트 점검</h3>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 14 }}>
+            <span style={{ fontFamily: NEWS, fontSize: 30, fontWeight: 500, color: ready ? '#0B7A4B' : NAVY }}>{coreOk}</span>
+            <span style={{ fontSize: 14, color: '#7A7163' }}>/ 5 핵심 요소 {ready ? '· 준비 완료' : ''}</span>
           </div>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 11 }}>
+            {results.map((r) => (
+              <li key={r.key} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: '50%', background: r.ok ? '#0B7A4B' : '#EDE7DC', color: r.ok ? '#fff' : '#9A8F7D', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, marginTop: 1 }}>{r.ok ? '✓' : ''}</span>
+                <div>
+                  <span style={{ fontSize: 14.5, fontWeight: 600, color: r.ok ? '#1B1916' : '#5A5246' }}>{r.label}</span>
+                  {!r.ok && <div style={{ fontSize: 13, color: '#7A7163', marginTop: 3, lineHeight: 1.5 }}>{r.tip}</div>}
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
-      <h3 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 22, marginTop: 48, marginBottom: 18 }}>템플릿 프롬프트</h3>
+      <h3 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 22, marginTop: 48, marginBottom: 6 }}>템플릿 프롬프트</h3>
+      <p style={{ fontSize: 14, color: '#7A7163', marginBottom: 18 }}>잘 구조화된 예시입니다. 불러와서 [대괄호]를 본인 내용으로 바꾸며 5요소를 익혀 보세요.</p>
       <div className="prompt-grid3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
         {templates.map((t, i) => (
-          <button key={i} onClick={() => { setPromptText(t.prompt); setOutput(''); window.scrollTo({ top: 0, behavior: 'smooth' }) }} style={{ ...card, textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit' }}>
+          <button key={i} onClick={() => { setPromptText(t.prompt); window.scrollTo({ top: 0, behavior: 'smooth' }) }} style={{ ...card, textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit' }}>
             <div style={{ fontSize: 16, fontWeight: 600, color: '#1B1916' }}>{t.title}</div>
             <div style={{ fontSize: 14, color: '#7A7163', marginTop: 8, lineHeight: 1.55 }}>{t.desc}</div>
           </button>

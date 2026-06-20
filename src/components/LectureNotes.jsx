@@ -35,6 +35,11 @@ export default function LectureNotes({ user, onRequestLogin }) {
 
   const active = useMemo(() => ALL_ITEMS.find((i) => i.id === activeId) || intro, [activeId])
 
+  // 현재 보고 있는 날짜 (intro는 Day 1에 속함)
+  const day1Ids = useMemo(() => new Set(['intro', ...lectureDays[0].sessions.map((s) => s.id)]), [])
+  const curDayIdx = day1Ids.has(activeId) ? 0 : 1
+  const curDay = lectureDays[curDayIdx]
+
   // 로그인 게이트
   if (!user) {
     return (
@@ -58,45 +63,55 @@ export default function LectureNotes({ user, onRequestLogin }) {
     <div style={{ maxWidth: 1180, margin: '0 auto', padding: '0 40px' }}>
       <div className="lecture-grid" style={{ display: 'grid', gridTemplateColumns: '264px 1fr', gap: 48, alignItems: 'start', padding: '56px 0 100px' }}>
 
-        {/* 왼쪽 메뉴 */}
+        {/* 왼쪽 메뉴 — 현재 날짜의 교시만 표시 */}
         <aside className="lecture-aside" style={{ position: 'sticky', top: 90 }}>
           <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, color: TERRA, marginBottom: 16 }}>Lecture Notes</div>
 
-          <SideLink
-            label="과정 개요 & 사용 안내"
-            active={activeId === intro.id}
-            onClick={() => select(intro.id)}
-          />
+          {curDayIdx === 0 && (
+            <SideLink
+              label="과정 개요 & 사용 안내"
+              active={activeId === intro.id}
+              onClick={() => select(intro.id)}
+            />
+          )}
 
-          {lectureDays.map((d, di) => (
-            <div key={d.id} style={{ marginTop: 24 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: d.accent }}>{d.day}</span>
-                <span style={{ fontSize: 11.5, fontWeight: 600, color: d.accent, background: d.chipBg, padding: '3px 9px', borderRadius: 999 }}>{d.date}</span>
-              </div>
-              <div style={{ fontSize: 13, color: '#8A8170', marginBottom: 10, paddingLeft: 2 }}>{d.title}</div>
-              <a
-                href={`${import.meta.env.BASE_URL}ppt/chosun-ai-day${di + 1}.pptx`}
-                download={`조선대AI특강_Day${di + 1}.pptx`}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: d.accent, textDecoration: 'none', background: d.chipBg, border: `1px solid ${d.accent}22`, borderRadius: 8, padding: '7px 11px', marginBottom: 10 }}
-              >↓ Day {di + 1} 강의안 PPT 다운로드</a>
-              {d.sessions.map((s, i) => (
-                <SideLink
-                  key={s.id}
-                  no={i + 1}
-                  label={s.title}
-                  active={activeId === s.id}
-                  accent={d.accent}
-                  onClick={() => select(s.id)}
-                />
-              ))}
+          <div style={{ marginTop: curDayIdx === 0 ? 24 : 4 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+              <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: curDay.accent }}>{curDay.day}</span>
+              <span style={{ fontSize: 11.5, fontWeight: 600, color: curDay.accent, background: curDay.chipBg, padding: '3px 9px', borderRadius: 999 }}>{curDay.date}</span>
             </div>
-          ))}
+            <div style={{ fontSize: 13, color: '#8A8170', marginBottom: 10, paddingLeft: 2 }}>{curDay.title}</div>
+            <a
+              href={`${import.meta.env.BASE_URL}ppt/chosun-ai-day${curDayIdx + 1}.pptx`}
+              download={`조선대AI특강_Day${curDayIdx + 1}.pptx`}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: curDay.accent, textDecoration: 'none', background: curDay.chipBg, border: `1px solid ${curDay.accent}22`, borderRadius: 8, padding: '7px 11px', marginBottom: 10 }}
+            >↓ Day {curDayIdx + 1} 강의안 PPT 다운로드</a>
+            {curDay.sessions.map((s, i) => (
+              <SideLink
+                key={s.id}
+                no={i + 1}
+                label={s.title}
+                active={activeId === s.id}
+                accent={curDay.accent}
+                onClick={() => select(s.id)}
+              />
+            ))}
+          </div>
         </aside>
 
         {/* 본문 */}
         <article style={{ minWidth: 0, animation: 'floatIn .35s ease both' }}>
           <Content item={active} />
+
+          {/* 이전/다음 날짜 이동 */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginTop: 52, borderTop: `1px solid ${BORDER}`, paddingTop: 26 }}>
+            {curDayIdx === 1
+              ? <button onClick={() => select('d1-s1')} style={dayNavBtn(false)}>← Day 1 · Claude 기반 연구 업무 활용</button>
+              : <span />}
+            {curDayIdx === 0
+              ? <button onClick={() => select('d2-s1')} style={dayNavBtn(true)}>Day 2 · AX 브릿지 교과목 설계 →</button>
+              : <span />}
+          </div>
         </article>
       </div>
     </div>
@@ -277,6 +292,10 @@ function Lines({ text }) {
 
 function Bullet({ color = NAVY }) {
   return <span style={{ color, fontFamily: NEWS, marginRight: 10, flexShrink: 0 }}>◆</span>
+}
+
+function dayNavBtn(primary) {
+  return { background: primary ? NAVY : '#fff', color: primary ? '#fff' : '#5A5246', border: `1px solid ${primary ? NAVY : BORDER}`, borderRadius: 11, padding: '13px 22px', fontSize: 14.5, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', lineHeight: 1.35, textAlign: primary ? 'right' : 'left' }
 }
 
 const h3S = { fontFamily: SERIF, fontWeight: 600, fontSize: 21, letterSpacing: '-0.015em', color: '#1B1916' }
