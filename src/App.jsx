@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
-import { heroStats, overviewItems, days, labs, prep, infoCards } from './data'
+import { heroStats, overviewItems, days, prep, infoCards } from './data'
 import LoginModal from './components/LoginModal'
 import LectureNotes from './components/LectureNotes'
+import LabModules from './components/LabModules'
 import { lectureDays } from './lectureNotes'
-import Diagram from './components/Diagram'
 import PromptGuide from './components/PromptGuide'
 import PromptPractice from './components/PromptPractice'
 import PromptGallery from './components/PromptGallery'
@@ -23,15 +23,11 @@ const NAVY = '#1E3A5F'
 const TERRA = '#C2603D'
 const BORDER = '#E2D9C9'
 const container = { maxWidth: 1180, margin: '0 auto', padding: '0 40px' }
-const labH = { fontSize: 12.5, fontWeight: 700, letterSpacing: '0.04em', color: NAVY, marginBottom: 9 }
-const labUl = { listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 7 }
-const labLi = { display: 'flex', alignItems: 'flex-start', fontSize: 14, color: '#3D372E', lineHeight: 1.55 }
 
 export default function App() {
   const [showLogin, setShowLogin] = useState(false)
   const [hash, setHash] = useState(window.location.hash)
   const [openMenu, setOpenMenu] = useState(null) // 'prompt' | 'day1' | 'day2' | null
-  const [expandedLab, setExpandedLab] = useState(null)
   const { user, signOut } = useAuth()
   const open = () => setShowLogin(true)
 
@@ -44,7 +40,7 @@ export default function App() {
   const route = hash.replace(/^#/, '').split('/')[0]
   const lectureSub = route === 'lecture' ? (hash.split('/')[1] || 'intro') : null
   const PromptView = PROMPT_VIEWS[route]
-  const view = route === 'lecture' ? 'lecture' : PromptView ? 'prompt' : 'home'
+  const view = route === 'lecture' ? 'lecture' : route === 'labs' ? 'labs' : PromptView ? 'prompt' : 'home'
   const goRoute = (r) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#' + r; window.scrollTo({ top: 0 }) }
   const goLectureItem = (id) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#lecture/' + id; window.scrollTo({ top: 0 }) }
 
@@ -73,7 +69,7 @@ export default function App() {
           </a>
           <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
             <a href="#curriculum" onClick={goSection('curriculum')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
-            <a href="#labs" onClick={goSection('labs')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>실습 모듈</a>
+            <a href="#labs" onClick={goRoute('labs')} style={{ color: route === 'labs' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'labs' ? 700 : 500 }}>실습 모듈</a>
 
             <NavMenu id="prompt" label="프롬프트" active={['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={promptItems} />
             <a href="#prompt-eval" onClick={goRoute('prompt-eval')} style={{ color: route === 'prompt-eval' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'prompt-eval' ? 700 : 500 }}>프롬프트 평가</a>
@@ -95,6 +91,8 @@ export default function App() {
 
       {view === 'lecture' ? (
         <LectureNotes user={user} onRequestLogin={open} />
+      ) : view === 'labs' ? (
+        <LabModules />
       ) : view === 'prompt' ? (
         <PromptView />
       ) : (
@@ -208,89 +206,15 @@ export default function App() {
         </div>
       </section>
 
-      {/* LABS */}
-      <section id="labs" style={{ ...container, padding: '90px 40px 40px' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20, marginBottom: 48 }}>
-          <div>
-            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, color: TERRA, marginBottom: 14 }}>Hands-on Labs</div>
-            <h2 className="section-h2" style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 42, letterSpacing: '-0.025em' }}>8개 실습 모듈</h2>
-          </div>
-          <p style={{ fontSize: 15, color: '#6F665A', maxWidth: 380, lineHeight: 1.6 }}>각 모듈은 완성된 산출물을 직접 만들어 보는 것으로 마무리됩니다. 카드를 클릭하면 진행 절차·예시 프롬프트가 펼쳐집니다.</p>
-        </div>
-
-        <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 20, alignItems: 'start' }}>
-          {labs.map((l, i) => {
-            const openLab = expandedLab === i
-            return (
-            <div key={i} onClick={() => setExpandedLab(openLab ? null : i)} style={{ background: '#fff', border: `1px solid ${openLab ? l.ink : BORDER}`, borderRadius: 18, padding: 30, display: 'flex', gap: 22, alignItems: 'flex-start', cursor: 'pointer', transition: 'border-color .15s' }}>
-              <div style={{ minWidth: 54, height: 54, borderRadius: 13, background: l.tint, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: NEWS, fontSize: 21, color: l.ink, fontWeight: 500 }}>{l.no}</div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                  <span style={{ display: 'inline-block', fontSize: 11.5, fontWeight: 700, letterSpacing: '0.06em', color: l.ink, background: l.tint, padding: '4px 10px', borderRadius: 6 }}>{l.tag}</span>
-                  <span style={{ fontSize: 12, color: '#9A8F7D', fontWeight: 600 }}>{openLab ? '접기 ▴' : '자세히 ▾'}</span>
-                </div>
-                <h3 style={{ fontSize: 17.5, fontWeight: 600, color: '#1B1916', lineHeight: 1.4, letterSpacing: '-0.01em', marginTop: 12 }}>{l.title}</h3>
-                <p style={{ fontSize: 14.5, color: '#7A7163', marginTop: 9, lineHeight: 1.6 }}>{openLab ? l.summary : l.desc}</p>
-                <div style={{ fontSize: 13, color: '#9A8F7D', marginTop: 14, display: 'flex', alignItems: 'center', gap: 7 }}>
-                  <span style={{ fontFamily: NEWS, color: TERRA }}>◆</span> 산출물 · {l.output}
-                </div>
-
-                {openLab && (
-                  <div onClick={(e) => e.stopPropagation()} style={{ marginTop: 22, cursor: 'auto', borderTop: '1px solid #EDE5D7', paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 20 }}>
-                    {l.diagram && (
-                      <div>
-                        <div style={labH}>한눈에 보기</div>
-                        <div style={{ background: '#FBFAF7', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '16px 18px' }}><Diagram spec={l.diagram} /></div>
-                      </div>
-                    )}
-                    {l.objectives && (
-                      <div>
-                        <div style={labH}>학습 목표</div>
-                        <ul style={labUl}>{l.objectives.map((o, j) => <li key={j} style={labLi}><span style={{ color: l.ink, marginRight: 8 }}>◆</span>{o}</li>)}</ul>
-                      </div>
-                    )}
-                    {l.steps && (
-                      <div>
-                        <div style={labH}>진행 절차</div>
-                        <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                          {l.steps.map((s, j) => (
-                            <li key={j} style={{ display: 'flex', gap: 11, alignItems: 'flex-start', fontSize: 14, color: '#3D372E', lineHeight: 1.55 }}>
-                              <span style={{ minWidth: 22, height: 22, borderRadius: '50%', background: l.ink, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontFamily: NEWS, flexShrink: 0 }}>{j + 1}</span>{s}
-                            </li>
-                          ))}
-                        </ol>
-                      </div>
-                    )}
-                    {l.promptExample && (
-                      <div>
-                        <div style={labH}>예시 프롬프트</div>
-                        <pre style={{ margin: 0, background: '#1B1916', color: '#EAE4D8', borderRadius: 11, padding: '14px 16px', fontSize: 13, lineHeight: 1.65, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: "'IBM Plex Sans KR', ui-monospace, monospace" }}>{l.promptExample}</pre>
-                      </div>
-                    )}
-                    {l.tips && (
-                      <div style={{ background: '#FBF3EC', border: '1px solid #F0DDCB', borderRadius: 11, padding: '14px 16px' }}>
-                        <div style={{ ...labH, color: TERRA }}>TIP</div>
-                        <ul style={labUl}>{l.tips.map((t, j) => <li key={j} style={{ ...labLi, color: '#5A4636' }}><span style={{ color: TERRA, marginRight: 8 }}>◆</span>{t}</li>)}</ul>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-            )
-          })}
-        </div>
-      </section>
-
       {/* PREP */}
       <section id="prep" style={{ ...container, padding: '90px 40px 40px' }}>
-        <div className="prep-wrap grid-prep" style={{ background: '#F4ECD8', border: '1px solid #E7D9B8', borderRadius: 24, padding: 56, display: 'grid', gridTemplateColumns: '0.9fr 1.1fr', gap: 56, alignItems: 'center' }}>
-          <div>
+        <div className="prep-wrap" style={{ background: '#F4ECD8', border: '1px solid #E7D9B8', borderRadius: 24, padding: '48px 52px' }}>
+          <div style={{ marginBottom: 30 }}>
             <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, color: '#A8732E', marginBottom: 14 }}>Before You Come</div>
             <h2 className="section-h2" style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 34, letterSpacing: '-0.02em', lineHeight: 1.3 }}>교육 전 준비사항</h2>
-            <p style={{ fontSize: 15, color: '#6B5B3C', marginTop: 18, lineHeight: 1.7 }}>원활한 실습 진행을 위해 아래 항목을 미리 준비해 주세요. 계정 발급과 기본 설정은 1교시 시작 전에 마칩니다.</p>
+            <p style={{ fontSize: 15, color: '#6B5B3C', marginTop: 16, lineHeight: 1.7, maxWidth: 680 }}>원활한 실습 진행을 위해 아래 항목을 미리 준비해 주세요. 계정 발급과 기본 설정은 1교시 시작 전에 마칩니다.</p>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' }}>
             {prep.map((p, i) => (
               <div key={i} style={{ background: '#fff', borderRadius: 13, padding: '20px 22px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
                 <div style={{ minWidth: 26, height: 26, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontFamily: NEWS, flexShrink: 0 }}>{p.no}</div>
