@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { intro, lectureDays } from '../lectureNotes'
 import Diagram from './Diagram'
+import LecturePreviewModal from './LecturePreviewModal'
 
 const SERIF = "'Noto Serif KR', serif"
 const NEWS = "'Newsreader', serif"
@@ -16,6 +17,7 @@ export default function LectureNotes({ user, onRequestLogin }) {
     const sub = typeof window !== 'undefined' ? window.location.hash.split('/')[1] : ''
     return ALL_ITEMS.some((i) => i.id === sub) ? sub : 'intro'
   })
+  const [previewDay, setPreviewDay] = useState(null) // 미리보기 모달 대상 Day 인덱스 (0|1|null)
 
   // 해시(#lecture/<id>) ↔ activeId 동기화
   useEffect(() => {
@@ -81,11 +83,17 @@ export default function LectureNotes({ user, onRequestLogin }) {
               <span style={{ fontSize: 11.5, fontWeight: 600, color: curDay.accent, background: curDay.chipBg, padding: '3px 9px', borderRadius: 999 }}>{curDay.date}</span>
             </div>
             <div style={{ fontSize: 13, color: '#8A8170', marginBottom: 10, paddingLeft: 2 }}>{curDay.title}</div>
-            <a
-              href={`${import.meta.env.BASE_URL}ppt/chosun-ai-day${curDayIdx + 1}.pptx`}
-              download={`조선대AI특강_Day${curDayIdx + 1}.pptx`}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: curDay.accent, textDecoration: 'none', background: curDay.chipBg, border: `1px solid ${curDay.accent}22`, borderRadius: 8, padding: '7px 11px', marginBottom: 10 }}
-            >↓ Day {curDayIdx + 1} 강의안 PPT 다운로드</a>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
+              <button
+                onClick={() => setPreviewDay(curDayIdx)}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: '#fff', cursor: 'pointer', background: curDay.accent, border: `1px solid ${curDay.accent}`, borderRadius: 8, padding: '8px 11px', fontFamily: 'inherit' }}
+              >👁 Day {curDayIdx + 1} 강의안 미리보기 · 다운로드</button>
+              <a
+                href={`${import.meta.env.BASE_URL}ppt/chosun-ai-day${curDayIdx + 1}.pptx`}
+                download={`조선대AI특강_Day${curDayIdx + 1}.pptx`}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: curDay.accent, textDecoration: 'none', background: curDay.chipBg, border: `1px solid ${curDay.accent}22`, borderRadius: 8, padding: '8px 11px' }}
+              >↓ Day {curDayIdx + 1} PPT 다운로드</a>
+            </div>
             {curDay.sessions.map((s, i) => (
               <SideLink
                 key={s.id}
@@ -114,6 +122,10 @@ export default function LectureNotes({ user, onRequestLogin }) {
           </div>
         </article>
       </div>
+
+      {previewDay !== null && (
+        <LecturePreviewModal dayIdx={previewDay} onClose={() => setPreviewDay(null)} />
+      )}
     </div>
   )
 }
@@ -232,9 +244,24 @@ function Content({ item }) {
 
       {item.promptExample && (
         <div style={{ marginTop: 34 }}>
-          <h3 style={h3S}>예시 프롬프트</h3>
+          <h3 style={h3S}>실습 랩 · 복사용 프롬프트</h3>
+          <p style={{ fontSize: 14, color: '#7A7163', marginTop: 6, marginBottom: 0 }}>아래 프롬프트를 복사해 [대괄호] 항목을 본인 자료로 바꿔 바로 사용하세요.</p>
           <pre style={{ marginTop: 14, background: '#1B1916', color: '#EAE4D8', borderRadius: 14, padding: '22px 24px', fontSize: 14, lineHeight: 1.7, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: "'IBM Plex Sans KR', ui-monospace, monospace" }}>{item.promptExample}</pre>
         </div>
+      )}
+
+      {item.techNote && (
+        <Block title="기술 노트">
+          <div style={{ background: '#EEF1F6', border: `1px solid ${BORDER}`, borderLeft: `3px solid ${NAVY}`, borderRadius: '0 12px 12px 0', padding: '18px 22px' }}>
+            <ul style={{ ...ulS, margin: 0, gap: 10 }}>
+              {item.techNote.map((n, i) => (
+                <li key={i} style={{ ...liS, color: '#2E3A4A', lineHeight: 1.65 }}>
+                  <Bullet color={NAVY} /><Lines text={n} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Block>
       )}
 
       {item.recap && (
@@ -248,6 +275,18 @@ function Content({ item }) {
               ))}
             </ul>
           </div>
+        </Block>
+      )}
+
+      {item.checklist && (
+        <Block title="완료 체크리스트">
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 8 }}>
+            {item.checklist.map((c, i) => (
+              <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 15, color: '#3D372E', lineHeight: 1.6, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 10, padding: '11px 15px' }}>
+                <span style={{ color: TERRA, fontWeight: 700, flexShrink: 0 }}>✓</span>{c}
+              </li>
+            ))}
+          </ul>
         </Block>
       )}
 

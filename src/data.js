@@ -147,9 +147,9 @@ export const prep = [
 
 export const infoCards = [
   { kicker: 'Faculty', rows: [
-    { k: '주강사', v: '메인 강의 리딩 · 전체 진행' },
-    { k: '보조강사', v: '1명 · 실습 밀착 지도' },
-    { k: '지도 방식', v: '참여자 밀착 · 1:2 운영' },
+    { k: '주강사', v: '이애본 · 한신대학교 AI.SW대학 / 드림아이티비즈' },
+    { k: '문의', v: 'aebon@hs.ac.kr' },
+    { k: '지도 방식', v: '주강사 + 보조강사 1명 · 1:2 밀착 운영' },
   ] },
   { kicker: 'Logistics', rows: [
     { k: '장소', v: '조선대학교 (오프라인)' },
