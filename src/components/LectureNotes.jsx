@@ -377,9 +377,11 @@ function Block({ title, accent, children }) {
   )
 }
 
-// 마침표(.) 기준 문장별 줄바꿈. 숫자 뒤 마침표(예: "2026. 6. 24")는 보호.
+// 마침표(.) 기준 문장별 줄바꿈 + 원문자(①②③…) 항목별 줄바꿈. 숫자 뒤 마침표(예: "2026. 6. 24")는 보호.
 function Lines({ text }) {
-  const parts = String(text).split(/(?<=[^\d]\.)\s+/).filter(Boolean)
+  const parts = String(text)
+    .split(/(?<=[^\d]\.)\s+|\s+(?=[①②③④⑤⑥⑦⑧⑨⑩])/)
+    .filter(Boolean)
   return parts.map((s, i) => (
     <span key={i} style={{ display: 'block' }}>{s}</span>
   ))

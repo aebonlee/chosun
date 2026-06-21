@@ -319,7 +319,7 @@ function NavMenu({ id, label, active, openMenu, setOpenMenu, items }) {
       </button>
       {isOpen && (
         <div role="menu" style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', paddingTop: 10, zIndex: 60 }}>
-          <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, boxShadow: '0 16px 40px rgba(27,25,22,0.16)', padding: 6, minWidth: 220, maxWidth: 320 }}>
+          <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, boxShadow: '0 16px 40px rgba(27,25,22,0.16)', padding: 6, width: 'max-content', minWidth: 150, maxWidth: 240 }}>
             {items.map((it) => (
               <a
                 key={it.key}
@@ -331,7 +331,7 @@ function NavMenu({ id, label, active, openMenu, setOpenMenu, items }) {
                 onMouseLeave={(e) => { if (!it.active) e.currentTarget.style.background = 'transparent' }}
               >
                 {it.meta && <span style={{ fontFamily: NEWS, fontSize: 12.5, color: '#9A8F7D', flexShrink: 0, minWidth: 78 }}>{it.meta}</span>}
-                <span style={{ lineHeight: 1.4 }}>{it.title}</span>
+                <span style={{ lineHeight: 1.4, whiteSpace: 'nowrap' }}>{it.title}</span>
               </a>
             ))}
           </div>
