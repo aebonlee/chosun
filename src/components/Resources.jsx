@@ -1339,25 +1339,52 @@ Rapid cycling of 3 core activities:
    ============================================ */
 const QUICK_RESOURCES = [
   {
-    titleKo: 'AI를 활용한 교육 혁신',
-    titleEn: 'Educational Innovation with AI',
-    descKo: 'AI 기술을 교육 현장에 효과적으로 적용하는 방법을 알아봅니다.',
-    descEn: 'Learn how to effectively apply AI technology in education.',
-    tags: ['AI', '교육혁신'],
+    titleKo: 'Anthropic 프롬프트 엔지니어링 가이드',
+    descKo: 'Claude 공식 문서의 프롬프트 설계 원칙과 기법(역할·맥락·예시·체이닝)을 정리한 1차 자료입니다.',
+    tags: ['Claude', '프롬프트'], icon: 'fa-book',
+    url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview',
   },
   {
-    titleKo: '학생 피드백 가이드',
-    titleEn: 'Student Feedback Guide',
-    descKo: '학생의 성장을 돕는 효과적인 피드백 작성법입니다.',
-    descEn: 'How to write effective feedback that helps student growth.',
-    tags: ['피드백', '학습'],
+    titleKo: 'Anthropic 프롬프트 라이브러리',
+    descKo: '업무·교육별로 바로 활용 가능한 검증된 프롬프트 예시 모음입니다.',
+    tags: ['프롬프트', '예시'], icon: 'fa-layer-group',
+    url: 'https://docs.anthropic.com/en/prompt-library/library',
   },
   {
-    titleKo: '직업능력개발훈련 교안 작성',
-    titleEn: 'Vocational Training Lesson Plans',
-    descKo: 'NCS 기반 직업능력개발훈련 교안 작성 가이드입니다.',
-    descEn: 'Guide for writing NCS-based vocational training lesson plans.',
-    tags: ['직업훈련', 'NCS'],
+    titleKo: 'Claude (claude.ai)',
+    descKo: '대화·프로젝트·파일 업로드 기반으로 연구·강의를 보조하는 작업 환경입니다.',
+    tags: ['AI 도구'], icon: 'fa-robot',
+    url: 'https://claude.ai',
+  },
+  {
+    titleKo: '한국저작권위원회',
+    descKo: '생성형 AI 활용 시 저작권 쟁점·안내와 저작권 교육·상담 자료를 제공합니다.',
+    tags: ['저작권', '연구윤리'], icon: 'fa-scale-balanced',
+    url: 'https://www.copyright.or.kr',
+  },
+  {
+    titleKo: '한국연구재단 (NRF)',
+    descKo: '연구과제 공고·신청, 제안서 양식과 평가 기준을 확인할 수 있습니다.',
+    tags: ['연구', '제안서'], icon: 'fa-flask',
+    url: 'https://www.nrf.re.kr',
+  },
+  {
+    titleKo: 'RISS 학술연구정보서비스',
+    descKo: '국내외 학위논문·학술지·참고문헌을 검색하고 원문을 확보합니다.',
+    tags: ['문헌', '검색'], icon: 'fa-magnifying-glass',
+    url: 'https://www.riss.kr',
+  },
+  {
+    titleKo: '한국교육학술정보원 (KERIS)',
+    descKo: '에듀테크·디지털 교육 자료와 학술정보 서비스를 제공합니다.',
+    tags: ['에듀테크', '교육'], icon: 'fa-laptop',
+    url: 'https://www.keris.or.kr',
+  },
+  {
+    titleKo: '교육부 디지털 교육',
+    descKo: '디지털 기반 교육혁신과 AI 활용 교육 정책·지침 자료를 안내합니다.',
+    tags: ['정책', '교육부'], icon: 'fa-building-columns',
+    url: 'https://www.moe.go.kr',
   },
 ];
 
@@ -1691,16 +1718,16 @@ function QuickOverview({ language }) {
       </div>
       <div className="ck-overview-grid">
         {QUICK_RESOURCES.map((r, i) => (
-          <div key={i} className="ck-ov-card ck-ov--blue" style={{ cursor: 'default' }}>
-            <div className="ck-ov-card-icon"><i className="fa-solid fa-file-lines" /></div>
+          <a key={i} href={r.url} target="_blank" rel="noreferrer" className="ck-ov-card ck-ov--blue" style={{ textDecoration: 'none' }}>
+            <div className="ck-ov-card-icon"><i className={`fa-solid ${r.icon || 'fa-file-lines'}`} /></div>
             <div className="ck-ov-card-body">
-              <h4>{r.titleKo}</h4>
+              <h4>{r.titleKo} <i className="fa-solid fa-arrow-up-right-from-square" style={{ fontSize: 10.5, opacity: 0.45, marginLeft: 2 }} /></h4>
               <p>{r.descKo}</p>
               <div style={{ marginTop: 8, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                 {r.tags.map(tag => <span key={tag} className="resource-tag">{tag}</span>)}
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
@@ -1812,6 +1839,8 @@ export default function Resources() {
         <i className={`fa-solid ${mobileSidebar ? 'fa-xmark' : 'fa-bars'}`} />
         <span>{'메뉴'}</span>
       </button>
+
+      {mobileSidebar && <div className="ck-overlay" onClick={() => setMobileSidebar(false)} />}
 
       <div className="ck-layout">
         {/* Sidebar */}
