@@ -4,6 +4,7 @@ import LoginModal from './components/LoginModal'
 import LectureNotes from './components/LectureNotes'
 import LabModules from './components/LabModules'
 import AppendixCases from './components/AppendixCases'
+import AboutPage from './components/AboutPage'
 import { lectureDays } from './lectureNotes'
 import PromptGuide from './components/PromptGuide'
 import PromptPractice from './components/PromptPractice'
@@ -41,7 +42,7 @@ export default function App() {
   const route = hash.replace(/^#/, '').split('/')[0]
   const lectureSub = route === 'lecture' ? (hash.split('/')[1] || 'intro') : null
   const PromptView = PROMPT_VIEWS[route]
-  const view = route === 'lecture' ? 'lecture' : route === 'labs' ? 'labs' : route === 'cases' ? 'cases' : PromptView ? 'prompt' : 'home'
+  const view = route === 'about' ? 'about' : route === 'lecture' ? 'lecture' : route === 'labs' ? 'labs' : route === 'cases' ? 'cases' : PromptView ? 'prompt' : 'home'
   const goRoute = (r) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#' + r; window.scrollTo({ top: 0 }) }
   const goLectureItem = (id) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#lecture/' + id; window.scrollTo({ top: 0 }) }
 
@@ -50,6 +51,7 @@ export default function App() {
     { key: 'prompt-guide', title: '프롬프트 가이드', active: route === 'prompt-guide', onClick: goRoute('prompt-guide') },
     { key: 'prompt-practice', title: '프롬프트 연습장', active: route === 'prompt-practice', onClick: goRoute('prompt-practice') },
     { key: 'prompt-gallery', title: '프롬프트 갤러리', active: route === 'prompt-gallery', onClick: goRoute('prompt-gallery') },
+    { key: 'prompt-eval', title: '프롬프트 평가', active: route === 'prompt-eval', onClick: goRoute('prompt-eval') },
   ]
   const goHome = (e) => { e.preventDefault(); window.location.hash = ''; window.scrollTo({ top: 0, behavior: 'smooth' }) }
   const goSection = (id) => (e) => {
@@ -69,12 +71,12 @@ export default function App() {
             <span style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 16, letterSpacing: '-0.01em' }}>조선대학교 AI특강</span>
           </a>
           <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+            <a href="#about" onClick={goRoute('about')} style={{ color: route === 'about' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'about' ? 700 : 500 }}>About</a>
             <a href="#curriculum" onClick={goSection('curriculum')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
             <a href="#labs" onClick={goRoute('labs')} style={{ color: route === 'labs' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'labs' ? 700 : 500 }}>실습 모듈</a>
             <a href="#cases" onClick={goRoute('cases')} style={{ color: route === 'cases' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'cases' ? 700 : 500, whiteSpace: 'nowrap' }}>활용 사례집</a>
 
-            <NavMenu id="prompt" label="프롬프트" active={['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={promptItems} />
-            <a href="#prompt-eval" onClick={goRoute('prompt-eval')} style={{ color: route === 'prompt-eval' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'prompt-eval' ? 700 : 500 }}>프롬프트 평가</a>
+            <NavMenu id="prompt" label="프롬프트" active={['prompt-guide', 'prompt-practice', 'prompt-gallery', 'prompt-eval'].includes(route)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={promptItems} />
 
             <a href="#prep" onClick={goSection('prep')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>준비사항</a>
             <a href="#lecture/d1-s1" onClick={goLectureItem('d1-s1')} style={{ color: view === 'lecture' && day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 1 강의안</a>
@@ -91,7 +93,9 @@ export default function App() {
         </div>
       </nav>
 
-      {view === 'lecture' ? (
+      {view === 'about' ? (
+        <AboutPage />
+      ) : view === 'lecture' ? (
         <LectureNotes user={user} onRequestLogin={open} />
       ) : view === 'labs' ? (
         <LabModules />

@@ -26,6 +26,33 @@ function sectionHtml(sec) {
   return `<div class="sec"><h3>${esc(sec.heading)}</h3>${ps}${ul(sec.bullets)}</div>`
 }
 
+function deepDiveHtml(dd) {
+  if (!dd?.length) return ''
+  const blocks = dd
+    .map((d) => {
+      const body = (Array.isArray(d.body) ? d.body : [d.body]).map((p) => `<p>${esc(p)}</p>`).join('')
+      const term = d.term ? `<div class="termbox"><b>용어</b> · ${esc(d.term)}</div>` : ''
+      return `<div class="dd"><div class="ddh">${esc(d.heading)}</div>${body}${term}</div>`
+    })
+    .join('')
+  return `<div class="block"><h4>개념 심화</h4>${blocks}</div>`
+}
+
+function walkthroughHtml(w) {
+  if (!w?.steps?.length) return ''
+  const steps = w.steps
+    .map((s, i) => {
+      const input = s.input ? `<div class="lbl navy">입력</div><pre class="dark">${esc(s.input)}</pre>` : ''
+      const output = s.output ? `<div class="lbl terra">예상 출력</div><div class="soft">${esc(s.output)}</div>` : ''
+      const note = s.note ? `<div class="notebox"><b>강사 노트</b> · ${esc(s.note)}</div>` : ''
+      return `<li class="wstep"><div class="wnum">${i + 1}</div><div class="wbody"><div class="wdo">${esc(s.do)}</div>${input}${output}${note}</div></li>`
+    })
+    .join('')
+  return `<div class="block"><h4>${esc(w.title || '라이브 데모 워크스루')}</h4>
+    <p class="hint">강사가 화면에서 함께 따라 하는 시연 흐름입니다.</p>
+    <ol class="wlist">${steps}</ol></div>`
+}
+
 function exampleHtml(ex) {
   if (!ex) return ''
   const scenario = ex.scenario ? `<p class="scenario">${esc(ex.scenario)}</p>` : ''
@@ -109,8 +136,10 @@ function sessionHtml(s, no) {
     <p class="summary">${esc(s.summary)}</p>
     ${objectivesHtml(s.objectives)}
     ${(s.sections || []).map(sectionHtml).join('')}
+    ${deepDiveHtml(s.deepDive)}
     ${exampleHtml(s.example)}
     ${slidesHtml(s.slides)}
+    ${walkthroughHtml(s.walkthrough)}
     ${practiceHtml(s.practice)}
     ${promptHtml(s.promptExample)}
     ${techNoteHtml(s.techNote)}
@@ -176,6 +205,17 @@ const STYLE = `
   .checklist li{display:flex;gap:10px;background:#fff;border:1px solid ${BORDER};
     border-radius:10px;padding:11px 15px;font-size:14.5px;color:#3D372E;page-break-inside:avoid}
   .ck{color:${TERRA};font-weight:700;flex-shrink:0}
+  .dd{background:#fff;border:1px solid ${BORDER};border-radius:12px;padding:16px 18px;margin:10px 0;page-break-inside:avoid}
+  .ddh{font-size:15px;font-weight:700;color:${NAVY};margin-bottom:6px}
+  .termbox{margin-top:10px;background:#F4F6F9;border:1px solid ${BORDER};border-radius:9px;padding:9px 13px;font-size:13px;color:#5A5246}
+  .termbox b{color:${TERRA}}
+  .wlist{list-style:none;padding:0;margin:0;display:grid;gap:14px}
+  .wstep{display:flex;gap:12px;background:#fff;border:1px solid ${BORDER};border-radius:12px;padding:16px 18px;page-break-inside:avoid}
+  .wnum{flex-shrink:0;width:26px;height:26px;border-radius:7px;background:${TERRA};color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .wbody{min-width:0;flex:1}
+  .wdo{font-size:15px;font-weight:600;color:#1B1916;margin-bottom:4px}
+  .notebox{margin-top:10px;background:#FBF3EC;border:1px solid #F0DDCB;border-radius:9px;padding:9px 13px;font-size:13px;color:#5A4636}
+  .notebox b{color:${TERRA}}
   .cards{display:flex;flex-wrap:wrap;gap:16px;margin-top:18px}
   .card{flex:1 1 240px;border-radius:12px;padding:16px 18px}
   .card.out{background:#F4F6F9;border:1px solid ${BORDER}}

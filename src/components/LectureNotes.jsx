@@ -194,6 +194,27 @@ function Content({ item }) {
         </div>
       ))}
 
+      {item.deepDive && (
+        <Block title="개념 심화">
+          <p style={{ fontSize: 14, color: '#7A7163', marginTop: -4, marginBottom: 16 }}>슬라이드 한 줄 뒤의 맥락 — 수업에서 풀어 설명할 학술적 배경입니다.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {item.deepDive.map((d, i) => (
+              <div key={i} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: '18px 22px' }}>
+                <div style={{ fontSize: 15.5, fontWeight: 700, color: NAVY, marginBottom: 8 }}>{d.heading}</div>
+                {(Array.isArray(d.body) ? d.body : [d.body]).map((p, j) => (
+                  <p key={j} style={{ fontSize: 15, color: '#3D372E', lineHeight: 1.85, marginTop: j ? 12 : 0 }}><Lines text={p} /></p>
+                ))}
+                {d.term && (
+                  <div style={{ marginTop: 12, fontSize: 13.5, color: '#5A5246', background: '#F4F6F9', border: `1px solid ${BORDER}`, borderRadius: 10, padding: '10px 14px', lineHeight: 1.6 }}>
+                    <span style={{ fontWeight: 700, color: TERRA }}>용어</span> · {d.term}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </Block>
+      )}
+
       {item.example && (
         <Block title="사례 · 예시">
           {item.example.scenario && (
@@ -226,6 +247,41 @@ function Content({ item }) {
               </div>
             ))}
           </div>
+        </Block>
+      )}
+
+      {item.walkthrough && (
+        <Block title={item.walkthrough.title || '라이브 데모 워크스루'}>
+          <p style={{ fontSize: 14, color: '#7A7163', marginTop: -4, marginBottom: 16 }}>강사가 화면에서 함께 따라 하는 시연 흐름입니다. 각 단계의 입력을 그대로 실행하고 예상 출력과 비교하세요.</p>
+          <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {item.walkthrough.steps.map((s, i) => (
+              <li key={i} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: '18px 20px' }}>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <span style={{ flexShrink: 0, minWidth: 28, height: 28, borderRadius: 8, background: TERRA, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontFamily: NEWS }}>{i + 1}</span>
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ fontSize: 15.5, fontWeight: 600, color: '#1B1916', lineHeight: 1.45 }}>{s.do}</div>
+                    {s.input && (
+                      <>
+                        <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', color: NAVY, margin: '12px 0 6px' }}>입력</div>
+                        <pre style={{ ...preDark, fontSize: 13 }}>{s.input}</pre>
+                      </>
+                    )}
+                    {s.output && (
+                      <>
+                        <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', color: TERRA, margin: '14px 0 6px' }}>예상 출력</div>
+                        <div style={{ background: '#F4F6F9', border: `1px solid ${BORDER}`, borderRadius: 11, padding: '14px 16px', fontSize: 14, color: '#3D372E', lineHeight: 1.7, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{s.output}</div>
+                      </>
+                    )}
+                    {s.note && (
+                      <div style={{ marginTop: 12, fontSize: 13.5, color: '#5A4636', background: '#FBF3EC', border: '1px solid #F0DDCB', borderRadius: 10, padding: '10px 14px', lineHeight: 1.6 }}>
+                        <span style={{ fontWeight: 700, color: TERRA }}>강사 노트</span> · {s.note}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
         </Block>
       )}
 

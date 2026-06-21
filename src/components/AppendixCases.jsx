@@ -107,6 +107,7 @@ export default function AppendixCases() {
 
 function CaseCard({ c }) {
   const [copied, setCopied] = useState(false)
+  const [showSample, setShowSample] = useState(false)
   const copy = () => {
     navigator.clipboard?.writeText(c.prompt).then(() => {
       setCopied(true)
@@ -130,6 +131,18 @@ function CaseCard({ c }) {
       <div style={{ fontSize: 13.5, color: '#3D372E', lineHeight: 1.55, marginTop: 14, background: '#F4F6F9', border: `1px solid ${BORDER}`, borderRadius: 10, padding: '11px 14px' }}>
         <span style={{ fontWeight: 700, color: NAVY }}>산출물</span> · {c.output}
       </div>
+
+      {c.sample && (
+        <div style={{ marginTop: 10 }}>
+          <button
+            onClick={() => setShowSample((v) => !v)}
+            style={{ fontSize: 12.5, fontWeight: 600, color: TERRA, background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
+          >{showSample ? '▾ 예상 산출물 예시 닫기' : '▸ 예상 산출물 예시 보기'}</button>
+          {showSample && (
+            <div style={{ marginTop: 8, background: '#FBF8F1', border: `1px solid ${BORDER}`, borderLeft: `3px solid ${TERRA}`, borderRadius: '0 10px 10px 0', padding: '12px 14px', fontSize: 13, color: '#3D372E', lineHeight: 1.7, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{c.sample}</div>
+          )}
+        </div>
+      )}
 
       <ul style={{ listStyle: 'none', padding: 0, margin: '12px 0 0', display: 'flex', flexWrap: 'wrap', gap: 7 }}>
         {c.checks.map((ck, i) => (
