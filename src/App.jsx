@@ -5,6 +5,7 @@ import LectureNotes from './components/LectureNotes'
 import LabModules from './components/LabModules'
 import AppendixCases from './components/AppendixCases'
 import AboutPage from './components/AboutPage'
+import Resources from './components/Resources'
 import { lectureDays } from './lectureNotes'
 import PromptGuide from './components/PromptGuide'
 import PromptPractice from './components/PromptPractice'
@@ -42,7 +43,7 @@ export default function App() {
   const route = hash.replace(/^#/, '').split('/')[0]
   const lectureSub = route === 'lecture' ? (hash.split('/')[1] || 'intro') : null
   const PromptView = PROMPT_VIEWS[route]
-  const view = route === 'about' ? 'about' : route === 'lecture' ? 'lecture' : route === 'labs' ? 'labs' : route === 'cases' ? 'cases' : PromptView ? 'prompt' : 'home'
+  const view = route === 'about' ? 'about' : route === 'resources' ? 'resources' : route === 'lecture' ? 'lecture' : route === 'labs' ? 'labs' : route === 'cases' ? 'cases' : PromptView ? 'prompt' : 'home'
   const goRoute = (r) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#' + r; window.scrollTo({ top: 0 }) }
   const goLectureItem = (id) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#lecture/' + id; window.scrollTo({ top: 0 }) }
 
@@ -78,7 +79,7 @@ export default function App() {
 
             <NavMenu id="prompt" label="프롬프트" active={['prompt-guide', 'prompt-practice', 'prompt-gallery', 'prompt-eval'].includes(route)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={promptItems} />
 
-            <a href="#prep" onClick={goSection('prep')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>준비사항</a>
+            <a href="#resources" onClick={goRoute('resources')} style={{ color: route === 'resources' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'resources' ? 700 : 500, whiteSpace: 'nowrap' }}>교육공학자료</a>
             <a href="#lecture/d1-s1" onClick={goLectureItem('d1-s1')} style={{ color: view === 'lecture' && day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 1 강의안</a>
             <a href="#lecture/d2-s1" onClick={goLectureItem('d2-s1')} style={{ color: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 2 강의안</a>
             {user ? (
@@ -95,6 +96,8 @@ export default function App() {
 
       {view === 'about' ? (
         <AboutPage />
+      ) : view === 'resources' ? (
+        <Resources />
       ) : view === 'lecture' ? (
         <LectureNotes user={user} onRequestLogin={open} />
       ) : view === 'labs' ? (
