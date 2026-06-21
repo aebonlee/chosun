@@ -1796,7 +1796,7 @@ export default function Resources() {
     setActiveSection(sectionId);
     for (const m of MENU) {
       if (m.id === sectionId || m.children.some(c => c.id === sectionId)) {
-        setOpenMenus(prev => ({ ...prev, [m.id]: true }));
+        setOpenMenus({ [m.id]: true });   // 아코디언: 해당 카테고리만 열기
         break;
       }
     }
@@ -1806,7 +1806,7 @@ export default function Resources() {
 
   const handleParentClick = useCallback((parentId) => {
     const isOpen = openMenus[parentId];
-    setOpenMenus(prev => ({ ...prev, [parentId]: !isOpen }));
+    setOpenMenus(isOpen ? {} : { [parentId]: true });   // 아코디언: 한 번에 하나만
     if (!isOpen || MENU.find(m => m.id === parentId)?.children.length === 0) {
       setActiveSection(parentId);
       setMobileSidebar(false);
