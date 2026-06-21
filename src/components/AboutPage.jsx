@@ -49,8 +49,7 @@ export default function AboutPage() {
       <section style={{ marginTop: 48, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 18, padding: '34px 38px' }}>
         <Kicker>Overview</Kicker>
         <p style={{ fontSize: 16, color: '#3D372E', lineHeight: 1.85, marginTop: 12 }}>
-          본 과정은 전공을 막론하고 모든 전임 교원이 생성형 AI(Claude)를 연구와 강의에 곧바로 적용할 수 있도록 설계한 실습 중심 교육입니다.
-          Day 1에서는 논문 리뷰·학술 글쓰기·데이터 분석·제안서 작성 등 연구 업무 전반을, Day 2에서는 교과목에 AI를 접목하는 교수 설계 전 과정을 다룹니다.
+          <Lines text="본 과정은 전공을 막론하고 모든 전임 교원이 생성형 AI(Claude)를 연구와 강의에 곧바로 적용할 수 있도록 설계한 실습 중심 교육입니다. Day 1에서는 논문 리뷰·학술 글쓰기·데이터 분석·제안서 작성 등 연구 업무 전반을, Day 2에서는 교과목에 AI를 접목하는 교수 설계 전 과정을 다룹니다." />
         </p>
         <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 22 }}>
           {overviewItems.map((o, i) => (
@@ -114,10 +113,7 @@ export default function AboutPage() {
             </div>
           </div>
           <p style={{ fontSize: 15, color: '#3D372E', lineHeight: 1.85, marginTop: 18 }}>
-            드림아이티비즈는 생성형 AI 교육과 학습관리시스템(LMS) 개발을 전문으로 하는 기업입니다.
-            전공과 직무를 막론하고 누구나 AI를 실제 연구·업무·강의에 적용할 수 있도록 실습 중심 교육을 설계·운영하며,
-            교육에 필요한 학습 플랫폼과 웹사이트를 직접 구축합니다.
-            대학 교원 연수부터 청년·재직자 대상 과정까지 다양한 기관과 협력해 왔으며, 본 조선대학교 AI특강 또한 드림아이티비즈가 설계·운영합니다.
+            <Lines text="드림아이티비즈는 생성형 AI 교육과 학습관리시스템(LMS) 개발을 전문으로 하는 기업입니다. 전공과 직무를 막론하고 누구나 AI를 실제 연구·업무·강의에 적용할 수 있도록 실습 중심 교육을 설계·운영하며, 교육에 필요한 학습 플랫폼과 웹사이트를 직접 구축합니다. 대학 교원 연수부터 청년·재직자 대상 과정까지 다양한 기관과 협력해 왔으며, 본 조선대학교 AI특강 또한 드림아이티비즈가 설계·운영합니다." />
           </p>
           <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 20 }}>
             {bizAreas.map(([k, v], i) => (
@@ -142,9 +138,7 @@ export default function AboutPage() {
             <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 24, color: '#fff' }}>이애본 <span style={{ fontSize: 15, fontWeight: 500, color: '#C99A7E' }}>대표 · 담당 강사</span></div>
             <div style={{ fontSize: 14.5, color: '#B6BECB', marginTop: 6 }}>드림아이티비즈(DreamIT Biz) 대표 · 한신대학교 AI.SW대학</div>
             <p style={{ fontSize: 14.5, color: '#CDD4DE', lineHeight: 1.8, marginTop: 14 }}>
-              생성형 AI 교육과 학습 플랫폼 개발을 이끌며, 대학·공공기관을 대상으로 AI 활용·바이브코딩 교육을 다수 설계·운영해 왔습니다.
-              연구 업무 자동화부터 교과목 AI 접목 설계까지, 전공과 무관하게 현장에 바로 적용할 수 있는 실습 중심 교육을 지향합니다.
-              본 조선대학교 AI특강의 커리큘럼 설계와 강의를 직접 맡고 있습니다.
+              <Lines text="생성형 AI 교육과 학습 플랫폼 개발을 이끌며, 대학·공공기관을 대상으로 AI 활용·바이브코딩 교육을 다수 설계·운영해 왔습니다. 연구 업무 자동화부터 교과목 AI 접목 설계까지, 전공과 무관하게 현장에 바로 적용할 수 있는 실습 중심 교육을 지향합니다. 본 조선대학교 AI특강의 커리큘럼 설계와 강의를 직접 맡고 있습니다." />
             </p>
             <div style={{ fontSize: 13.5, color: '#9FA8B6', marginTop: 12 }}>문의 · aebon@hs.ac.kr</div>
           </div>
@@ -156,4 +150,10 @@ export default function AboutPage() {
 
 function Kicker({ children }) {
   return <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, color: TERRA }}>{children}</div>
+}
+
+// 마침표(.) 기준 문장별 줄바꿈. 숫자 뒤 마침표는 보호.
+function Lines({ text }) {
+  const parts = String(text).split(/(?<=[^\d]\.)\s+/).filter(Boolean)
+  return parts.map((s, i) => <span key={i} style={{ display: 'block' }}>{s}</span>)
 }
