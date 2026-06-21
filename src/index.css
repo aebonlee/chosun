@@ -27,6 +27,11 @@ button { font-family: inherit; }
 }
 
 /* 반응형: 좁은 화면에서 2/3/4단 그리드를 1단으로 */
+/* 강의안 좌측 메뉴 라벨: 데스크탑에서 자간 미세 조정(긴 제목 2줄 가독성) */
+@media (min-width: 901px) {
+  .lec-side-label { letter-spacing: -0.03em; word-break: keep-all; }
+}
+
 @media (max-width: 900px) {
   .grid-2, .grid-3, .grid-4, .grid-overview, .grid-prep, .grid-curriculum {
     grid-template-columns: 1fr !important;

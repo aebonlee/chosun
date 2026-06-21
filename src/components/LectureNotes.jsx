@@ -145,7 +145,7 @@ function SideLink({ no, label, active, accent = NAVY, onClick }) {
       }}
     >
       {no != null && <span style={{ fontFamily: NEWS, fontSize: 13, color: accent, minWidth: 16 }}>{no}</span>}
-      <span>{label}</span>
+      <span className="lec-side-label">{label}</span>
     </button>
   )
 }
