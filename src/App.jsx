@@ -3,6 +3,7 @@ import { heroStats, overviewItems, days, prep, infoCards } from './data'
 import LoginModal from './components/LoginModal'
 import LectureNotes from './components/LectureNotes'
 import LabModules from './components/LabModules'
+import AppendixCases from './components/AppendixCases'
 import { lectureDays } from './lectureNotes'
 import PromptGuide from './components/PromptGuide'
 import PromptPractice from './components/PromptPractice'
@@ -40,7 +41,7 @@ export default function App() {
   const route = hash.replace(/^#/, '').split('/')[0]
   const lectureSub = route === 'lecture' ? (hash.split('/')[1] || 'intro') : null
   const PromptView = PROMPT_VIEWS[route]
-  const view = route === 'lecture' ? 'lecture' : route === 'labs' ? 'labs' : PromptView ? 'prompt' : 'home'
+  const view = route === 'lecture' ? 'lecture' : route === 'labs' ? 'labs' : route === 'cases' ? 'cases' : PromptView ? 'prompt' : 'home'
   const goRoute = (r) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#' + r; window.scrollTo({ top: 0 }) }
   const goLectureItem = (id) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#lecture/' + id; window.scrollTo({ top: 0 }) }
 
@@ -70,6 +71,7 @@ export default function App() {
           <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
             <a href="#curriculum" onClick={goSection('curriculum')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
             <a href="#labs" onClick={goRoute('labs')} style={{ color: route === 'labs' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'labs' ? 700 : 500 }}>실습 모듈</a>
+            <a href="#cases" onClick={goRoute('cases')} style={{ color: route === 'cases' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'cases' ? 700 : 500, whiteSpace: 'nowrap' }}>활용 사례집</a>
 
             <NavMenu id="prompt" label="프롬프트" active={['prompt-guide', 'prompt-practice', 'prompt-gallery'].includes(route)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={promptItems} />
             <a href="#prompt-eval" onClick={goRoute('prompt-eval')} style={{ color: route === 'prompt-eval' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'prompt-eval' ? 700 : 500 }}>프롬프트 평가</a>
@@ -93,6 +95,8 @@ export default function App() {
         <LectureNotes user={user} onRequestLogin={open} />
       ) : view === 'labs' ? (
         <LabModules />
+      ) : view === 'cases' ? (
+        <AppendixCases />
       ) : view === 'prompt' ? (
         <PromptView />
       ) : (

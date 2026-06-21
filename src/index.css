@@ -42,6 +42,11 @@ button { font-family: inherit; }
   .lecture-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
   .lecture-aside { position: static !important; }
 
+  /* 활용 사례집: 섹션 내비를 본문 위로 쌓기 */
+  .cases-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .cases-aside { position: static !important; }
+  .case-cards, .lec-preview-actions { grid-template-columns: 1fr !important; }
+
   /* 프롬프트 페이지 그리드 */
   .prompt-2col, .prompt-grid2, .prompt-grid3 { grid-template-columns: 1fr !important; }
 }
