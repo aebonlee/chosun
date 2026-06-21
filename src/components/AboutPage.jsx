@@ -16,6 +16,13 @@ const structure = [
   ['프롬프트 도구', '가이드·연습장·갤러리·평가'],
 ]
 
+const bizAreas = [
+  ['생성형 AI 교육', '대학·공공기관 맞춤형 AI 활용 교육과정 설계·운영'],
+  ['LMS·교육 플랫폼 개발', '학습관리시스템(LMS)과 교육 웹사이트 자체 구축'],
+  ['프롬프트·바이브코딩', '실무 중심 커리큘럼과 실습 콘텐츠 제작'],
+  ['LLM 활용 컨설팅', 'Claude 등 생성형 AI의 연구·업무·강의 적용 자문'],
+]
+
 export default function AboutPage() {
   return (
     <div style={{ ...container, paddingBottom: 100 }}>
@@ -95,18 +102,49 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* INSTRUCTOR */}
+      {/* COMPANY */}
       <section style={{ marginTop: 36 }}>
-        <Kicker>강사 소개</Kicker>
+        <Kicker>운영사 소개 · DreamIT Biz</Kicker>
+        <div style={{ marginTop: 16, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 18, padding: '30px 34px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+            <div style={{ width: 46, height: 46, borderRadius: 12, background: NAVY, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: NEWS, fontStyle: 'italic', fontSize: 22 }}>D</div>
+            <div>
+              <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 22, letterSpacing: '-0.01em' }}>드림아이티비즈 <span style={{ fontSize: 14, fontWeight: 500, color: '#9A8F7D' }}>DreamIT Biz</span></div>
+              <div style={{ fontSize: 13.5, color: TERRA, fontWeight: 600, marginTop: 2 }}>생성형 AI 교육 · 학습 플랫폼(LMS) 개발 전문</div>
+            </div>
+          </div>
+          <p style={{ fontSize: 15, color: '#3D372E', lineHeight: 1.85, marginTop: 18 }}>
+            드림아이티비즈는 생성형 AI 교육과 학습관리시스템(LMS) 개발을 전문으로 하는 기업입니다.
+            전공과 직무를 막론하고 누구나 AI를 실제 연구·업무·강의에 적용할 수 있도록 실습 중심 교육을 설계·운영하며,
+            교육에 필요한 학습 플랫폼과 웹사이트를 직접 구축합니다.
+            대학 교원 연수부터 청년·재직자 대상 과정까지 다양한 기관과 협력해 왔으며, 본 조선대학교 AI특강 또한 드림아이티비즈가 설계·운영합니다.
+          </p>
+          <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 20 }}>
+            {bizAreas.map(([k, v], i) => (
+              <div key={i} style={{ background: '#F4F6F9', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '14px 18px' }}>
+                <div style={{ fontSize: 14.5, fontWeight: 700, color: NAVY }}>{k}</div>
+                <div style={{ fontSize: 13.5, color: '#6F665A', marginTop: 5, lineHeight: 1.55 }}>{v}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 18, fontSize: 13.5, color: '#7A6A57' }}>
+            웹 · <a href="https://dreamitbiz.com" target="_blank" rel="noreferrer" style={{ color: NAVY, fontWeight: 600 }}>dreamitbiz.com</a>
+          </div>
+        </div>
+      </section>
+
+      {/* INSTRUCTOR */}
+      <section style={{ marginTop: 28 }}>
+        <Kicker>담당 강사 소개</Kicker>
         <div style={{ marginTop: 16, background: NAVY, color: '#EAE4D8', borderRadius: 18, padding: '32px 36px', display: 'flex', gap: 28, flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{ flexShrink: 0, width: 84, height: 84, borderRadius: 20, background: TERRA, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: SERIF, fontWeight: 700, fontSize: 34 }}>이</div>
           <div style={{ minWidth: 0, flex: '1 1 360px' }}>
-            <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 24, color: '#fff' }}>이애본 <span style={{ fontSize: 15, fontWeight: 500, color: '#C99A7E' }}>강사</span></div>
-            <div style={{ fontSize: 14.5, color: '#B6BECB', marginTop: 6 }}>한신대학교 AI.SW대학 · 드림아이티비즈(DreamIT Biz)</div>
+            <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 24, color: '#fff' }}>이애본 <span style={{ fontSize: 15, fontWeight: 500, color: '#C99A7E' }}>대표 · 담당 강사</span></div>
+            <div style={{ fontSize: 14.5, color: '#B6BECB', marginTop: 6 }}>드림아이티비즈(DreamIT Biz) 대표 · 한신대학교 AI.SW대학</div>
             <p style={{ fontSize: 14.5, color: '#CDD4DE', lineHeight: 1.8, marginTop: 14 }}>
-              대학·공공기관을 대상으로 생성형 AI 활용과 바이브코딩 교육을 다수 설계·운영해 왔습니다.
+              생성형 AI 교육과 학습 플랫폼 개발을 이끌며, 대학·공공기관을 대상으로 AI 활용·바이브코딩 교육을 다수 설계·운영해 왔습니다.
               연구 업무 자동화부터 교과목 AI 접목 설계까지, 전공과 무관하게 현장에 바로 적용할 수 있는 실습 중심 교육을 지향합니다.
-              본 조선대학교 AI특강의 커리큘럼 설계와 강의를 맡고 있습니다.
+              본 조선대학교 AI특강의 커리큘럼 설계와 강의를 직접 맡고 있습니다.
             </p>
             <div style={{ fontSize: 13.5, color: '#9FA8B6', marginTop: 12 }}>문의 · aebon@hs.ac.kr</div>
           </div>
