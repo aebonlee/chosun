@@ -1,5 +1,7 @@
-// About — DreamIT Biz의 AI 교육 프로그램 소개.
-// 콘텐츠 출처: github.com/aebonlee/rest (AI Reboot Academy) 리포지토리 About/README.
+// About — 조선대학교 AI특강 소개 페이지.
+// 구성은 github.com/aebonlee/rest(About/README) 형식을 참고하되, 콘텐츠는 본 과정(조선대)에 맞춤.
+import { heroStats, overviewItems, days } from '../data'
+
 const SERIF = "'Noto Serif KR', serif"
 const NEWS = "'Newsreader', serif"
 const NAVY = '#1E3A5F'
@@ -7,99 +9,106 @@ const TERRA = '#C2603D'
 const BORDER = '#E2D9C9'
 const container = { maxWidth: 1100, margin: '0 auto', padding: '0 40px' }
 
-const curriculum = [
-  { course: '선수과정', hours: '20H (4일)', body: 'AI 기초, ChatGPT·Gemini·Solar, 웹 기초' },
-  { course: '정규과정 DT', hours: '52H (13일)', body: 'AI 자동화, 프롬프트, 바이브코딩, 프로젝트 구현' },
-  { course: '기술코칭', hours: '8H (4회)', body: '1:1·팀 기술 코칭, 코드 리뷰' },
+const structure = [
+  ['Day 1·2 강의안', '교시별 학습목표·개념 심화·라이브 데모·실습 랩·기술 노트(로그인)'],
+  ['실습 모듈', '단계별 실습 과제와 진행 가이드'],
+  ['활용 사례집', '단과대학·분야·업무별 복사용 프롬프트와 예상 산출물'],
+  ['프롬프트 도구', '가이드·연습장·갤러리·평가'],
 ]
-
-const publicPages = [
-  ['Home', '과정 개요·핵심 정보·CTA'],
-  ['Curriculum', '3단계 커리큘럼 상세(선수·정규·기술코칭)'],
-  ['Schedule', '일자별 일정표'],
-  ['Competition', 'AI 리부트 경진대회 안내'],
-  ['Resources', 'AI 도구·LLM 가이드·참고자료'],
-]
-const lmsPages = [
-  ['Dashboard', '출석·과제·진도 통계, 최근 공지'],
-  ['Materials', '학습자료 다운로드(카테고리 필터)'],
-  ['Assignments', '과제 목록·제출·채점'],
-  ['Teams · Projects', '팀 구성, 개인미니·팀미니·실전 프로젝트'],
-  ['Q&A', '질의응답 게시판'],
-]
-const tech = ['React 19 + Vite 7 + TypeScript', 'Supabase (DB·Auth)', 'Google·Kakao·Email 로그인', 'GitHub Pages 배포']
 
 export default function AboutPage() {
   return (
     <div style={{ ...container, paddingBottom: 100 }}>
       {/* HERO */}
       <header style={{ padding: '72px 0 8px', textAlign: 'center' }}>
-        <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, color: TERRA, marginBottom: 12 }}>About · DreamIT Biz AI Education</div>
-        <h1 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 42, letterSpacing: '-0.025em', lineHeight: 1.2 }}>
-          AI Reboot Academy
+        <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, color: TERRA, marginBottom: 12 }}>About · 조선대학교 전임 교원 AI특강</div>
+        <h1 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 40, letterSpacing: '-0.025em', lineHeight: 1.22 }}>
+          Claude 기반 <span style={{ color: TERRA }}>연구 업무 활용</span> &amp;<br />AX 브릿지 교과목 설계
         </h1>
-        <p style={{ fontSize: 16.5, color: '#5A5246', marginTop: 14, lineHeight: 1.7 }}>쉬었음청년 대상 AI·바이브코딩 교육과정 LMS</p>
-        <a href="https://rest.dreamitbiz.com" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 22, background: NAVY, color: '#fff', textDecoration: 'none', fontSize: 14.5, fontWeight: 600, padding: '12px 24px', borderRadius: 11 }}>
-          rest.dreamitbiz.com <span style={{ fontFamily: NEWS }}>→</span>
-        </a>
+        <p style={{ fontSize: 16.5, color: '#5A5246', marginTop: 16, lineHeight: 1.7 }}>
+          조선대학교 전임 교원을 위한 2일·14시간 실습 중심 생성형 AI 과정
+        </p>
+        <div className="stats-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0, marginTop: 36, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+          {heroStats.map((s, i) => (
+            <div key={i} style={{ padding: '24px 14px', textAlign: 'center', borderRight: i < heroStats.length - 1 ? `1px solid ${BORDER}` : 'none' }}>
+              <div style={{ fontFamily: NEWS, fontSize: 32, fontWeight: 500, color: NAVY, lineHeight: 1 }}>{s.value}</div>
+              <div style={{ fontSize: 13, color: '#7A7163', marginTop: 8 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
       </header>
 
       {/* OVERVIEW */}
-      <section style={{ marginTop: 56, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 18, padding: '34px 38px' }}>
+      <section style={{ marginTop: 48, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 18, padding: '34px 38px' }}>
         <Kicker>Overview</Kicker>
         <p style={{ fontSize: 16, color: '#3D372E', lineHeight: 1.85, marginTop: 12 }}>
-          쉬었음청년을 위한 AI 기술과 바이브코딩 교육과정을 운영하는 학습관리시스템(LMS)입니다.
-          총 80시간(선수과정 20H + 정규과정 DT 52H + 기술코칭 8H) 교육을 통해 AI 리부트 경진대회 출품을 목표로 합니다.
+          본 과정은 전공을 막론하고 모든 전임 교원이 생성형 AI(Claude)를 연구와 강의에 곧바로 적용할 수 있도록 설계한 실습 중심 교육입니다.
+          Day 1에서는 논문 리뷰·학술 글쓰기·데이터 분석·제안서 작성 등 연구 업무 전반을, Day 2에서는 교과목에 AI를 접목하는 교수 설계 전 과정을 다룹니다.
         </p>
-        <p style={{ fontSize: 14.5, color: '#6F665A', lineHeight: 1.7, marginTop: 14 }}>
-          본 조선대학교 AI특강을 비롯한 DreamIT Biz의 AI 교육 프로그램은 동일한 설계 철학—실습 중심·단계별 역량 형성·현장 적용—을 공유합니다.
-        </p>
-      </section>
-
-      {/* CURRICULUM */}
-      <section style={{ marginTop: 28 }}>
-        <Kicker>Curriculum</Kicker>
-        <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {curriculum.map((c, i) => (
-            <div key={i} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: '18px 22px', display: 'flex', gap: 20, alignItems: 'baseline', flexWrap: 'wrap' }}>
-              <div style={{ minWidth: 110, fontFamily: SERIF, fontWeight: 700, fontSize: 17, color: NAVY }}>{c.course}</div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: TERRA, background: '#F3E1D5', borderRadius: 999, padding: '4px 12px' }}>{c.hours}</div>
-              <div style={{ flex: '1 1 280px', fontSize: 15, color: '#3D372E', lineHeight: 1.6 }}>{c.body}</div>
+        <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 22 }}>
+          {overviewItems.map((o, i) => (
+            <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'baseline', padding: '12px 0', borderTop: '1px solid #F0EADD' }}>
+              <span style={{ fontFamily: NEWS, fontSize: 13, color: TERRA, minWidth: 22 }}>{o.no}</span>
+              <span style={{ minWidth: 78, fontSize: 13.5, fontWeight: 600, color: '#1B1916' }}>{o.label}</span>
+              <span style={{ fontSize: 14, color: '#5A5246', lineHeight: 1.55 }}>{o.value}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section style={{ marginTop: 36 }}>
-        <Kicker>Features</Kicker>
+      {/* CURRICULUM */}
+      <section style={{ marginTop: 28 }}>
+        <Kicker>Curriculum</Kicker>
         <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginTop: 16 }}>
-          <FeatureCard title="공개 페이지" rows={publicPages} />
-          <FeatureCard title="학생 LMS · 로그인" rows={lmsPages} accent />
-        </div>
-        <div style={{ marginTop: 16, background: NAVY, color: '#EAE4D8', borderRadius: 16, padding: '24px 28px' }}>
-          <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: '#C99A7E', marginBottom: 12 }}>관리자 패널</div>
-          <p style={{ fontSize: 14.5, lineHeight: 1.7, color: '#B6BECB' }}>수강생 관리 · 자료 업로드 · 과제 출제/채점 · 출석 관리 · 공지 · 팀 편성 · 프로젝트 관리</p>
+          {days.map((d, i) => (
+            <div key={i} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 16, overflow: 'hidden' }}>
+              <div style={{ padding: '20px 24px', background: d.headBg, borderBottom: '1px solid #EDE5D7' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+                  <span style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: d.accent }}>{d.day}</span>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: d.accent, background: d.chipBg, padding: '4px 11px', borderRadius: 999 }}>{d.date}</span>
+                </div>
+                <h3 style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 20, letterSpacing: '-0.02em', marginTop: 10, color: '#1B1916' }}>{d.title}</h3>
+              </div>
+              <ul style={{ listStyle: 'none', padding: '14px 24px 20px', margin: 0, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                {d.sessions.map((se, j) => (
+                  <li key={j} style={{ display: 'flex', gap: 12, fontSize: 13.5, color: '#3D372E', lineHeight: 1.5 }}>
+                    <span style={{ fontFamily: NEWS, fontSize: 12.5, color: '#9A8F7D', minWidth: 78 }}>{se.time}</span>
+                    <span>{se.title}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* TECH + ORG */}
+      {/* STRUCTURE */}
       <section style={{ marginTop: 36 }}>
-        <Kicker>Tech &amp; Operator</Kicker>
-        <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 18, marginTop: 16 }}>
-          <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 16, padding: '22px 26px' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: NAVY, marginBottom: 12, letterSpacing: '0.03em' }}>TECH STACK</div>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {tech.map((t, i) => (
-                <li key={i} style={{ fontSize: 13.5, color: '#3D372E', background: '#F4F6F9', border: `1px solid ${BORDER}`, borderRadius: 8, padding: '7px 12px' }}>{t}</li>
-              ))}
-            </ul>
-          </div>
-          <div style={{ background: '#FBF3EC', border: '1px solid #F0DDCB', borderRadius: 16, padding: '22px 26px' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: TERRA, marginBottom: 12, letterSpacing: '0.03em' }}>운영 · 강사</div>
-            <div style={{ fontSize: 15.5, fontWeight: 600, color: '#1B1916' }}>이애본</div>
-            <div style={{ fontSize: 14, color: '#5A4636', marginTop: 4, lineHeight: 1.6 }}>한신대학교 AI.SW대학 / DreamIT Biz</div>
-            <div style={{ fontSize: 13.5, color: '#7A6A57', marginTop: 8 }}>aebon@hs.ac.kr</div>
+        <Kicker>학습 구성</Kicker>
+        <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 16 }}>
+          {structure.map(([k, v], i) => (
+            <div key={i} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: '18px 22px' }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: NAVY }}>{k}</div>
+              <div style={{ fontSize: 14, color: '#6F665A', marginTop: 6, lineHeight: 1.6 }}>{v}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* INSTRUCTOR */}
+      <section style={{ marginTop: 36 }}>
+        <Kicker>강사 소개</Kicker>
+        <div style={{ marginTop: 16, background: NAVY, color: '#EAE4D8', borderRadius: 18, padding: '32px 36px', display: 'flex', gap: 28, flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ flexShrink: 0, width: 84, height: 84, borderRadius: 20, background: TERRA, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: SERIF, fontWeight: 700, fontSize: 34 }}>이</div>
+          <div style={{ minWidth: 0, flex: '1 1 360px' }}>
+            <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 24, color: '#fff' }}>이애본 <span style={{ fontSize: 15, fontWeight: 500, color: '#C99A7E' }}>강사</span></div>
+            <div style={{ fontSize: 14.5, color: '#B6BECB', marginTop: 6 }}>한신대학교 AI.SW대학 · 드림아이티비즈(DreamIT Biz)</div>
+            <p style={{ fontSize: 14.5, color: '#CDD4DE', lineHeight: 1.8, marginTop: 14 }}>
+              대학·공공기관을 대상으로 생성형 AI 활용과 바이브코딩 교육을 다수 설계·운영해 왔습니다.
+              연구 업무 자동화부터 교과목 AI 접목 설계까지, 전공과 무관하게 현장에 바로 적용할 수 있는 실습 중심 교육을 지향합니다.
+              본 조선대학교 AI특강의 커리큘럼 설계와 강의를 맡고 있습니다.
+            </p>
+            <div style={{ fontSize: 13.5, color: '#9FA8B6', marginTop: 12 }}>문의 · aebon@hs.ac.kr</div>
           </div>
         </div>
       </section>
@@ -109,20 +118,4 @@ export default function AboutPage() {
 
 function Kicker({ children }) {
   return <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, color: TERRA }}>{children}</div>
-}
-
-function FeatureCard({ title, rows, accent }) {
-  return (
-    <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 16, padding: '22px 26px' }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: accent ? TERRA : NAVY, marginBottom: 14, letterSpacing: '0.03em' }}>{title}</div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        {rows.map(([k, v], i) => (
-          <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'baseline' }}>
-            <span style={{ minWidth: 116, fontSize: 13.5, fontWeight: 600, color: '#1B1916' }}>{k}</span>
-            <span style={{ fontSize: 13.5, color: '#6F665A', lineHeight: 1.55 }}>{v}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
 }
