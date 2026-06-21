@@ -147,7 +147,7 @@ export const prep = [
 
 export const infoCards = [
   { kicker: 'Faculty', rows: [
-    { k: '주강사', v: '이애본 · 한신대학교 AI.SW대학 / 드림아이티비즈' },
+    { k: '주강사', v: '이애본 · 드림아이티비즈 대표 · 한신대 AI.SW대학 겸임교수' },
     { k: '문의', v: 'aebon@hs.ac.kr' },
     { k: '지도 방식', v: '주강사 + 보조강사 1명 · 1:2 밀착 운영' },
   ] },

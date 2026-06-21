@@ -247,7 +247,7 @@ export function buildDayHtml(dayIdx) {
     <div class="day">${esc(day.day)} · ${esc(day.date)}</div>
     <h1>${esc(day.title)}</h1>
     <div class="meta">조선대학교 전임 교원 교육 · Claude 기반 연구 업무 활용 &amp; AX 브릿지 교과목 설계</div>
-    <div class="meta">강사 이애본 (aebon@hs.ac.kr) · 한신대학교 AI.SW대학 / 드림아이티비즈(DreamIT Biz)</div>
+    <div class="meta">강사 이애본 (aebon@hs.ac.kr) · 드림아이티비즈(DreamIT Biz) 대표 · 한신대학교 AI.SW대학 겸임교수</div>
   </header>
   ${items}
   <div class="foot">조선대학교 AI특강 강의안 · ${esc(day.day)} (${esc(day.date)}) · 본 자료는 교육 참여자용입니다.</div>

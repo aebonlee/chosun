@@ -136,7 +136,7 @@ export default function AboutPage() {
           <div style={{ flexShrink: 0, width: 84, height: 84, borderRadius: 20, background: TERRA, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: SERIF, fontWeight: 700, fontSize: 34 }}>이</div>
           <div style={{ minWidth: 0, flex: '1 1 360px' }}>
             <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 24, color: '#fff' }}><span style={{ fontFamily: NEWS, fontStyle: 'italic', color: '#C99A7E', marginRight: 6 }}>Ph.D.</span>이애본 <span style={{ fontSize: 15, fontWeight: 500, color: '#C99A7E' }}>대표 · 담당 강사</span></div>
-            <div style={{ fontSize: 14.5, color: '#B6BECB', marginTop: 6 }}>드림아이티비즈(DreamIT Biz) 대표 · 한신대학교 AI.SW대학</div>
+            <div style={{ fontSize: 14.5, color: '#B6BECB', marginTop: 6 }}>드림아이티비즈(DreamIT Biz) 대표 · 한신대학교 AI.SW대학 겸임교수</div>
             <p style={{ fontSize: 14.5, color: '#CDD4DE', lineHeight: 1.8, marginTop: 14 }}>
               <Lines text="생성형 AI 교육과 학습 플랫폼 개발을 이끌며, 대학·공공기관을 대상으로 AI 활용·바이브코딩 교육을 다수 설계·운영해 왔습니다. 연구 업무 자동화부터 교과목 AI 접목 설계까지, 전공과 무관하게 현장에 바로 적용할 수 있는 실습 중심 교육을 지향합니다. 본 조선대학교 AI특강의 커리큘럼 설계와 강의를 직접 맡고 있습니다." />
             </p>
