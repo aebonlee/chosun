@@ -26,9 +26,9 @@
   --bg-white: #FFFFFF;
 
   /* 카테고리 무톤(muted academic) 팔레트 */
-  --ck-sage: #5B7553;         /* green → sage */
-  --ck-cat-navy: #1E3A5F;     /* blue → navy */
-  --ck-plum: #6E5A7B;         /* purple → muted plum */
+  --ck-sage: #5F7355;         /* green → sage */
+  --ck-cat-navy: #345A86;     /* blue → 부드러운 navy(사이드바 가독) */
+  --ck-plum: #836A78;         /* purple → warm mauve */
   --ck-cat-terra: #C2603D;    /* orange → terra */
 
   --nav-height: 80px;
@@ -63,7 +63,7 @@
 .ck-mobile-toggle i { font-size: 14px; }
 .ck-mobile-toggle span { margin-left: 6px; }
 
-.ck-layout { display: flex; min-height: calc(100vh - var(--nav-height)); max-width: var(--container-max); margin: 0 auto; }
+.ck-layout { display: flex; min-height: calc(100vh - var(--nav-height)); max-width: var(--container-max); margin: 0 auto; padding: 0 40px; box-sizing: border-box; }
 
 /* ============================================
    Sidebar — chosun sticky navbar 오프셋
@@ -85,41 +85,50 @@
 .ck-sb-nav { padding: 6px 0; }
 
 /* Nav Group */
-.ck-nav-group { border-bottom: 1px solid var(--ck-border); }
-.ck-nav-group:last-child { border-bottom: none; }
+.ck-nav-group { margin-bottom: 2px; }
 .ck-nav-group.active { background: transparent; }
 
-/* Parent button */
+/* Parent button — SideLink 카드 스타일 통일 */
 .ck-nav-parent {
   display: flex; align-items: center; gap: 10px; width: 100%;
-  padding: 11px 14px; font-size: 14px; font-weight: 600;
-  color: var(--ck-secondary); background: none; border: none;
-  border-left: 3px solid transparent; border-radius: 0 8px 8px 0;
+  padding: 9px 12px; font-size: 14px; font-weight: 600;
+  color: var(--ck-secondary); background: none;
+  border: 1px solid transparent; border-left: 3px solid transparent; border-radius: 9px;
+  margin-bottom: 2px;
   cursor: pointer; font-family: inherit; text-align: left; transition: var(--transition-base);
 }
 .ck-nav-parent:hover { background: var(--ck-cream); color: var(--ck-ink); }
-.ck-np-icon { width: 20px; text-align: center; font-size: 14px; flex-shrink: 0; color: var(--ck-muted); }
+/* 활성(펼쳐진) 그룹의 부모 = 흰 카드 (좌측바 색은 카테고리 규칙이 지정) */
+.ck-nav-group.active .ck-nav-parent { background: #fff; border-color: var(--ck-border); }
+.ck-np-icon { width: 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; color: var(--ck-muted); background: var(--ck-soft); border: 1px solid var(--ck-border); transition: var(--transition-base); }
 .ck-nav-parent span { flex: 1; }
 .ck-nav-arrow { font-size: 10px; color: var(--ck-faint); transition: transform 0.2s ease; }
 .ck-nav-arrow.open { transform: rotate(180deg); }
 
-/* Parent color accents (active state) — muted academic palette */
-.ck-nav-group.active .ck-np--green  { color: var(--ck-sage);     border-left-color: var(--ck-sage);     background: rgba(91,117,83,0.05); }
-.ck-nav-group.active .ck-np--green  .ck-np-icon { color: var(--ck-sage); }
-.ck-nav-group.active .ck-np--blue   { color: var(--ck-cat-navy); border-left-color: var(--ck-cat-navy); background: rgba(30,58,95,0.05); }
-.ck-nav-group.active .ck-np--blue   .ck-np-icon { color: var(--ck-cat-navy); }
-.ck-nav-group.active .ck-np--purple { color: var(--ck-plum);     border-left-color: var(--ck-plum);     background: rgba(110,90,123,0.05); }
-.ck-nav-group.active .ck-np--purple .ck-np-icon { color: var(--ck-plum); }
-.ck-nav-group.active .ck-np--orange { color: var(--ck-cat-terra); border-left-color: var(--ck-cat-terra); background: rgba(194,96,61,0.05); }
-.ck-nav-group.active .ck-np--orange .ck-np-icon { color: var(--ck-cat-terra); }
+/* 카테고리별 아이콘 배지 — 상시 색상화(접혀 있어도 카테고리 구분) */
+.ck-np--green  .ck-np-icon { color: var(--ck-sage);      background: rgba(95,115,85,0.12);   border-color: rgba(95,115,85,0.24); }
+.ck-np--blue   .ck-np-icon { color: var(--ck-cat-navy);  background: rgba(52,90,134,0.11);   border-color: rgba(52,90,134,0.22); }
+.ck-np--purple .ck-np-icon { color: var(--ck-plum);      background: rgba(131,106,120,0.13); border-color: rgba(131,106,120,0.26); }
+.ck-np--orange .ck-np-icon { color: var(--ck-cat-terra); background: rgba(194,96,61,0.11);   border-color: rgba(194,96,61,0.24); }
+
+/* 활성 그룹: 부모 라벨·좌측바를 카테고리 색으로, 배지는 살짝 진하게 */
+.ck-nav-group.active .ck-np--green  { color: var(--ck-sage);      border-left-color: var(--ck-sage); }
+.ck-nav-group.active .ck-np--blue   { color: var(--ck-cat-navy);  border-left-color: var(--ck-cat-navy); }
+.ck-nav-group.active .ck-np--purple { color: var(--ck-plum);      border-left-color: var(--ck-plum); }
+.ck-nav-group.active .ck-np--orange { color: var(--ck-cat-terra); border-left-color: var(--ck-cat-terra); }
+.ck-nav-group.active .ck-np--green  .ck-np-icon { background: rgba(95,115,85,0.20); }
+.ck-nav-group.active .ck-np--blue   .ck-np-icon { background: rgba(52,90,134,0.18); }
+.ck-nav-group.active .ck-np--purple .ck-np-icon { background: rgba(131,106,120,0.22); }
+.ck-nav-group.active .ck-np--orange .ck-np-icon { background: rgba(194,96,61,0.18); }
 
 /* Children list */
 .ck-nav-children { list-style: none; padding: 2px 0 8px; margin: 0; }
 .ck-nav-child {
   display: flex; align-items: center; gap: 8px; width: 100%;
-  padding: 7px 14px 7px 30px;
-  font-size: 13px; color: var(--ck-muted); background: none; border: none;
-  border-left: 3px solid transparent; border-radius: 0 8px 8px 0;
+  padding: 8px 12px 8px 28px;
+  font-size: 13px; color: var(--ck-muted); background: none;
+  border: 1px solid transparent; border-left: 3px solid transparent; border-radius: 9px;
+  margin-bottom: 2px;
   cursor: pointer; font-family: inherit; text-align: left; transition: var(--transition-base);
 }
 .ck-nav-child:hover { background: var(--ck-cream); color: var(--ck-ink); }
