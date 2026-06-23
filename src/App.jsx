@@ -281,8 +281,15 @@ export default function App() {
       )}
 
       {/* FOOTER */}
-      <footer style={{ marginTop: 'auto', background: '#1B1916', color: '#A39C90', padding: '32px 0' }}>
-        <div style={{ ...container, textAlign: 'center' }}>
+      <footer style={{ marginTop: 'auto', background: '#1B1916', color: '#A39C90', padding: '48px 0' }}>
+        <div style={{ ...container, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 28, height: 28, borderRadius: 7, background: TERRA, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: NEWS, fontStyle: 'italic', fontSize: 16 }}>C</div>
+            <span style={{ fontFamily: SERIF, fontWeight: 500, fontSize: 15, color: '#EAE4D8' }}>Claude 기반 연구 업무 활용 &amp; AX 브릿지 교과목 설계</span>
+          </div>
+          <div style={{ fontSize: 13.5 }}>조선대학교 전임 교원 교육 · 2026. 6. 24 – 25</div>
+        </div>
+        <div style={{ ...container, marginTop: 28, paddingTop: 22, borderTop: '1px solid #2E2A24', textAlign: 'center' }}>
           <div style={{ fontSize: 13, lineHeight: 1.9, color: '#9A938A' }}>
             대표 : 이애본(Ph.D) <span style={{ color: '#4A453E' }}>|</span> 한신대학교 AI·SW대학 겸임교수 <span style={{ color: '#4A453E' }}>|</span> 사업자등록번호 : 601-45-20154 <span style={{ color: '#4A453E' }}>|</span> 통신판매신고번호 : 제2024-수원팔달-0584호 <span style={{ color: '#4A453E' }}>|</span> 출판사 신고번호 : 제2026-000026호
           </div>
