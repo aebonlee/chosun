@@ -109,7 +109,7 @@ export default function App() {
       ) : (
       <>
       {/* HERO */}
-      <header style={{ ...container, padding: '84px 40px 72px', position: 'relative' }}>
+      <header style={{ ...container, maxWidth: 1320, padding: '84px 40px 72px', position: 'relative' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 999, padding: '7px 16px', marginBottom: 30 }}>
           <span style={{ width: 7, height: 7, borderRadius: '50%', background: TERRA, display: 'inline-block' }}></span>
           <span style={{ fontSize: 13, fontWeight: 600, color: '#7A4A33', letterSpacing: '0.01em' }}>전임 교원 대상 · 오프라인 실습 과정</span>
@@ -129,10 +129,10 @@ export default function App() {
             })}
           </svg>
         </div>
-        <h1 className="hero-h1" style={{ position: 'relative', zIndex: 1, fontFamily: SERIF, fontWeight: 700, fontSize: 62, lineHeight: 1.14, letterSpacing: '-0.025em', maxWidth: 880, marginBottom: 26 }}>
+        <h1 className="hero-h1" style={{ position: 'relative', zIndex: 1, fontFamily: SERIF, fontWeight: 700, fontSize: 62, lineHeight: 1.14, letterSpacing: '-0.025em', maxWidth: 1180, marginBottom: 26 }}>
           Claude 기반<br /><span style={{ color: TERRA }}>연구 업무 활용</span> &amp;<br />AX 브릿지 교과목 설계
         </h1>
-        <p style={{ fontSize: 19, lineHeight: 1.6, color: '#5A5246', maxWidth: 620, marginBottom: 42 }}>
+        <p style={{ fontSize: 19, lineHeight: 1.6, color: '#5A5246', maxWidth: 860, marginBottom: 42 }}>
           논문 리뷰부터 제안서 작성, 교과목 AI 접목과 과목 에이전트 구축까지<br />— 학과를 막론하고 따라 할 수 있는 실습 중심 2일 과정입니다.
         </p>
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
