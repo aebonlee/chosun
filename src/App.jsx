@@ -130,7 +130,7 @@ export default function App() {
           </svg>
         </div>
         <h1 className="hero-h1" style={{ position: 'relative', zIndex: 1, fontFamily: SERIF, fontWeight: 700, fontSize: 62, lineHeight: 1.14, letterSpacing: '-0.025em', maxWidth: 880, marginBottom: 26 }}>
-          Claude 기반 <span style={{ color: TERRA }}>연구 업무 활용</span> &amp;<br />AX 브릿지 교과목 설계
+          Claude 기반<br /><span style={{ color: TERRA }}>연구 업무 활용</span> &amp;<br />AX 브릿지 교과목 설계
         </h1>
         <p style={{ fontSize: 19, lineHeight: 1.6, color: '#5A5246', maxWidth: 620, marginBottom: 42 }}>
           논문 리뷰부터 제안서 작성, 교과목 AI 접목과 과목 에이전트 구축까지<br />— 학과를 막론하고 따라 할 수 있는 실습 중심 2일 과정입니다.

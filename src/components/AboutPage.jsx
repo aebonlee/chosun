@@ -30,7 +30,7 @@ export default function AboutPage() {
       <header style={{ padding: '72px 0 8px', textAlign: 'center' }}>
         <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 16, color: TERRA, marginBottom: 12 }}>About · 조선대학교 전임 교원 AI특강</div>
         <h1 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 40, letterSpacing: '-0.025em', lineHeight: 1.22 }}>
-          Claude 기반 <span style={{ color: TERRA }}>연구 업무 활용</span> &amp;<br />AX 브릿지 교과목 설계
+          Claude 기반<br /><span style={{ color: TERRA }}>연구 업무 활용</span> &amp;<br />AX 브릿지 교과목 설계
         </h1>
         <p style={{ fontSize: 16.5, color: '#5A5246', marginTop: 16, lineHeight: 1.7 }}>
           조선대학교 전임 교원을 위한 2일·14시간 실습 중심 생성형 AI 과정
