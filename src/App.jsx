@@ -76,7 +76,7 @@ export default function App() {
             <div style={{ width: 30, height: 30, borderRadius: 7, background: NAVY, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: NEWS, fontSize: 17, fontStyle: 'italic' }}>C</div>
             <span style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 16, letterSpacing: '-0.01em' }}>조선대학교 AI특강</span>
           </a>
-          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
             <a href="#about" onClick={goRoute('about')} style={{ color: route === 'about' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'about' ? 700 : 500 }}>About</a>
             <a href="#curriculum" onClick={goSection('curriculum')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
             <a href="#labs" onClick={goRoute('labs')} style={{ color: route === 'labs' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'labs' ? 700 : 500 }}>실습 모듈</a>
