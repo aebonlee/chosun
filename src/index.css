@@ -42,6 +42,7 @@ button { font-family: inherit; }
     grid-template-columns: 1fr !important;
   }
   .nav-links { display: none !important; }
+  .nav-hamburger { display: inline-flex !important; }
   .hero-logo { display: none !important; }
   .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
   .hero-h1 { font-size: 40px !important; }

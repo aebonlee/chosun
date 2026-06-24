@@ -36,10 +36,11 @@ export default function App() {
   const [openMenu, setOpenMenu] = useState(null) // 'prompt' | 'day1' | 'day2' | null
   const { user, profile, needsProfile, refreshProfile, signOut } = useAuth()
   const [profileDismissed, setProfileDismissed] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const open = () => setShowLogin(true)
 
   useEffect(() => {
-    const onHash = () => { setHash(window.location.hash); setOpenMenu(null) }
+    const onHash = () => { setHash(window.location.hash); setOpenMenu(null); setMobileOpen(false) }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
@@ -65,6 +66,12 @@ export default function App() {
     window.location.hash = ''
     setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 60)
   }
+  // 모바일 드로어 링크 스타일
+  const mLink = (active) => ({
+    display: 'block', textDecoration: 'none', padding: '12px 2px', fontSize: 15.5,
+    fontWeight: active ? 700 : 500, color: active ? NAVY : '#3C3730',
+    borderBottom: `1px solid ${BORDER}`,
+  })
 
   return (
     <div style={{ background: '#F6F2EA', color: '#1B1916', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -114,7 +121,62 @@ export default function App() {
               <button onClick={open} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: NAVY, color: '#fff', border: 'none', cursor: 'pointer', fontSize: 13.5, fontWeight: 600, padding: '9px 18px', borderRadius: 999 }}>로그인</button>
             )}
           </div>
+
+          {/* 모바일 햄버거 */}
+          <button
+            className="nav-hamburger"
+            aria-label={mobileOpen ? '메뉴 닫기' : '메뉴 열기'}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((o) => !o)}
+            style={{ display: 'none', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: 10, border: `1px solid ${BORDER}`, background: '#fff', cursor: 'pointer', color: NAVY, padding: 0 }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              {mobileOpen ? (<><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></>) : (<><line x1="3" y1="7" x2="21" y2="7" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="17" x2="21" y2="17" /></>)}
+            </svg>
+          </button>
         </div>
+
+        {/* 모바일 드로어 */}
+        {mobileOpen && (
+          <div className="nav-mobile" style={{ borderTop: `1px solid ${BORDER}`, background: '#F6F2EA', maxHeight: 'calc(100vh - 66px)', overflowY: 'auto' }}>
+            <div style={{ padding: '10px 24px 22px', display: 'flex', flexDirection: 'column' }}>
+              {[
+                ['About', goRoute('about'), route === 'about'],
+                ['커리큘럼', goSection('curriculum'), false],
+                ['실습 모듈', goRoute('labs'), route === 'labs'],
+                ['활용 사례집', goRoute('cases'), route === 'cases'],
+              ].map(([label, handler, active]) => (
+                <a key={label} href="#" onClick={(e) => { handler(e); setMobileOpen(false) }} style={mLink(active)}>{label}</a>
+              ))}
+
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#9A8F7D', padding: '14px 2px 6px' }}>프롬프트</div>
+              {promptItems.map((it) => (
+                <a key={it.key} href="#" onClick={(e) => { it.onClick(e); setMobileOpen(false) }} style={{ ...mLink(it.active), paddingLeft: 14 }}>{it.title}</a>
+              ))}
+
+              {[
+                ['교육공학자료', goRoute('resources'), route === 'resources'],
+                ['Day 1 강의안', goLectureItem('d1-s1'), view === 'lecture' && day1Ids.has(lectureSub)],
+                ['Day 2 강의안', goLectureItem('d2-s1'), view === 'lecture' && lectureSub && !day1Ids.has(lectureSub)],
+                ['AI 워크숍', goRoute('authoring/lecture'), route === 'authoring'],
+                ['추천사이트', goRoute('recommend'), route === 'recommend'],
+              ].map(([label, handler, active]) => (
+                <a key={label} href="#" onClick={(e) => { handler(e); setMobileOpen(false) }} style={mLink(active)}>{label}</a>
+              ))}
+
+              <div style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${BORDER}` }}>
+                {user ? (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: NAVY }}>{displayName(user, profile)}님</span>
+                    <button onClick={() => { signOut(); setMobileOpen(false) }} style={{ background: '#fff', color: '#5A5246', border: `1px solid ${BORDER}`, cursor: 'pointer', fontSize: 13.5, fontWeight: 600, padding: '9px 18px', borderRadius: 999 }}>로그아웃</button>
+                  </div>
+                ) : (
+                  <button onClick={() => { open(); setMobileOpen(false) }} style={{ width: '100%', background: NAVY, color: '#fff', border: 'none', cursor: 'pointer', fontSize: 14.5, fontWeight: 600, padding: '13px 18px', borderRadius: 12 }}>로그인</button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {view === 'about' ? (
