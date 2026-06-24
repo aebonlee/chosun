@@ -50,6 +50,9 @@ button { font-family: inherit; }
 
   /* 학습강의안: 사이드바를 본문 위로 쌓기 */
   .lecture-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
+
+  /* 강의안제작: 좌측 메뉴를 본문 위로 쌓기 */
+  .authoring-layout { grid-template-columns: 1fr !important; gap: 24px !important; }
   .lecture-aside { position: static !important; }
 
   /* 활용 사례집: 섹션 내비를 본문 위로 쌓기 */
