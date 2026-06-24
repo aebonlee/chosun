@@ -25,6 +25,30 @@ const siteGroups = [
         url: 'https://aisw.dreamitbiz.com',
         tags: ['AI', 'SW 개론', '분야 탐색'],
       },
+      {
+        name: '서울과학기술대학교',
+        desc: '전체 교수 대상 생성형 AI 활용 강의 — SeoulTech AI Lecture.',
+        url: 'https://seoultech.dreamitbiz.com',
+        tags: ['생성형 AI', '교수 대상', 'Auth'],
+      },
+      {
+        name: '한라대학교',
+        desc: '2026 하계 방학특강 — AI기초·바이브코딩·생성형AI 3개 과정.',
+        url: 'https://halla.dreamitbiz.com',
+        tags: ['하계 특강', '바이브코딩', 'Auth'],
+      },
+      {
+        name: '서울대학교',
+        desc: '하계 계절학기 PBL LMS — 제주 생태포럼 해커톤 연계 15차시 과정.',
+        url: 'https://snu.dreamitbiz.com',
+        tags: ['PBL', '계절학기', 'Auth'],
+      },
+      {
+        name: '삼육대학교',
+        desc: '생성형 AI 실무 역량 강화 특강 — 과정별 학습자료·로그인(9/14·15·21·22).',
+        url: 'https://syu.dreamitbiz.com',
+        tags: ['생성형 AI', '실무 특강', 'Auth'],
+      },
     ],
   },
   {
