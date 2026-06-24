@@ -104,7 +104,7 @@ export default function App() {
               )
             })()}
 
-            <a href="#authoring/lecture" onClick={goRoute('authoring/lecture')} style={{ color: route === 'authoring' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'authoring' ? 700 : 500, whiteSpace: 'nowrap' }}>AI 활용 실습</a>
+            <a href="#authoring/lecture" onClick={goRoute('authoring/lecture')} style={{ color: route === 'authoring' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'authoring' ? 700 : 500, whiteSpace: 'nowrap' }}>AI 워크숍</a>
 
             <a href="#recommend" onClick={goRoute('recommend')} style={{ color: route === 'recommend' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'recommend' ? 700 : 500, whiteSpace: 'nowrap' }}>추천사이트</a>
 
