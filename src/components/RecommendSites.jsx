@@ -49,6 +49,54 @@ const siteGroups = [
         url: 'https://syu.dreamitbiz.com',
         tags: ['생성형 AI', '실무 특강', 'Auth'],
       },
+      {
+        name: '울산과학기술원(UNIST)',
+        desc: '데이터 분석 학습 사이트 — 엑셀 EDA·시각화 실습 과정.',
+        url: 'https://unist.dreamitbiz.com',
+        tags: ['데이터 분석', 'EDA', 'Auth'],
+      },
+    ],
+  },
+  {
+    category: '기업교육 및 일반교육 사례',
+    note: '기업·기관 임직원과 일반 대상 맞춤형 교육 사례',
+    sites: [
+      {
+        name: 'AI Reboot Academy · 쉬었음청년',
+        desc: 'AI·바이브코딩 교육, AI 리부트 경진대회, LMS, 코칭까지 제공하는 청년 AI 교육.',
+        url: 'https://rest.dreamitbiz.com',
+        tags: ['바이브코딩', 'LMS', '코칭'],
+      },
+      {
+        name: '한국중부발전 AI 아카데미',
+        desc: '한국중부발전(KOMIPO) 전 직원 대상 AI 리터러시 교육.',
+        url: 'https://komipo.dreamitbiz.com',
+        tags: ['AI 리터러시', '전 직원', 'Auth'],
+      },
+      {
+        name: '다스코 생성형AI 교육',
+        desc: '다스코(주) 직원을 위한 생성형 AI 업무 활용 교육.',
+        url: 'https://dasco.dreamitbiz.com',
+        tags: ['생성형 AI', '업무 활용', 'Auth'],
+      },
+      {
+        name: '한전KDN 바이브코딩',
+        desc: 'KDN 직원 대상 바이브코딩 풀스택 웹 개발 교육(3일·21시간).',
+        url: 'https://kdn2026.dreamitbiz.com',
+        tags: ['바이브코딩', '풀스택', 'Auth'],
+      },
+      {
+        name: '휴넷 AI 홍보 실무',
+        desc: '「AI로 만드는 홍보 실무」 8시간 워크숍 — 도장깨기 미션·갤러리.',
+        url: 'https://contents.dreamitbiz.com',
+        tags: ['홍보 실무', '워크숍', '갤러리'],
+      },
+      {
+        name: 'KERIS 데이터 분석 실습',
+        desc: '엑셀 EDA·시각화 대시보드 — 1일 6시간 실습 과정.',
+        url: 'https://data.dreamitbiz.com',
+        tags: ['데이터 분석', 'EDA', '시각화'],
+      },
     ],
   },
   {
