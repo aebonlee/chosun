@@ -1,6 +1,7 @@
 // 강의안제작 — 강의안/루브릭/과제/시험문제 제작 + 전공 챗봇.
 // 좌측 메뉴는 로고 아래(콘텐츠 상단)에서 시작하며, 마지막 항목은 전공학과별 AI 챗봇.
 import MajorChatBot from './MajorChatBot'
+import SyllabusPractice from './SyllabusPractice'
 
 const SERIF = "'Noto Serif KR', serif"
 const NEWS = "'Newsreader', serif"
@@ -10,7 +11,7 @@ const BORDER = '#E2D9C9'
 const container = { maxWidth: 1180, margin: '0 auto', padding: '0 40px' }
 
 export const authoringMenu = [
-  { key: 'lecture', title: '강의안 제작', lead: '학습 목표와 차시 구성을 바탕으로 강의안 초안을 만듭니다.' },
+  { key: 'lecture', title: '강의계획서 제작', lead: 'Claude 웹에서 단계별 프롬프트로 한 학기 강의계획서를 만듭니다.' },
   { key: 'rubric', title: '루브릭 제작', lead: '평가 기준·배점·수준별 기술문(루브릭)을 설계합니다.' },
   { key: 'assignment', title: '과제 출제', lead: '학습 목표에 맞춘 과제와 제출 가이드를 구성합니다.' },
   { key: 'exam', title: '시험문제 출제', lead: '난이도별 문항과 정답·해설을 출제합니다.' },
@@ -65,6 +66,8 @@ export default function AuthoringTools({ sub, user, onRequestLogin }) {
         <section>
           {current.key === 'chatbot'
             ? <MajorChatBot user={user} onRequestLogin={onRequestLogin} />
+            : current.key === 'lecture'
+            ? <SyllabusPractice />
             : <Stub current={current} />}
         </section>
       </div>
