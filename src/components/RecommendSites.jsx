@@ -49,12 +49,6 @@ const siteGroups = [
         url: 'https://syu.dreamitbiz.com',
         tags: ['생성형 AI', '실무 특강', 'Auth'],
       },
-      {
-        name: '울산과학기술원(UNIST)',
-        desc: '데이터 분석 학습 사이트 — 엑셀 EDA·시각화 실습 과정.',
-        url: 'https://unist.dreamitbiz.com',
-        tags: ['데이터 분석', 'EDA', 'Auth'],
-      },
     ],
   },
   {
@@ -96,6 +90,12 @@ const siteGroups = [
         desc: '엑셀 EDA·시각화 대시보드 — 1일 6시간 실습 과정.',
         url: 'https://data.dreamitbiz.com',
         tags: ['데이터 분석', 'EDA', '시각화'],
+      },
+      {
+        name: '울산과학기술원(UNIST)',
+        desc: '데이터 분석 학습 사이트 — 엑셀 EDA·시각화 실습 과정.',
+        url: 'https://unist.dreamitbiz.com',
+        tags: ['데이터 분석', 'EDA', 'Auth'],
       },
     ],
   },
