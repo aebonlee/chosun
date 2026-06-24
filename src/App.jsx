@@ -7,7 +7,7 @@ import AppendixCases from './components/AppendixCases'
 import AboutPage from './components/AboutPage'
 import Resources from './components/Resources'
 import RecommendSites from './components/RecommendSites'
-import AuthoringTools, { authoringMenu } from './components/AuthoringTools'
+import AuthoringTools from './components/AuthoringTools'
 import { lectureDays } from './lectureNotes'
 import PromptGuide from './components/PromptGuide'
 import PromptPractice from './components/PromptPractice'
@@ -57,9 +57,6 @@ export default function App() {
     { key: 'prompt-gallery', title: '프롬프트 갤러리', active: route === 'prompt-gallery', onClick: goRoute('prompt-gallery') },
     { key: 'prompt-eval', title: '프롬프트 평가', active: route === 'prompt-eval', onClick: goRoute('prompt-eval') },
   ]
-  const authoringItems = authoringMenu.map((m) => ({
-    key: m.key, title: m.title, active: authoringSub === m.key, onClick: goRoute('authoring/' + m.key),
-  }))
   const goHome = (e) => { e.preventDefault(); window.location.hash = ''; window.scrollTo({ top: 0, behavior: 'smooth' }) }
   const goSection = (id) => (e) => {
     e.preventDefault()
@@ -105,7 +102,7 @@ export default function App() {
               )
             })()}
 
-            <NavMenu id="authoring" label="강의안제작" active={route === 'authoring'} openMenu={openMenu} setOpenMenu={setOpenMenu} items={authoringItems} />
+            <a href="#authoring/lecture" onClick={goRoute('authoring/lecture')} style={{ color: route === 'authoring' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'authoring' ? 700 : 500, whiteSpace: 'nowrap' }}>강의안제작</a>
 
             <a href="#recommend" onClick={goRoute('recommend')} style={{ color: route === 'recommend' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'recommend' ? 700 : 500, whiteSpace: 'nowrap' }}>추천사이트</a>
 
