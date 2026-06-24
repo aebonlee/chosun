@@ -81,8 +81,24 @@ export default function App() {
             <NavMenu id="prompt" label="프롬프트" active={['prompt-guide', 'prompt-practice', 'prompt-gallery', 'prompt-eval'].includes(route)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={promptItems} />
 
             <a href="#resources" onClick={goRoute('resources')} style={{ color: route === 'resources' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'resources' ? 700 : 500, whiteSpace: 'nowrap' }}>교육공학자료</a>
-            <a href="#lecture/d1-s1" onClick={goLectureItem('d1-s1')} style={{ color: view === 'lecture' && day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 1</a>
-            <a href="#lecture/d2-s1" onClick={goLectureItem('d2-s1')} style={{ color: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 2</a>
+            {(() => {
+              const day1Active = view === 'lecture' && day1Ids.has(lectureSub)
+              const day2Active = view === 'lecture' && lectureSub && !day1Ids.has(lectureSub)
+              const dayBtn = (active) => ({
+                display: 'inline-flex', alignItems: 'center', textDecoration: 'none', whiteSpace: 'nowrap',
+                fontSize: 13.5, fontWeight: 700, letterSpacing: '0.01em', padding: '6px 15px', borderRadius: 999,
+                border: `1.5px solid ${NAVY}`, color: active ? '#fff' : NAVY, background: active ? NAVY : 'transparent',
+                transition: 'background .15s, color .15s',
+              })
+              const onEnter = (active) => (e) => { if (!active) { e.currentTarget.style.background = NAVY; e.currentTarget.style.color = '#fff' } }
+              const onLeave = (active) => (e) => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = NAVY } }
+              return (
+                <>
+                  <a href="#lecture/d1-s1" onClick={goLectureItem('d1-s1')} style={dayBtn(day1Active)} onMouseEnter={onEnter(day1Active)} onMouseLeave={onLeave(day1Active)}>Day 1</a>
+                  <a href="#lecture/d2-s1" onClick={goLectureItem('d2-s1')} style={dayBtn(day2Active)} onMouseEnter={onEnter(day2Active)} onMouseLeave={onLeave(day2Active)}>Day 2</a>
+                </>
+              )
+            })()}
 
             <a href="#recommend" onClick={goRoute('recommend')} style={{ color: route === 'recommend' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'recommend' ? 700 : 500, whiteSpace: 'nowrap' }}>추천사이트</a>
 
