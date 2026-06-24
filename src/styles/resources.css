@@ -289,7 +289,7 @@
   cursor: pointer; font-family: inherit; transition: var(--transition-base); max-width: 46%;
 }
 .ck-nav-btn:hover { border-color: var(--ck-navy); background: var(--ck-warm); }
-.ck-nav-btn i { font-family: var(--ck-news); font-size: 14px; color: var(--ck-navy); flex-shrink: 0; }
+.ck-nav-btn i { font-size: 14px; color: var(--ck-navy); flex-shrink: 0; }
 .ck-nav-label { display: block; font-family: var(--ck-news); font-size: 11.5px; color: var(--ck-muted); font-weight: 500; }
 .ck-nav-title { display: block; font-size: 13.5px; color: var(--ck-ink); font-weight: 600; margin-top: 2px; }
 .ck-nav-next { margin-left: auto; text-align: right; }
