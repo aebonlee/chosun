@@ -92,12 +92,6 @@ const siteGroups = [
     note: '주요 생성형 AI 도구별 사용법과 실무 활용 가이드',
     sites: [
       {
-        name: 'AI 프롬프트 학습',
-        desc: '효과적인 프롬프트 작성법과 프롬프트 엔지니어링 가이드.',
-        url: 'https://ai-prompt.dreamitbiz.com',
-        tags: ['프롬프트', '엔지니어링', 'Auth'],
-      },
-      {
         name: 'ChatGPT 활용',
         desc: 'ChatGPT 사용법, GPTs, API 활용, 업무 자동화.',
         url: 'https://chatgpt.dreamitbiz.com',
