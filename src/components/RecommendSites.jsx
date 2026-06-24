@@ -87,6 +87,48 @@ const siteGroups = [
       },
     ],
   },
+  {
+    category: 'AI 학습 사이트',
+    note: '주요 생성형 AI 도구별 사용법과 실무 활용 가이드',
+    sites: [
+      {
+        name: 'AI 프롬프트 학습',
+        desc: '효과적인 프롬프트 작성법과 프롬프트 엔지니어링 가이드.',
+        url: 'https://ai-prompt.dreamitbiz.com',
+        tags: ['프롬프트', '엔지니어링', 'Auth'],
+      },
+      {
+        name: 'ChatGPT 활용',
+        desc: 'ChatGPT 사용법, GPTs, API 활용, 업무 자동화.',
+        url: 'https://chatgpt.dreamitbiz.com',
+        tags: ['ChatGPT', 'GPTs', '업무 자동화'],
+      },
+      {
+        name: 'Gemini 활용',
+        desc: 'Google Gemini 사용법, Workspace 연동, 멀티모달 활용.',
+        url: 'https://gemini.dreamitbiz.com',
+        tags: ['Gemini', 'Workspace', '멀티모달'],
+      },
+      {
+        name: 'Claude 활용',
+        desc: 'Anthropic Claude 사용법, 프롬프트 기법, API 활용.',
+        url: 'https://claude.dreamitbiz.com',
+        tags: ['Claude', '프롬프트 기법', 'API'],
+      },
+      {
+        name: 'GenSpark 활용',
+        desc: 'GenSpark AI 에이전트 기반 검색·리서치 활용 가이드.',
+        url: 'https://genspark.dreamitbiz.com',
+        tags: ['GenSpark', 'AI 에이전트', '리서치'],
+      },
+      {
+        name: 'Microsoft Copilot',
+        desc: 'MS Copilot 사용법, Office 연동, 코딩 보조.',
+        url: 'https://copilot.dreamitbiz.com',
+        tags: ['Copilot', 'Office', '코딩 보조'],
+      },
+    ],
+  },
 ]
 
 function SiteCard({ site }) {
