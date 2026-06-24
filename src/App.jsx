@@ -72,7 +72,7 @@ export default function App() {
             <div style={{ width: 30, height: 30, borderRadius: 7, background: NAVY, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: NEWS, fontSize: 17, fontStyle: 'italic' }}>C</div>
             <span style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 16, letterSpacing: '-0.01em' }}>조선대학교 AI특강</span>
           </a>
-          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
             <a href="#about" onClick={goRoute('about')} style={{ color: route === 'about' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'about' ? 700 : 500 }}>About</a>
             <a href="#curriculum" onClick={goSection('curriculum')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
             <a href="#labs" onClick={goRoute('labs')} style={{ color: route === 'labs' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'labs' ? 700 : 500 }}>실습 모듈</a>
@@ -81,8 +81,8 @@ export default function App() {
             <NavMenu id="prompt" label="프롬프트" active={['prompt-guide', 'prompt-practice', 'prompt-gallery', 'prompt-eval'].includes(route)} openMenu={openMenu} setOpenMenu={setOpenMenu} items={promptItems} />
 
             <a href="#resources" onClick={goRoute('resources')} style={{ color: route === 'resources' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'resources' ? 700 : 500, whiteSpace: 'nowrap' }}>교육공학자료</a>
-            <a href="#lecture/d1-s1" onClick={goLectureItem('d1-s1')} style={{ color: view === 'lecture' && day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 1 강의안</a>
-            <a href="#lecture/d2-s1" onClick={goLectureItem('d2-s1')} style={{ color: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 2 강의안</a>
+            <a href="#lecture/d1-s1" onClick={goLectureItem('d1-s1')} style={{ color: view === 'lecture' && day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 1</a>
+            <a href="#lecture/d2-s1" onClick={goLectureItem('d2-s1')} style={{ color: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 2</a>
 
             <a href="#recommend" onClick={goRoute('recommend')} style={{ color: route === 'recommend' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'recommend' ? 700 : 500, whiteSpace: 'nowrap' }}>추천사이트</a>
 
