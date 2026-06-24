@@ -39,10 +39,10 @@ export default function AuthoringTools({ sub, user, onRequestLogin }) {
   return (
     <div style={{ ...container, paddingTop: 28, paddingBottom: 100 }}>
       <div className="authoring-layout" style={{ display: 'grid', gridTemplateColumns: '230px 1fr', gap: 40, alignItems: 'start' }}>
-        {/* LEFT MENU — 타이틀 + 메뉴, 콘텐츠 상단(로고 아래)에서 시작 */}
-        <aside style={{ position: 'sticky', top: 84 }}>
-          <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: TERRA, marginBottom: 4, paddingLeft: 2 }}>Authoring</div>
-          <h2 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 22, color: NAVY, letterSpacing: '-0.01em', marginBottom: 16, paddingLeft: 2 }}>강의안제작</h2>
+        {/* LEFT MENU — 타이틀 + 메뉴, 콘텐츠 상단(로고 아래)에서 시작 / 스크롤 시 고정 */}
+        <aside style={{ position: 'sticky', top: 84, alignSelf: 'start' }}>
+          <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: TERRA, marginBottom: 4, paddingLeft: 2 }}>Hands-on</div>
+          <h2 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 22, color: NAVY, letterSpacing: '-0.01em', marginBottom: 16, paddingLeft: 2 }}>실습:따라하기</h2>
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 4, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: 8 }}>
             {authoringMenu.map((m) => {
               const active = m.key === current.key
