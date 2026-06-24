@@ -13,8 +13,18 @@ const TERRA = '#C2603D'
 const BORDER = '#E2D9C9'
 
 const PROVIDERS = {
-  claude: { label: 'Claude (Anthropic)', model: 'claude-opus-4-8', hint: 'sk-ant-…' },
-  openai: { label: 'OpenAI (ChatGPT)', model: 'gpt-4o-mini', hint: 'sk-…' },
+  site: { label: '사이트 제공 (OpenAI · 로그인 필요)', model: 'gpt-4o-mini', mode: 'proxy' },
+  claude: { label: 'Claude (Anthropic) · 내 키', model: 'claude-opus-4-8', hint: 'sk-ant-…', mode: 'key' },
+  openai: { label: 'OpenAI (ChatGPT) · 내 키', model: 'gpt-4o-mini', hint: 'sk-…', mode: 'key' },
+}
+const providerLabel = (p) => (p === 'openai' ? 'OpenAI' : p === 'claude' ? 'Claude' : '사이트')
+
+// 사이트 제공 키(Edge Function 프록시) — 키는 Supabase 시크릿에만, 로그인 세션으로 호출
+async function callSiteProxy({ system, messages }) {
+  const { data, error } = await supabase.functions.invoke('chosun-chat', { body: { system, messages } })
+  if (error) throw new Error(error.message || '사이트 프록시 호출 실패 (로그인/배포 상태 확인)')
+  if (data?.error) throw new Error(data.error)
+  return (data?.text || '').trim()
 }
 
 async function callClaude({ apiKey, model, system, messages }) {
@@ -55,7 +65,7 @@ function fmtTime(ts) {
 }
 
 export default function MajorChatBot({ user, onRequestLogin }) {
-  const [provider, setProvider] = useState('claude')
+  const [provider, setProvider] = useState('site')
   const [apiKey, setApiKey] = useState('')
   const [department, setDepartment] = useState('컴퓨터공학')
   const [messages, setMessages] = useState([])
@@ -86,18 +96,25 @@ export default function MajorChatBot({ user, onRequestLogin }) {
 
   const systemPrompt = `당신은 조선대학교 「${department || '전공'}」 전공 학생과 교원을 돕는 친절하고 정확한 AI 학습 도우미입니다. 해당 전공 분야의 개념 설명, 과제·강의 준비 도움, 학습 방향 안내를 한국어로 명확하게 제공하세요. 확실하지 않은 내용은 모른다고 솔직히 답하고, 추측을 사실처럼 말하지 마세요.`
 
+  const mode = PROVIDERS[provider].mode
+
   const send = async () => {
     const text = input.trim()
     if (!text || loading) return
-    if (!apiKey.trim()) { setError('먼저 API Key를 입력하세요.'); return }
+    if (mode === 'proxy') {
+      if (!user) { setError('사이트 제공 키는 로그인 후 사용할 수 있습니다.'); return }
+    } else if (!apiKey.trim()) {
+      setError('먼저 API Key를 입력하세요.'); return
+    }
     setError('')
     const next = [...messages, { role: 'user', content: text }]
     setMessages(next)
     setInput('')
     setLoading(true)
     try {
-      const fn = provider === 'claude' ? callClaude : callOpenAI
-      const reply = await fn({ apiKey: apiKey.trim(), model: PROVIDERS[provider].model, system: systemPrompt, messages: next })
+      const reply = mode === 'proxy'
+        ? await callSiteProxy({ system: systemPrompt, messages: next })
+        : await (provider === 'claude' ? callClaude : callOpenAI)({ apiKey: apiKey.trim(), model: PROVIDERS[provider].model, system: systemPrompt, messages: next })
       setMessages((m) => [...m, { role: 'assistant', content: reply || '(빈 응답)' }])
       // 로그인 사용자면 대화 저장 → 히스토리 게시판 갱신
       if (user) {
@@ -128,7 +145,7 @@ export default function MajorChatBot({ user, onRequestLogin }) {
     <div>
       <h2 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 25, color: NAVY, letterSpacing: '-0.01em' }}>전공 챗봇</h2>
       <p style={{ fontSize: 15.5, color: '#5A5246', marginTop: 10, lineHeight: 1.7 }}>
-        전공학과를 입력하고 사용할 AI(OpenAI 또는 Claude)와 API Key를 넣으면, 해당 전공 맞춤 챗봇으로 동작합니다.
+        전공학과를 입력하면 해당 전공 맞춤 챗봇으로 동작합니다. 기본은 <b>사이트 제공(OpenAI)</b>이라 로그인만 하면 키 없이 바로 사용할 수 있고, 원하면 본인 OpenAI/Claude 키로도 쓸 수 있습니다.
         {user ? ' 로그인되어 있어 대화가 아래 히스토리에 저장됩니다.' : ' 로그인하면 대화가 히스토리로 저장됩니다.'}
       </p>
 
@@ -144,10 +161,16 @@ export default function MajorChatBot({ user, onRequestLogin }) {
           <label style={labelCss}>전공 / 학과</label>
           <input value={department} onChange={(e) => setDepartment(e.target.value)} placeholder="예: 컴퓨터공학, 간호학, 경영학" style={field} />
         </div>
-        <div style={{ gridColumn: '1 / -1' }}>
-          <label style={labelCss}>API Key <span style={{ fontWeight: 500, color: '#9A8F7D' }}>({PROVIDERS[provider].hint} · 브라우저에만 보관, 저장 안 함)</span></label>
-          <input type="password" value={apiKey} onChange={(e) => setApiKey(e.target.value)} placeholder={PROVIDERS[provider].hint} autoComplete="off" style={field} />
-        </div>
+        {mode === 'key' ? (
+          <div style={{ gridColumn: '1 / -1' }}>
+            <label style={labelCss}>API Key <span style={{ fontWeight: 500, color: '#9A8F7D' }}>({PROVIDERS[provider].hint} · 브라우저에만 보관, 저장 안 함)</span></label>
+            <input type="password" value={apiKey} onChange={(e) => setApiKey(e.target.value)} placeholder={PROVIDERS[provider].hint} autoComplete="off" style={field} />
+          </div>
+        ) : (
+          <div style={{ gridColumn: '1 / -1', fontSize: 13, color: '#5A5246', background: '#F1ECE1', borderRadius: 9, padding: '10px 12px', lineHeight: 1.6 }}>
+            🔒 사이트가 제공하는 OpenAI 키로 동작합니다. <b>로그인만</b> 하면 별도 키 입력 없이 사용할 수 있어요. (키는 서버에만 보관되어 노출되지 않습니다)
+          </div>
+        )}
       </div>
 
       {/* 대화 */}
@@ -220,7 +243,7 @@ export default function MajorChatBot({ user, onRequestLogin }) {
                     onClick={() => setOpenId(open ? null : h.id)}
                     style={{ width: '100%', display: 'grid', gridTemplateColumns: '120px 1fr 130px', gap: 12, alignItems: 'center', padding: '12px 14px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}
                   >
-                    <span style={{ fontSize: 12, color: NAVY, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.department || '전공'} · {h.provider === 'openai' ? 'OpenAI' : 'Claude'}</span>
+                    <span style={{ fontSize: 12, color: NAVY, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.department || '전공'} · {providerLabel(h.provider)}</span>
                     <span style={{ fontSize: 14, color: '#1B1916', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.question}</span>
                     <span style={{ fontFamily: NEWS, fontSize: 12.5, color: '#9A8F7D', textAlign: 'right' }}>{fmtTime(h.created_at)}</span>
                   </button>
