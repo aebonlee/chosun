@@ -76,7 +76,7 @@ export default function App() {
             <div style={{ width: 30, height: 30, borderRadius: 7, background: NAVY, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: NEWS, fontSize: 17, fontStyle: 'italic' }}>C</div>
             <span style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 16, letterSpacing: '-0.01em' }}>조선대학교 AI특강</span>
           </a>
-          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
             <a href="#about" onClick={goRoute('about')} style={{ color: route === 'about' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'about' ? 700 : 500 }}>About</a>
             <a href="#curriculum" onClick={goSection('curriculum')} style={{ color: '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>커리큘럼</a>
             <a href="#labs" onClick={goRoute('labs')} style={{ color: route === 'labs' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'labs' ? 700 : 500 }}>실습 모듈</a>
@@ -136,38 +136,47 @@ export default function App() {
       ) : (
       <>
       {/* HERO */}
-      <header style={{ ...container, maxWidth: 1320, padding: '84px 40px 72px', position: 'relative' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 999, padding: '7px 16px', marginBottom: 30 }}>
-          <span style={{ width: 7, height: 7, borderRadius: '50%', background: TERRA, display: 'inline-block' }}></span>
-          <span style={{ fontSize: 13, fontWeight: 600, color: '#7A4A33', letterSpacing: '0.01em' }}>전임 교원 대상 · 오프라인 실습 과정</span>
-        </div>
-        <div className="hero-logo" aria-hidden="true" style={{ position: 'absolute', top: 72, right: 16, width: 180, height: 180, zIndex: 0, pointerEvents: 'none' }}>
-          <div style={{ position: 'absolute', inset: '-10%', background: 'radial-gradient(circle, rgba(217,119,87,0.18), transparent 66%)' }} />
-          <svg viewBox="0 0 120 120" width="180" height="180" style={{ position: 'relative', animation: 'floatBob 6s ease-in-out infinite', filter: 'drop-shadow(0 16px 28px rgba(194,96,61,0.28))' }}>
-            {Array.from({ length: 12 }).map((_, i) => {
-              const a = (i * 30) * Math.PI / 180
-              const r0 = 13, r1 = i % 2 === 0 ? 47 : 33
-              return (
-                <line key={i}
-                  x1={(60 + Math.cos(a) * r0).toFixed(1)} y1={(60 + Math.sin(a) * r0).toFixed(1)}
-                  x2={(60 + Math.cos(a) * r1).toFixed(1)} y2={(60 + Math.sin(a) * r1).toFixed(1)}
-                  stroke="#D9774F" strokeWidth="7" strokeLinecap="round" />
-              )
-            })}
-          </svg>
-        </div>
-        <h1 className="hero-h1" style={{ position: 'relative', zIndex: 1, fontFamily: SERIF, fontWeight: 700, fontSize: 62, lineHeight: 1.14, letterSpacing: '-0.025em', maxWidth: 1180, marginBottom: 26 }}>
-          Claude 기반<br /><span style={{ color: TERRA }}>연구 업무 활용</span> &amp;<br />AX 브릿지 교과목 설계
-        </h1>
-        <p style={{ fontSize: 19, lineHeight: 1.6, color: '#5A5246', maxWidth: 860, marginBottom: 42 }}>
-          논문 리뷰부터 제안서 작성, 교과목 AI 접목과 과목 에이전트 구축까지<br />— 학과를 막론하고 따라 할 수 있는 실습 중심 2일 과정입니다.
-        </p>
-        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-          <a href="#curriculum" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: NAVY, color: '#fff', textDecoration: 'none', fontSize: 15, fontWeight: 600, padding: '14px 26px', borderRadius: 11 }}>커리큘럼 살펴보기 <span style={{ fontFamily: NEWS }}>→</span></a>
-          <a href="#prep" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: '#fff', border: `1px solid ${BORDER}`, color: '#1B1916', textDecoration: 'none', fontSize: 15, fontWeight: 600, padding: '14px 26px', borderRadius: 11 }}>준비물 확인</a>
+      <header style={{ ...container, maxWidth: 1320, padding: '72px 40px 64px', position: 'relative' }}>
+        <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1.22fr 0.78fr', gap: 52, alignItems: 'center' }}>
+          {/* LEFT — 카피 */}
+          <div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 999, padding: '7px 16px', marginBottom: 26 }}>
+              <span style={{ width: 7, height: 7, borderRadius: '50%', background: TERRA, display: 'inline-block' }}></span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#7A4A33', letterSpacing: '0.01em' }}>전임 교원 대상 · 오프라인 실습 과정</span>
+            </div>
+            <h1 className="hero-h1" style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 54, lineHeight: 1.16, letterSpacing: '-0.025em', marginBottom: 22 }}>
+              Claude 기반<br /><span style={{ color: TERRA }}>연구 업무 활용</span> &amp;<br />AX 브릿지 교과목 설계
+            </h1>
+            <p style={{ fontSize: 18, lineHeight: 1.65, color: '#5A5246', maxWidth: 560, marginBottom: 34 }}>
+              논문 리뷰부터 제안서 작성, 교과목 AI 접목과 과목 에이전트 구축까지 — 학과를 막론하고 따라 할 수 있는 실습 중심 2일 과정입니다.
+            </p>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <a href="#curriculum" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: NAVY, color: '#fff', textDecoration: 'none', fontSize: 15, fontWeight: 600, padding: '14px 26px', borderRadius: 11 }}>커리큘럼 살펴보기 <span style={{ fontFamily: NEWS }}>→</span></a>
+              <a href="#prep" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: '#fff', border: `1px solid ${BORDER}`, color: '#1B1916', textDecoration: 'none', fontSize: 15, fontWeight: 600, padding: '14px 26px', borderRadius: 11 }}>준비물 확인</a>
+            </div>
+          </div>
+
+          {/* RIGHT — 한눈에 보기 카드 */}
+          <aside className="hero-card" style={{ position: 'relative', background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 20, padding: '26px 26px 12px', boxShadow: '0 24px 60px rgba(27,25,22,0.10)' }}>
+            <div style={{ position: 'absolute', top: 0, left: 26, right: 26, height: 3, borderRadius: 3, background: TERRA }} />
+            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, color: TERRA, marginBottom: 4 }}>At a glance</div>
+            <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 19, color: NAVY, marginBottom: 16 }}>한눈에 보기</div>
+            {[
+              ['대상', '전임 교원 · 정원 45명'],
+              ['방식', '오프라인 · 실습 중심'],
+              ['기간', '2일 · 총 14시간'],
+              ['구성', '8단계 실습 모듈'],
+              ['지도', '주강사 + 보조강사 (1:2)'],
+            ].map(([k, v], i, arr) => (
+              <div key={k} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 14, padding: '13px 0', borderBottom: i < arr.length - 1 ? `1px solid ${BORDER}` : 'none' }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: '#9A8F7D', flexShrink: 0 }}>{k}</span>
+                <span style={{ fontSize: 14.5, fontWeight: 600, color: '#1B1916', textAlign: 'right' }}>{v}</span>
+              </div>
+            ))}
+          </aside>
         </div>
 
-        <div className="stats-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0, marginTop: 64, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+        <div className="stats-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0, marginTop: 56, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
           {heroStats.map((s, i) => (
             <div key={i} style={{ padding: '28px 16px', textAlign: 'center', borderRight: i < heroStats.length - 1 ? `1px solid ${BORDER}` : 'none' }}>
               <div style={{ fontFamily: NEWS, fontSize: 38, fontWeight: 500, color: NAVY, lineHeight: 1, letterSpacing: '-0.01em' }}>{s.value}</div>
