@@ -3,6 +3,8 @@
 import MajorChatBot from './MajorChatBot'
 import SyllabusPractice from './SyllabusPractice'
 import RubricPractice from './RubricPractice'
+import AssignmentPractice from './AssignmentPractice'
+import ExamPractice from './ExamPractice'
 
 const SERIF = "'Noto Serif KR', serif"
 const NEWS = "'Newsreader', serif"
@@ -71,6 +73,10 @@ export default function AuthoringTools({ sub, user, onRequestLogin }) {
             ? <SyllabusPractice />
             : current.key === 'rubric'
             ? <RubricPractice />
+            : current.key === 'assignment'
+            ? <AssignmentPractice />
+            : current.key === 'exam'
+            ? <ExamPractice />
             : <Stub current={current} />}
         </section>
       </div>
