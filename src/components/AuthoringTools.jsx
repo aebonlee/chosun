@@ -62,7 +62,7 @@ export default function AuthoringTools({ sub, user, onRequestLogin }) {
         {/* LEFT MENU — 타이틀 + 그룹별 흰 박스, 콘텐츠 상단에서 시작 / 스크롤 시 고정 */}
         <aside style={{ position: 'sticky', top: 84, alignSelf: 'start' }}>
           <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: TERRA, marginBottom: 4, paddingLeft: 2 }}>Hands-on</div>
-          <h2 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 22, color: NAVY, letterSpacing: '-0.01em', marginBottom: 14, paddingLeft: 2 }}>실습:따라하기</h2>
+          <h2 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 22, color: NAVY, letterSpacing: '-0.01em', marginBottom: 14, paddingLeft: 2 }}>AI 활용 실습</h2>
 
           {MENU_GROUPS.map((g) => (
             <div key={g.no} style={{ marginBottom: 16 }}>
