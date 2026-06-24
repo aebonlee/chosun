@@ -1933,7 +1933,7 @@ export default function Resources() {
                   <span className="ck-nav-label">{'다음'}</span>
                   <span className="ck-nav-title">{getLabel(nextSec)}</span>
                 </div>
-                <i className="fa-solid fa-chevron-right" />
+                <i className="fa-solid fa-arrow-right" />
               </button>
             ) : <div />}
           </div>
