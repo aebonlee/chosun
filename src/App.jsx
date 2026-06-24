@@ -6,6 +6,7 @@ import LabModules from './components/LabModules'
 import AppendixCases from './components/AppendixCases'
 import AboutPage from './components/AboutPage'
 import Resources from './components/Resources'
+import RecommendSites from './components/RecommendSites'
 import { lectureDays } from './lectureNotes'
 import PromptGuide from './components/PromptGuide'
 import PromptPractice from './components/PromptPractice'
@@ -43,7 +44,7 @@ export default function App() {
   const route = hash.replace(/^#/, '').split('/')[0]
   const lectureSub = route === 'lecture' ? (hash.split('/')[1] || 'intro') : null
   const PromptView = PROMPT_VIEWS[route]
-  const view = route === 'about' ? 'about' : route === 'resources' ? 'resources' : route === 'lecture' ? 'lecture' : route === 'labs' ? 'labs' : route === 'cases' ? 'cases' : PromptView ? 'prompt' : 'home'
+  const view = route === 'about' ? 'about' : route === 'resources' ? 'resources' : route === 'lecture' ? 'lecture' : route === 'labs' ? 'labs' : route === 'cases' ? 'cases' : route === 'recommend' ? 'recommend' : PromptView ? 'prompt' : 'home'
   const goRoute = (r) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#' + r; window.scrollTo({ top: 0 }) }
   const goLectureItem = (id) => (e) => { e.preventDefault(); setOpenMenu(null); window.location.hash = '#lecture/' + id; window.scrollTo({ top: 0 }) }
 
@@ -53,10 +54,6 @@ export default function App() {
     { key: 'prompt-practice', title: '프롬프트 연습장', active: route === 'prompt-practice', onClick: goRoute('prompt-practice') },
     { key: 'prompt-gallery', title: '프롬프트 갤러리', active: route === 'prompt-gallery', onClick: goRoute('prompt-gallery') },
     { key: 'prompt-eval', title: '프롬프트 평가', active: route === 'prompt-eval', onClick: goRoute('prompt-eval') },
-  ]
-  const recommendItems = [
-    { key: 'koreatech', title: '한국기술교육대 · 컴퓨팅사고 ↗', href: 'https://koreatech.dreamitbiz.com' },
-    { key: 'aisw', title: 'AI·SW 개론 ↗', href: 'https://aisw.dreamitbiz.com' },
   ]
   const goHome = (e) => { e.preventDefault(); window.location.hash = ''; window.scrollTo({ top: 0, behavior: 'smooth' }) }
   const goSection = (id) => (e) => {
@@ -87,7 +84,7 @@ export default function App() {
             <a href="#lecture/d1-s1" onClick={goLectureItem('d1-s1')} style={{ color: view === 'lecture' && day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 1 강의안</a>
             <a href="#lecture/d2-s1" onClick={goLectureItem('d2-s1')} style={{ color: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: view === 'lecture' && lectureSub && !day1Ids.has(lectureSub) ? 700 : 500, whiteSpace: 'nowrap' }}>Day 2 강의안</a>
 
-            <NavMenu id="recommend" label="추천사이트" active={false} openMenu={openMenu} setOpenMenu={setOpenMenu} items={recommendItems} />
+            <a href="#recommend" onClick={goRoute('recommend')} style={{ color: route === 'recommend' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'recommend' ? 700 : 500, whiteSpace: 'nowrap' }}>추천사이트</a>
 
             {user ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -111,6 +108,8 @@ export default function App() {
         <LabModules />
       ) : view === 'cases' ? (
         <AppendixCases />
+      ) : view === 'recommend' ? (
+        <RecommendSites />
       ) : view === 'prompt' ? (
         <PromptView />
       ) : (
