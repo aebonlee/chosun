@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { heroStats, overviewItems, days, prep, infoCards } from './data'
 import LoginModal from './components/LoginModal'
+import ProfileCompleteModal from './components/ProfileCompleteModal'
 import LectureNotes from './components/LectureNotes'
 import LabModules from './components/LabModules'
 import AppendixCases from './components/AppendixCases'
@@ -33,7 +34,8 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false)
   const [hash, setHash] = useState(window.location.hash)
   const [openMenu, setOpenMenu] = useState(null) // 'prompt' | 'day1' | 'day2' | null
-  const { user, signOut } = useAuth()
+  const { user, profile, needsProfile, refreshProfile, signOut } = useAuth()
+  const [profileDismissed, setProfileDismissed] = useState(false)
   const open = () => setShowLogin(true)
 
   useEffect(() => {
@@ -107,7 +109,7 @@ export default function App() {
             <a href="#recommend" onClick={goRoute('recommend')} style={{ color: route === 'recommend' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'recommend' ? 700 : 500, whiteSpace: 'nowrap' }}>추천사이트</a>
 
             {user ? (
-              <UserMenu user={user} signOut={signOut} />
+              <UserMenu user={user} profile={profile} signOut={signOut} />
             ) : (
               <button onClick={open} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: NAVY, color: '#fff', border: 'none', cursor: 'pointer', fontSize: 13.5, fontWeight: 600, padding: '9px 18px', borderRadius: 999 }}>로그인</button>
             )}
@@ -293,7 +295,7 @@ export default function App() {
         <div style={{ textAlign: 'center', marginTop: 56 }}>
           {user ? (
             <div style={{ fontSize: 16, color: '#5A5246' }}>
-              <span style={{ fontFamily: SERIF, fontWeight: 600, color: NAVY }}>{displayName(user)}</span>님, 환영합니다. 교육 안내를 확인해 주세요.
+              <span style={{ fontFamily: SERIF, fontWeight: 600, color: NAVY }}>{displayName(user, profile)}</span>님, 환영합니다. 교육 안내를 확인해 주세요.
             </div>
           ) : (
             <button onClick={open} style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: TERRA, color: '#fff', border: 'none', cursor: 'pointer', fontSize: 16, fontWeight: 600, padding: '16px 36px', borderRadius: 12 }}>
@@ -325,6 +327,13 @@ export default function App() {
       </footer>
 
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+      {needsProfile && !profileDismissed && (
+        <ProfileCompleteModal
+          user={user}
+          onComplete={async () => { await refreshProfile(); setProfileDismissed(true) }}
+          onSkip={() => setProfileDismissed(true)}
+        />
+      )}
     </div>
   )
 }
@@ -380,7 +389,7 @@ function NavMenu({ id, label, active, openMenu, setOpenMenu, items }) {
 }
 
 // 로그인 후 상단 우측 동그라미 아바타 + 드롭다운(이름·이메일·로그아웃)
-function UserMenu({ user, signOut }) {
+function UserMenu({ user, profile, signOut }) {
   const ref = useRef(null)
   const [open, setOpen] = useState(false)
   useEffect(() => {
@@ -391,7 +400,7 @@ function UserMenu({ user, signOut }) {
     document.addEventListener('keydown', onKey)
     return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey) }
   }, [open])
-  const name = displayName(user) || '회원'
+  const name = displayName(user, profile) || '회원'
   const initial = name.trim().charAt(0).toUpperCase()
   return (
     <div ref={ref} style={{ position: 'relative', display: 'flex' }}>
