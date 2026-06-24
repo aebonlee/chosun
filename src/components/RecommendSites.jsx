@@ -185,7 +185,7 @@ export default function RecommendSites() {
             {group.note && <span style={{ fontSize: 14, color: '#7A7263' }}>{group.note}</span>}
             <span style={{ marginLeft: 'auto', fontFamily: NEWS, fontSize: 14, color: '#9A8F7D' }}>{group.sites.length}곳</span>
           </div>
-          <div className="recommend-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
+          <div className="recommend-grid" style={{ display: 'grid', gap: 20 }}>
             {group.sites.map((site) => (
               <SiteCard key={site.url} site={site} />
             ))}

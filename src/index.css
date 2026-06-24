@@ -26,6 +26,11 @@ button { font-family: inherit; }
   50% { transform: translateY(-14px) rotate(4deg); }
 }
 
+/* 추천사이트: 콘텐츠 폭만큼 가로 3열 고정 (좁아지면 2열→1열) */
+.recommend-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .recommend-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .recommend-grid { grid-template-columns: 1fr; } }
+
 /* 반응형: 좁은 화면에서 2/3/4단 그리드를 1단으로 */
 /* 강의안 좌측 메뉴 라벨: 데스크탑에서 자간 미세 조정(긴 제목 2줄 가독성) */
 @media (min-width: 901px) {
