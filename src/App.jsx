@@ -103,10 +103,7 @@ export default function App() {
             <a href="#recommend" onClick={goRoute('recommend')} style={{ color: route === 'recommend' ? NAVY : '#5A5246', textDecoration: 'none', fontSize: 14, fontWeight: route === 'recommend' ? 700 : 500, whiteSpace: 'nowrap' }}>추천사이트</a>
 
             {user ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: 13.5, fontWeight: 600, color: NAVY }}>{displayName(user)}님</span>
-                <button onClick={signOut} style={{ background: '#fff', color: '#5A5246', border: `1px solid ${BORDER}`, cursor: 'pointer', fontSize: 13.5, fontWeight: 600, padding: '8px 16px', borderRadius: 999 }}>로그아웃</button>
-              </div>
+              <UserMenu user={user} signOut={signOut} />
             ) : (
               <button onClick={open} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: NAVY, color: '#fff', border: 'none', cursor: 'pointer', fontSize: 13.5, fontWeight: 600, padding: '9px 18px', borderRadius: 999 }}>로그인</button>
             )}
@@ -369,6 +366,54 @@ function NavMenu({ id, label, active, openMenu, setOpenMenu, items }) {
                 <span style={{ lineHeight: 1.4, whiteSpace: 'nowrap' }}>{it.title}</span>
               </a>
             ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// 로그인 후 상단 우측 동그라미 아바타 + 드롭다운(이름·이메일·로그아웃)
+function UserMenu({ user, signOut }) {
+  const ref = useRef(null)
+  const [open, setOpen] = useState(false)
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
+    document.addEventListener('mousedown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey) }
+  }, [open])
+  const name = displayName(user) || '회원'
+  const initial = name.trim().charAt(0).toUpperCase()
+  return (
+    <div ref={ref} style={{ position: 'relative', display: 'flex' }}>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        title={`${name}님`}
+        style={{ width: 36, height: 36, borderRadius: '50%', background: NAVY, color: '#fff', border: 'none', cursor: 'pointer', fontFamily: SERIF, fontWeight: 700, fontSize: 15, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, lineHeight: 1 }}
+      >
+        {initial}
+      </button>
+      {open && (
+        <div role="menu" style={{ position: 'absolute', top: '100%', right: 0, paddingTop: 10, zIndex: 60 }}>
+          <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, boxShadow: '0 16px 40px rgba(27,25,22,0.16)', padding: 8, minWidth: 170 }}>
+            <div style={{ padding: '8px 12px 10px', borderBottom: `1px solid ${BORDER}`, marginBottom: 6 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: NAVY }}>{name}님</div>
+              {user?.email && <div style={{ fontSize: 12, color: '#9A8F7D', marginTop: 2, wordBreak: 'break-all' }}>{user.email}</div>}
+            </div>
+            <button
+              onClick={() => { setOpen(false); signOut() }}
+              style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13.5, fontWeight: 600, color: '#5A5246', padding: '9px 12px', borderRadius: 8 }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#F6F2EA' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
+            >
+              로그아웃
+            </button>
           </div>
         </div>
       )}
