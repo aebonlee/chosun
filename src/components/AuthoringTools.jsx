@@ -2,6 +2,7 @@
 // 좌측 메뉴는 로고 아래(콘텐츠 상단)에서 시작하며, 마지막 항목은 전공학과별 AI 챗봇.
 import MajorChatBot from './MajorChatBot'
 import SyllabusPractice from './SyllabusPractice'
+import RubricPractice from './RubricPractice'
 
 const SERIF = "'Noto Serif KR', serif"
 const NEWS = "'Newsreader', serif"
@@ -68,6 +69,8 @@ export default function AuthoringTools({ sub, user, onRequestLogin }) {
             ? <MajorChatBot user={user} onRequestLogin={onRequestLogin} />
             : current.key === 'lecture'
             ? <SyllabusPractice />
+            : current.key === 'rubric'
+            ? <RubricPractice />
             : <Stub current={current} />}
         </section>
       </div>
