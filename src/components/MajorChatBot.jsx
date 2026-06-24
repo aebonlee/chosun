@@ -1,7 +1,10 @@
 // 전공학과별 AI 챗봇 — 사용자가 OpenAI 또는 Claude API Key를 직접 입력해 사용.
 // 정적 사이트(GitHub Pages)이므로 브라우저에서 각 제공사 API를 직접 호출한다.
 // 키는 브라우저 메모리에만 있고 서버로 전송/저장되지 않는다.
-import { useState, useRef, useEffect } from 'react'
+// 로그인한 사용자는 나눈 대화가 Supabase(chosun_chat_logs)에 저장되어
+// 아래 '대화 히스토리' 게시판으로 유지된다.
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { supabase } from '../lib/supabase'
 
 const SERIF = "'Noto Serif KR', serif"
 const NEWS = "'Newsreader', serif"
@@ -44,7 +47,14 @@ async function callOpenAI({ apiKey, model, system, messages }) {
 const field = { width: '100%', boxSizing: 'border-box', border: `1px solid ${BORDER}`, borderRadius: 9, padding: '9px 12px', fontSize: 14, fontFamily: 'inherit', background: '#fff', color: '#1B1916' }
 const labelCss = { display: 'block', fontSize: 12.5, fontWeight: 700, color: '#7A7263', marginBottom: 6, letterSpacing: '0.01em' }
 
-export default function MajorChatBot() {
+function fmtTime(ts) {
+  try {
+    const d = new Date(ts)
+    return d.toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+  } catch { return '' }
+}
+
+export default function MajorChatBot({ user, onRequestLogin }) {
   const [provider, setProvider] = useState('claude')
   const [apiKey, setApiKey] = useState('')
   const [department, setDepartment] = useState('컴퓨터공학')
@@ -52,11 +62,27 @@ export default function MajorChatBot() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [history, setHistory] = useState([])
+  const [openId, setOpenId] = useState(null)
   const listRef = useRef(null)
 
   useEffect(() => {
     if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight
   }, [messages, loading])
+
+  const loadHistory = useCallback(async () => {
+    if (!user) { setHistory([]); return }
+    const { data, error: e } = await supabase
+      .from('chosun_chat_logs')
+      .select('id, department, provider, question, answer, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(50)
+    if (e) { console.warn('히스토리 로드 실패:', e.message); return }
+    setHistory(data || [])
+  }, [user])
+
+  useEffect(() => { loadHistory() }, [loadHistory])
 
   const systemPrompt = `당신은 조선대학교 「${department || '전공'}」 전공 학생과 교원을 돕는 친절하고 정확한 AI 학습 도우미입니다. 해당 전공 분야의 개념 설명, 과제·강의 준비 도움, 학습 방향 안내를 한국어로 명확하게 제공하세요. 확실하지 않은 내용은 모른다고 솔직히 답하고, 추측을 사실처럼 말하지 마세요.`
 
@@ -73,6 +99,14 @@ export default function MajorChatBot() {
       const fn = provider === 'claude' ? callClaude : callOpenAI
       const reply = await fn({ apiKey: apiKey.trim(), model: PROVIDERS[provider].model, system: systemPrompt, messages: next })
       setMessages((m) => [...m, { role: 'assistant', content: reply || '(빈 응답)' }])
+      // 로그인 사용자면 대화 저장 → 히스토리 게시판 갱신
+      if (user) {
+        const { error: e } = await supabase.from('chosun_chat_logs').insert({
+          user_id: user.id, department, provider, question: text, answer: reply || '',
+        })
+        if (e) console.warn('히스토리 저장 실패:', e.message)
+        else loadHistory()
+      }
     } catch (e) {
       setError(e.message || '요청에 실패했습니다.')
     } finally {
@@ -84,11 +118,18 @@ export default function MajorChatBot() {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() }
   }
 
+  const removeEntry = async (id) => {
+    const { error: e } = await supabase.from('chosun_chat_logs').delete().eq('id', id)
+    if (e) { console.warn('삭제 실패:', e.message); return }
+    setHistory((h) => h.filter((x) => x.id !== id))
+  }
+
   return (
     <div>
       <h2 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 25, color: NAVY, letterSpacing: '-0.01em' }}>전공 챗봇</h2>
       <p style={{ fontSize: 15.5, color: '#5A5246', marginTop: 10, lineHeight: 1.7 }}>
         전공학과를 입력하고 사용할 AI(OpenAI 또는 Claude)와 API Key를 넣으면, 해당 전공 맞춤 챗봇으로 동작합니다.
+        {user ? ' 로그인되어 있어 대화가 아래 히스토리에 저장됩니다.' : ' 로그인하면 대화가 히스토리로 저장됩니다.'}
       </p>
 
       {/* 설정 */}
@@ -110,7 +151,7 @@ export default function MajorChatBot() {
       </div>
 
       {/* 대화 */}
-      <div ref={listRef} style={{ marginTop: 16, height: 360, overflowY: 'auto', background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div ref={listRef} style={{ marginTop: 16, height: 340, overflowY: 'auto', background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
         {messages.length === 0 && !loading && (
           <div style={{ margin: 'auto', textAlign: 'center', color: '#9A8F7D' }}>
             <div style={{ fontFamily: NEWS, fontSize: 30, color: TERRA, marginBottom: 8 }}>💬</div>
@@ -150,6 +191,56 @@ export default function MajorChatBot() {
       <p style={{ marginTop: 12, fontSize: 12, color: '#9A8F7D', lineHeight: 1.6 }}>
         ※ 입력한 API Key는 이 브라우저에서 해당 AI 서버로 직접 전송될 뿐, 본 사이트 서버에 저장·전송되지 않습니다. 공용 PC에서는 사용 후 키를 비워 주세요.
       </p>
+
+      {/* 대화 히스토리 게시판 */}
+      <div style={{ marginTop: 36 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 14, paddingBottom: 12, borderBottom: `2px solid ${NAVY}` }}>
+          <h3 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 20, color: NAVY }}>대화 히스토리</h3>
+          {user && <span style={{ marginLeft: 'auto', fontFamily: NEWS, fontSize: 14, color: '#9A8F7D' }}>{history.length}건</span>}
+        </div>
+
+        {!user ? (
+          <div style={{ background: '#fff', border: `1px dashed ${BORDER}`, borderRadius: 14, padding: '28px 24px', textAlign: 'center' }}>
+            <p style={{ fontSize: 14, color: '#7A7263', marginBottom: 14 }}>로그인하면 나눈 대화가 이곳에 게시판처럼 저장·유지됩니다.</p>
+            <button onClick={onRequestLogin} style={{ background: NAVY, color: '#fff', border: 'none', cursor: 'pointer', fontSize: 13.5, fontWeight: 700, padding: '10px 22px', borderRadius: 999 }}>로그인</button>
+          </div>
+        ) : history.length === 0 ? (
+          <p style={{ fontSize: 14, color: '#9A8F7D', padding: '8px 2px' }}>아직 저장된 대화가 없습니다. 챗봇과 대화하면 이곳에 쌓입니다.</p>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {/* 헤더 행 */}
+            <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 130px', gap: 12, padding: '0 14px', fontSize: 12, fontWeight: 700, color: '#9A8F7D' }}>
+              <span>전공 · AI</span><span>질문</span><span style={{ textAlign: 'right' }}>일시</span>
+            </div>
+            {history.map((h) => {
+              const open = openId === h.id
+              return (
+                <div key={h.id} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 12, overflow: 'hidden' }}>
+                  <button
+                    onClick={() => setOpenId(open ? null : h.id)}
+                    style={{ width: '100%', display: 'grid', gridTemplateColumns: '120px 1fr 130px', gap: 12, alignItems: 'center', padding: '12px 14px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}
+                  >
+                    <span style={{ fontSize: 12, color: NAVY, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.department || '전공'} · {h.provider === 'openai' ? 'OpenAI' : 'Claude'}</span>
+                    <span style={{ fontSize: 14, color: '#1B1916', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.question}</span>
+                    <span style={{ fontFamily: NEWS, fontSize: 12.5, color: '#9A8F7D', textAlign: 'right' }}>{fmtTime(h.created_at)}</span>
+                  </button>
+                  {open && (
+                    <div style={{ borderTop: `1px solid ${BORDER}`, padding: '14px 16px', background: '#FBF8F2' }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: NAVY, marginBottom: 4 }}>Q. 질문</div>
+                      <div style={{ fontSize: 14, color: '#1B1916', whiteSpace: 'pre-wrap', lineHeight: 1.6, marginBottom: 14 }}>{h.question}</div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: TERRA, marginBottom: 4 }}>A. 답변</div>
+                      <div style={{ fontSize: 14, color: '#1B1916', whiteSpace: 'pre-wrap', lineHeight: 1.65 }}>{h.answer}</div>
+                      <div style={{ marginTop: 14, textAlign: 'right' }}>
+                        <button onClick={() => removeEntry(h.id)} style={{ background: 'none', border: `1px solid ${BORDER}`, color: '#B23B2E', cursor: 'pointer', fontSize: 12.5, fontWeight: 600, padding: '6px 12px', borderRadius: 8 }}>삭제</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

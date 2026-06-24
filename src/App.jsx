@@ -128,7 +128,7 @@ export default function App() {
       ) : view === 'recommend' ? (
         <RecommendSites />
       ) : view === 'authoring' ? (
-        <AuthoringTools sub={authoringSub} />
+        <AuthoringTools sub={authoringSub} user={user} onRequestLogin={open} />
       ) : view === 'prompt' ? (
         <PromptView />
       ) : (

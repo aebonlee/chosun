@@ -33,15 +33,16 @@ function Stub({ current }) {
   )
 }
 
-export default function AuthoringTools({ sub }) {
+export default function AuthoringTools({ sub, user, onRequestLogin }) {
   const current = authoringMenu.find((m) => m.key === sub) || authoringMenu[0]
 
   return (
     <div style={{ ...container, paddingTop: 28, paddingBottom: 100 }}>
       <div className="authoring-layout" style={{ display: 'grid', gridTemplateColumns: '230px 1fr', gap: 40, alignItems: 'start' }}>
-        {/* LEFT MENU — 로고 아래(상단)에서 시작 */}
+        {/* LEFT MENU — 타이틀 + 메뉴, 콘텐츠 상단(로고 아래)에서 시작 */}
         <aside style={{ position: 'sticky', top: 84 }}>
-          <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: TERRA, marginBottom: 12, paddingLeft: 4 }}>강의안제작</div>
+          <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 14, color: TERRA, marginBottom: 4, paddingLeft: 2 }}>Authoring</div>
+          <h2 style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 22, color: NAVY, letterSpacing: '-0.01em', marginBottom: 16, paddingLeft: 2 }}>강의안제작</h2>
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 4, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, padding: 8 }}>
             {authoringMenu.map((m) => {
               const active = m.key === current.key
@@ -60,9 +61,11 @@ export default function AuthoringTools({ sub }) {
           </nav>
         </aside>
 
-        {/* CONTENT */}
+        {/* CONTENT — 좌측 메뉴와 동일한 상단 지점에서 시작 */}
         <section>
-          {current.key === 'chatbot' ? <MajorChatBot /> : <Stub current={current} />}
+          {current.key === 'chatbot'
+            ? <MajorChatBot user={user} onRequestLogin={onRequestLogin} />
+            : <Stub current={current} />}
         </section>
       </div>
     </div>
