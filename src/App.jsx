@@ -159,18 +159,22 @@ export default function App() {
           {/* RIGHT — 한눈에 보기 카드 */}
           <aside className="hero-card" style={{ position: 'relative', background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 20, padding: '26px 26px 12px', boxShadow: '0 24px 60px rgba(27,25,22,0.10)' }}>
             <div style={{ position: 'absolute', top: 0, left: 26, right: 26, height: 3, borderRadius: 3, background: TERRA }} />
-            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, color: TERRA, marginBottom: 4 }}>At a glance</div>
-            <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 19, color: NAVY, marginBottom: 16 }}>한눈에 보기</div>
+            <div style={{ fontFamily: NEWS, fontStyle: 'italic', fontSize: 15, color: TERRA, marginBottom: 4 }}>Prompt Rules</div>
+            <div style={{ fontFamily: SERIF, fontWeight: 700, fontSize: 19, color: NAVY, marginBottom: 14 }}>프롬프트 규칙 6가지</div>
             {[
-              ['대상', '전임 교원 · 정원 45명'],
-              ['방식', '오프라인 · 실습 중심'],
-              ['기간', '2일 · 총 14시간'],
-              ['구성', '8단계 실습 모듈'],
-              ['지도', '주강사 + 보조강사 (1:2)'],
-            ].map(([k, v], i, arr) => (
-              <div key={k} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 14, padding: '13px 0', borderBottom: i < arr.length - 1 ? `1px solid ${BORDER}` : 'none' }}>
-                <span style={{ fontSize: 13, fontWeight: 600, color: '#9A8F7D', flexShrink: 0 }}>{k}</span>
-                <span style={{ fontSize: 14.5, fontWeight: 600, color: '#1B1916', textAlign: 'right' }}>{v}</span>
+              ['역할을 부여한다', '"당신은 ~ 전문가" 페르소나 지정'],
+              ['명확·구체적으로 지시한다', '모호함 없이 원하는 바를 직접'],
+              ['맥락·자료를 제공한다', '배경·데이터·파일을 함께'],
+              ['출력 형식을 지정한다', '표·단계·길이·톤 명시'],
+              ['예시를 보여준다', '원하는 결과 샘플(few-shot)'],
+              ['나누고 검증한다', '복잡한 일은 단계로, 결과 점검'],
+            ].map(([t, d], i, arr) => (
+              <div key={t} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '11px 0', borderBottom: i < arr.length - 1 ? `1px solid ${BORDER}` : 'none' }}>
+                <span style={{ flexShrink: 0, width: 22, height: 22, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: NEWS, fontSize: 12.5, lineHeight: 1 }}>{i + 1}</span>
+                <span>
+                  <span style={{ display: 'block', fontSize: 14, fontWeight: 700, color: '#1B1916', lineHeight: 1.35 }}>{t}</span>
+                  <span style={{ display: 'block', fontSize: 12.5, color: '#8A8071', marginTop: 2, lineHeight: 1.4 }}>{d}</span>
+                </span>
               </div>
             ))}
           </aside>
