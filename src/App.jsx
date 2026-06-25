@@ -199,6 +199,22 @@ export default function App() {
       <>
       {/* HERO */}
       <header style={{ ...container, maxWidth: 1320, padding: '72px 40px 64px', position: 'relative' }}>
+        {/* 둥둥 떠 있는 Claude 로고 장식 (≤900px 숨김) */}
+        <div className="hero-logo" aria-hidden="true" style={{ position: 'absolute', top: 14, right: 8, width: 92, height: 92, zIndex: 3, pointerEvents: 'none' }}>
+          <div style={{ position: 'absolute', inset: '-14%', background: 'radial-gradient(circle, rgba(217,119,87,0.20), transparent 66%)' }} />
+          <svg viewBox="0 0 120 120" width="92" height="92" style={{ position: 'relative', animation: 'floatBob 6s ease-in-out infinite', filter: 'drop-shadow(0 14px 24px rgba(194,96,61,0.30))' }}>
+            {Array.from({ length: 12 }).map((_, i) => {
+              const a = (i * 30) * Math.PI / 180
+              const r0 = 13, r1 = i % 2 === 0 ? 47 : 33
+              return (
+                <line key={i}
+                  x1={(60 + Math.cos(a) * r0).toFixed(1)} y1={(60 + Math.sin(a) * r0).toFixed(1)}
+                  x2={(60 + Math.cos(a) * r1).toFixed(1)} y2={(60 + Math.sin(a) * r1).toFixed(1)}
+                  stroke="#D9774F" strokeWidth="7" strokeLinecap="round" />
+              )
+            })}
+          </svg>
+        </div>
         <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1.22fr 0.78fr', gap: 52, alignItems: 'center' }}>
           {/* LEFT — 카피 */}
           <div>
