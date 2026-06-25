@@ -93,14 +93,14 @@ export default function AuthoringTools({ sub, user, onRequestLogin }) {
             href="https://padlet.com/aebon/chosun2606"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderRadius: 12, textDecoration: 'none', background: '#FB6B9D', color: '#fff', fontSize: 14, fontWeight: 700, boxShadow: '0 8px 20px rgba(251,107,157,0.35)' }}
+            style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderRadius: 12, textDecoration: 'none', background: '#B0532E', color: '#fff', fontSize: 14, fontWeight: 700, boxShadow: '0 8px 20px rgba(176,83,46,0.35)' }}
           >
             <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" style={{ flexShrink: 0 }}>
               <rect x="3" y="3" width="18" height="18" rx="4.5" fill="#fff" />
-              <rect x="6" y="6" width="5" height="5" rx="1.3" fill="#FB6B9D" />
-              <rect x="13" y="6" width="5" height="5" rx="1.3" fill="#FB6B9D" />
-              <rect x="6" y="13" width="5" height="5" rx="1.3" fill="#FB6B9D" />
-              <rect x="13" y="13" width="5" height="5" rx="1.3" fill="#FB6B9D" />
+              <rect x="6" y="6" width="5" height="5" rx="1.3" fill="#B0532E" />
+              <rect x="13" y="6" width="5" height="5" rx="1.3" fill="#B0532E" />
+              <rect x="6" y="13" width="5" height="5" rx="1.3" fill="#B0532E" />
+              <rect x="13" y="13" width="5" height="5" rx="1.3" fill="#B0532E" />
             </svg>
             실습결과 패들렛
           </a>
