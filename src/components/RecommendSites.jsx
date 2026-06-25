@@ -172,7 +172,7 @@ const siteGroups = [
       {
         name: 'AI Study 자료 보드',
         desc: 'AI 학습 참고 자료·실습 링크를 모은 패들렛 보드(AIstudy26).',
-        url: 'https://padlet.com/mia1004/AIstudy26',
+        url: 'https://padlet.com/aebon/AIstudy26',
         tags: ['Padlet', '자료 모음', 'AI 학습'],
       },
     ],
